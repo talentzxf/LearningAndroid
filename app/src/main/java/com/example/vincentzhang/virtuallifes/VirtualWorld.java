@@ -1,4 +1,4 @@
-package com.eacmple.vincentzhang.virtuallifes;
+package com.example.vincentzhang.virtuallifes;
 
 import android.graphics.Canvas;
 import android.graphics.Color;

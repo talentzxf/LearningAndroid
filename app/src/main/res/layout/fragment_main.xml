@@ -18,9 +18,9 @@
         android:text="Life game!"
         android:id="@+id/sample_text" />
 
-    <SurfaceView
+    <com.example.vincentzhang.learnandroid.MyGameView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/surfaceView" />
+        android:id="@+id/gamesurfaceview" />
 
 </RelativeLayout>

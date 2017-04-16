@@ -5,7 +5,7 @@ import android.graphics.Color;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
-import com.eacmple.vincentzhang.virtuallifes.VirtualWorld;
+import com.example.vincentzhang.virtuallifes.VirtualWorld;
 
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;

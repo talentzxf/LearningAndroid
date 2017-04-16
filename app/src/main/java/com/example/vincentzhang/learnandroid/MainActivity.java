@@ -21,7 +21,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        try{
+            setContentView(R.layout.activity_main);
+        }catch(Exception e){
+            Log.e("Exception happened!", "Exception during initing main window", e);
+            return;
+        }
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -37,38 +43,6 @@ public class MainActivity extends AppCompatActivity {
         // Example of a call to a native method
         TextView tv = (TextView) findViewById(R.id.sample_text);
         tv.setText(stringFromJNI());
-
-        mSurfaceView = (SurfaceView) findViewById(R.id.surfaceView);
-        mSurfaceHolder = mSurfaceView.getHolder();
-
-
-        mSurfaceHolder.addCallback(new SurfaceHolder.Callback() {
-            @Override
-            public void surfaceCreated(SurfaceHolder holder) {
-                Log.i("Main activity"," Surface created!");
-                mThread = new LifeGameDrawingThread();
-                mThread.setSurfaceHolder(mSurfaceHolder);
-                mThread.startRunning();
-            }
-
-            @Override
-            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-
-            }
-
-            @Override
-            public void surfaceDestroyed(SurfaceHolder holder) {
-                if(null != mThread)
-                    mThread.stopDrawing();
-            }
-        });
-
-//        GLSurfaceView view = new GLSurfaceView(this){
-//            {
-//                setEGLContextClientVersion(2);
-//            }
-//        };
-//        view.setRenderer(new OpenGLRenderer());
     }
 
     @Override
