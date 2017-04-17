@@ -12,16 +12,17 @@ import com.example.vincentzhang.Sprite.SpriteWorld;
  * Created by VincentZhang on 4/15/2017.
  */
 
-public class MyGameView extends SurfaceView implements Runnable{
+public class MyGameView extends SurfaceView implements Runnable {
     private SpriteWorld spriteWorld = new SpriteWorld();
     private boolean isDrawing = false;
+    private final static long FPS = 30;
 
 
     public MyGameView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         Log.i("Context", "begin to init world");
-        if( spriteWorld.init(context) ){
+        if (spriteWorld.init(context)) {
             Log.i("Context", "World inited");
             isDrawing = true;
             Thread t = new Thread(this);
@@ -33,31 +34,21 @@ public class MyGameView extends SurfaceView implements Runnable{
     public void run() {
         long lastMilliSeconds = System.currentTimeMillis();
 
-        while(isDrawing){
-            Canvas canvas = this.getHolder().lockCanvas();
-
-
-            if(canvas != null){
-                this.spriteWorld.draw(canvas);
-                this.getHolder().unlockCanvasAndPost(canvas);
-                long usedMilliSeconds = System.currentTimeMillis() - lastMilliSeconds;
-
-                lastMilliSeconds = System.currentTimeMillis();
-
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-            }else{
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+        while (isDrawing) {
+            if (System.currentTimeMillis() - lastMilliSeconds > 1000/FPS) {
+                Canvas canvas = this.getHolder().lockCanvas();
+                if (canvas != null) {
+                    this.spriteWorld.draw(canvas);
+                    this.getHolder().unlockCanvasAndPost(canvas);
+                    lastMilliSeconds = System.currentTimeMillis();
+                } else {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
-
         }
     }
 }
