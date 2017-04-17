@@ -17,6 +17,10 @@ public class SpriteWorld {
         return true;
     }
 
+    public void update(){
+        imgSprite.update();;
+    }
+
     public void draw(Canvas canvas){
         imgSprite.draw(canvas);
     }

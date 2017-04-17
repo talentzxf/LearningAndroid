@@ -9,4 +9,5 @@ import android.graphics.Canvas;
 public interface AbstractSprite {
     boolean loaded();
     void draw(Canvas canvas);
+    void update();
 }

@@ -15,7 +15,7 @@ import com.example.vincentzhang.Sprite.SpriteWorld;
 public class MyGameView extends SurfaceView implements Runnable {
     private SpriteWorld spriteWorld = new SpriteWorld();
     private boolean isDrawing = false;
-    private final static long FPS = 30;
+    private final static long FPS = 20;
 
 
     public MyGameView(Context context, AttributeSet attrs) {
@@ -38,6 +38,7 @@ public class MyGameView extends SurfaceView implements Runnable {
             if (System.currentTimeMillis() - lastMilliSeconds > 1000/FPS) {
                 Canvas canvas = this.getHolder().lockCanvas();
                 if (canvas != null) {
+                    this.spriteWorld.update();
                     this.spriteWorld.draw(canvas);
                     this.getHolder().unlockCanvasAndPost(canvas);
                     lastMilliSeconds = System.currentTimeMillis();

@@ -98,12 +98,15 @@ public class ImageSprite implements AbstractSprite {
     }
 
     @Override
-    public void draw(Canvas canvas) {
+    public void update() {
+        ArrayList<Rect> spriteSequence = dirSpriteMap.get(curDirection);
+        curSpriteIndex = (curSpriteIndex + 1) % spriteSequence.size();
+    }
 
+    @Override
+    public void draw(Canvas canvas) {
         ArrayList<Rect> spriteSequence = dirSpriteMap.get(curDirection);
         Rect curRect = spriteSequence.get(curSpriteIndex);
-
-        curSpriteIndex = (curSpriteIndex + 1) % spriteSequence.size();
 
         canvas.drawColor(Color.BLACK);
         canvas.drawBitmap(bm, curRect, new Rect(0, 0, spriteWidth, spriteHeight), null);
