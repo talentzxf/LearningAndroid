@@ -9,6 +9,8 @@ import com.example.vincentzhang.learnandroid.R;
 
 import org.xml.sax.InputSource;
 
+import java.util.ArrayList;
+
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
@@ -27,9 +29,22 @@ public class SpriteWorld {
             InputSource inputSource = new InputSource(context.getResources().openRawResource(R.raw.level1));
 
             XPath xPath = XPathFactory.newInstance().newXPath();
-            String mapData = xPath.evaluate("//game/map", inputSource);
+            String mapDataStrings = xPath.evaluate("//game/map", inputSource).trim();
+            String[] lines = mapDataStrings.split("\n");
+
+            ArrayList<ArrayList<Integer>> mapData = new ArrayList<>();
+
+            for(String line : lines){
+                ArrayList<Integer> lineData = new ArrayList<>();
+                String[] dataString = line.trim().split("\\s+");
+                for(String elem:dataString){
+                    lineData.add(Integer.valueOf(elem));
+                }
+                mapData.add(lineData);
+            }
 
             Log.i("End of loading file:", "res/xml/level1.xml:" + mapData);
+
         } catch (XPathExpressionException e) {
             Log.i("XPathexpressionwrong", "Xpath wrong?", e);
         }
