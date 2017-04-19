@@ -2,6 +2,7 @@ package com.example.vincentzhang.learnandroid;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -49,6 +50,7 @@ public class MyGameView extends SurfaceView implements Runnable, GestureDetector
                 Canvas canvas = this.getHolder().lockCanvas();
                 if (canvas != null) {
                     this.spriteWorld.update();
+                    canvas.drawColor(Color.BLACK);
                     this.spriteWorld.draw(canvas);
                     this.getHolder().unlockCanvasAndPost(canvas);
                     lastMilliSeconds = System.currentTimeMillis();

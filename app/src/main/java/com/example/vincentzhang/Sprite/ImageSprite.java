@@ -2,7 +2,6 @@ package com.example.vincentzhang.Sprite;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Rect;
 
 import java.util.ArrayList;
@@ -108,7 +107,6 @@ public class ImageSprite implements AbstractSprite {
         ArrayList<Rect> spriteSequence = dirSpriteMap.get(curDirection);
         Rect curRect = spriteSequence.get(curSpriteIndex);
 
-        canvas.drawColor(Color.BLACK);
         canvas.drawBitmap(bm, curRect, new Rect(0, 0, spriteWidth, spriteHeight), null);
     }
 }
