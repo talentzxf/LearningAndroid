@@ -12,26 +12,26 @@ import java.util.Map;
  * Created by VincentZhang on 4/15/2017.
  */
 
-enum DIRECTION {
-    UNKNOWN,
-    UP,
-    DOWN,
-    LEFT,
-    RIGHT,
-    UPLEFT,
-    UPRIGHT,
-    DOWNLEFT,
-    DOWNRIGHT
-}
-
 public class ImageSprite implements AbstractSprite {
+
     private boolean resLoaded = false;
     private Bitmap bm;
-    private Map<DIRECTION, ArrayList<Rect>> dirSpriteMap = new HashMap<DIRECTION, ArrayList<Rect>>();
-    private DIRECTION curDirection = DIRECTION.DOWNLEFT;
+    private Map<DIRECTIONS, ArrayList<Rect>> dirSpriteMap = new HashMap<DIRECTIONS, ArrayList<Rect>>();
+    private DIRECTIONS curDirection = DIRECTIONS.DOWNLEFT;
     private int curSpriteIndex = 0;
     private int spriteWidth = -1;
     private int spriteHeight = -1;
+
+    private int scrWidth = -1;
+    private int scrHeight = -1;
+
+    public void setCurDirection(DIRECTIONS curDirection) {
+        this.curDirection = curDirection;
+    }
+
+    public DIRECTIONS getCurDirection(){
+        return curDirection;
+    }
 
     public void load(Bitmap bitmap) {
         bm = bitmap;
@@ -51,31 +51,31 @@ public class ImageSprite implements AbstractSprite {
 
         for (int row = 0; row < rowCount; row++) {
             for (int col = 0; col < colCount; col++) {
-                DIRECTION targetDir = DIRECTION.UNKNOWN;
+                DIRECTIONS targetDir = DIRECTIONS.UNKNOWN;
                 switch (row) {
                     case 0:
-                        targetDir = DIRECTION.DOWN;
+                        targetDir = DIRECTIONS.DOWN;
                         break;
                     case 1:
-                        targetDir = DIRECTION.RIGHT;
+                        targetDir = DIRECTIONS.RIGHT;
                         break;
                     case 2:
-                        targetDir = DIRECTION.UP;
+                        targetDir = DIRECTIONS.UP;
                         break;
                     case 3:
-                        targetDir = DIRECTION.LEFT;
+                        targetDir = DIRECTIONS.LEFT;
                         break;
                     case 4:
-                        targetDir = DIRECTION.DOWNLEFT;
+                        targetDir = DIRECTIONS.DOWNLEFT;
                         break;
                     case 5:
-                        targetDir = DIRECTION.DOWNRIGHT;
+                        targetDir = DIRECTIONS.DOWNRIGHT;
                         break;
                     case 6:
-                        targetDir = DIRECTION.UPLEFT;
+                        targetDir = DIRECTIONS.UPLEFT;
                         break;
                     case 7:
-                        targetDir = DIRECTION.UPRIGHT;
+                        targetDir = DIRECTIONS.UPRIGHT;
                         break;
                 }
 
@@ -89,6 +89,12 @@ public class ImageSprite implements AbstractSprite {
         }
 
 
+    }
+
+    @Override
+    public void setSpriteDim(int width, int height) {
+        scrWidth = width;
+        scrHeight = height;
     }
 
     @Override
@@ -106,7 +112,9 @@ public class ImageSprite implements AbstractSprite {
     public void draw(Canvas canvas) {
         ArrayList<Rect> spriteSequence = dirSpriteMap.get(curDirection);
         Rect curRect = spriteSequence.get(curSpriteIndex);
+        float ratio = this.spriteHeight/this.spriteWidth;
+        int real_scrHeight = (int) (ratio * scrWidth);
 
-        canvas.drawBitmap(bm, curRect, new Rect(0, 0, spriteWidth, spriteHeight), null);
+        canvas.drawBitmap(bm, curRect, new Rect(0, 0, scrWidth, real_scrHeight), null);
     }
 }

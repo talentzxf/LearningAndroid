@@ -28,14 +28,16 @@ public class SpriteWorld {
      * TODO: 1. Terrain should be move to a separate class. 2. Add more types. 3. Make it more customizable. 4. Culling invisible elements.
      */
     private Bitmap normalTerrain;
+    private Bitmap normalBaldTerrain;
 
     private int viewPortX = 0;
     private int viewPortY = 0;
     private int scrWidth = -1;
     private int scrHeight = -1;
+    private int tileWidth = -1;
+    private int tileHeight = -1;
 
-    private int tileWidth = 96;
-    private int tileHeight = 47;
+    private boolean viewPortMoving = false;
 
     private boolean loadMap(Context context) {
         String level1 = "level1.xml";
@@ -70,27 +72,57 @@ public class SpriteWorld {
     }
 
     public boolean init(Context context) {
-        imgSprite.load(BitmapFactory.decodeResource(context.getResources(), R.drawable.green));
         loadMap(context);
         normalTerrain = BitmapFactory.decodeResource(context.getResources(), R.drawable.normal_terrain);
+        normalBaldTerrain = BitmapFactory.decodeResource(context.getResources(), R.drawable.normal_bald_terrain);
+        imgSprite.load(BitmapFactory.decodeResource(context.getResources(), R.drawable.green));
+
         return true;
     }
 
     public void update() {
         imgSprite.update();
+
+        if(this.viewPortMoving == true){
+            int speed = 10;
+            switch(imgSprite.getCurDirection()){
+                case DOWN:
+                    viewPortY += speed;
+                    break;
+                case UP:
+                    viewPortY -= speed;
+                    break;
+                case LEFT:
+                    viewPortX -= speed;
+                    break;
+                case RIGHT:
+                    viewPortX += speed;
+                    break;
+            }
+        }
     }
 
     private void drawTerrain(Canvas canvas) {
+        tileWidth = normalBaldTerrain.getScaledWidth(canvas);
+        tileHeight = normalBaldTerrain.getScaledHeight(canvas);
+
+        imgSprite.setSpriteDim(tileWidth, tileHeight);
+
+        Log.i("Tilewidth:", Integer.toString(tileWidth) + ":" + Integer.toString(tileHeight));
+
         for (int y = 0; y < mapData.size(); y++) {
             for (int x = 0; x < mapData.get(y).size(); x++) {
-                int realWorld_x = x * tileWidth;
-                int realWorld_y = y * tileHeight;
+                int realWorld_x = x * tileWidth/2;
+                int realWorld_y = y * tileHeight - x*tileHeight/2;
 
                 int scr_x = realWorld_x - viewPortX;
                 int scr_y = realWorld_y - viewPortY;
                 switch (mapData.get(y).get(x)) {
                     case 1:
                         canvas.drawBitmap(normalTerrain, scr_x, scr_y, null);
+                        break;
+                    case 2:
+                        canvas.drawBitmap(normalBaldTerrain, scr_x, scr_y, null);
                         break;
                 }
             }
@@ -103,5 +135,14 @@ public class SpriteWorld {
 
         drawTerrain(canvas);
         imgSprite.draw(canvas);
+    }
+
+    public void onClick(DIRECTIONS dir) {
+        if(dir == DIRECTIONS.UNKNOWN){
+            viewPortMoving = false;
+        }else{
+            imgSprite.setCurDirection(dir);
+            viewPortMoving = true;
+        }
     }
 }

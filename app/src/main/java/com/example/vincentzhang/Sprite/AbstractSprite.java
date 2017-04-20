@@ -7,6 +7,7 @@ import android.graphics.Canvas;
  */
 
 public interface AbstractSprite {
+    void setSpriteDim(int width, int height);
     boolean loaded();
     void draw(Canvas canvas);
     void update();

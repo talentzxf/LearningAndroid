@@ -12,7 +12,7 @@ import android.view.View;
  * Created by VincentZhang on 4/8/2017.
  */
 
-public class My2DDrawView extends View {
+public class My2DDrawView extends View{
     private static final int SEGS=32;
     private static final int SIZE=500;
     private static final int X=0;
@@ -61,5 +61,4 @@ public class My2DDrawView extends View {
             value += delta;
         }
     }
-
 }

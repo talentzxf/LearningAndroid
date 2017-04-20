@@ -21,6 +21,10 @@ public class MyGameView extends SurfaceView implements Runnable, GestureDetector
     private final static long FPS = 20;
     private GestureDetector gestureDetector;
 
+    public SpriteWorld getWorld(){
+        return spriteWorld;
+    }
+
     public MyGameView(Context context, AttributeSet attrs) {
         super(context, attrs);
 

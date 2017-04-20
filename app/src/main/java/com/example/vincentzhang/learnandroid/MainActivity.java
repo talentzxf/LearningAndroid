@@ -9,11 +9,57 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+
+import com.example.vincentzhang.Sprite.SpriteWorld;
+
+import static com.example.vincentzhang.Sprite.DIRECTIONS.DOWN;
+import static com.example.vincentzhang.Sprite.DIRECTIONS.LEFT;
+import static com.example.vincentzhang.Sprite.DIRECTIONS.RIGHT;
+import static com.example.vincentzhang.Sprite.DIRECTIONS.UNKNOWN;
+import static com.example.vincentzhang.Sprite.DIRECTIONS.UP;
 
 public class MainActivity extends AppCompatActivity {
     private GestureDetector detector;
+
+    class MyOnTouchListener implements View.OnTouchListener{
+        private SpriteWorld world;
+        public MyOnTouchListener(SpriteWorld world){
+            this.world = world;
+        }
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            switch(event.getAction()){
+                case MotionEvent.ACTION_BUTTON_RELEASE:
+                case MotionEvent.ACTION_CANCEL:
+                case MotionEvent.ACTION_UP:
+                    world.onClick(UNKNOWN);
+                    return false;
+            }
+
+            switch(v.getId()){
+                case R.id.leftbutton:
+                    world.onClick(LEFT);
+                    break;
+                case R.id.rightbutton:
+                    world.onClick(RIGHT);
+                    break;
+                case R.id.upbutton:
+                    world.onClick(UP);
+                    break;
+                case R.id.downbutton:
+                    world.onClick(DOWN);
+                    break;
+            }
+
+            return false;
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +85,20 @@ public class MainActivity extends AppCompatActivity {
         // Example of a call to a native method
         TextView tv = (TextView) findViewById(R.id.sample_text);
         tv.setText(stringFromJNI());
+
+        final MyGameView gameView = (MyGameView) findViewById(R.id.gamesurfaceview);
+
+        Button leftButton = (Button) findViewById(R.id.leftbutton);
+        Button rightButton = (Button) findViewById(R.id.rightbutton);
+        Button upButton = (Button) findViewById(R.id.upbutton);
+        Button downButton = (Button) findViewById(R.id.downbutton);
+
+        MyOnTouchListener myOnTouchListener = new MyOnTouchListener(gameView.getWorld());
+        leftButton.setOnTouchListener(myOnTouchListener);
+        rightButton.setOnTouchListener(myOnTouchListener);
+        upButton.setOnTouchListener(myOnTouchListener);
+        downButton.setOnTouchListener(myOnTouchListener);
+
     }
 
     @Override

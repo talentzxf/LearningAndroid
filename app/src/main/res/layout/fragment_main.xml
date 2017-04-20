@@ -23,4 +23,41 @@
         android:layout_height="wrap_content"
         android:id="@+id/gamesurfaceview" />
 
+    <Button
+        android:id="@+id/leftbutton"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="44dp"
+        android:text="&lt;" />
+
+    <Button
+        android:id="@+id/upbutton"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_above="@+id/leftbutton"
+        android:layout_toEndOf="@+id/leftbutton"
+        android:layout_toRightOf="@+id/leftbutton"
+        android:text="^" />
+
+    <Button
+        android:id="@+id/downbutton"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:text="v"
+        android:textAllCaps="false"
+        android:layout_below="@+id/rightbutton"
+        android:layout_toRightOf="@+id/leftbutton"
+        android:layout_toEndOf="@+id/leftbutton" />
+
+    <Button
+        android:id="@+id/rightbutton"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/upbutton"
+        android:layout_toEndOf="@+id/upbutton"
+        android:text=">"
+        android:layout_alignBottom="@+id/leftbutton"
+        android:layout_toRightOf="@+id/upbutton" />
+
 </RelativeLayout>
