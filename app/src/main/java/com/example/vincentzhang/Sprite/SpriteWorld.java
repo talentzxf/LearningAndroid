@@ -80,11 +80,15 @@ public class SpriteWorld {
         return true;
     }
 
+    private long steps = 0;
     public void update() {
-        imgSprite.update();
+        steps++;
 
         if(this.viewPortMoving == true){
-            int speed = 10;
+            if(steps % 2 == 0)
+                imgSprite.update();
+
+            int speed = 2;
             switch(imgSprite.getCurDirection()){
                 case DOWN:
                     viewPortY += speed;

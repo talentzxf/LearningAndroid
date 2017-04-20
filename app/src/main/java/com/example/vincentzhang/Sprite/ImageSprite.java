@@ -112,9 +112,9 @@ public class ImageSprite implements AbstractSprite {
     public void draw(Canvas canvas) {
         ArrayList<Rect> spriteSequence = dirSpriteMap.get(curDirection);
         Rect curRect = spriteSequence.get(curSpriteIndex);
-        float ratio = this.spriteHeight/this.spriteWidth;
-        int real_scrHeight = (int) (ratio * scrWidth);
+        float ratio = this.spriteWidth/this.spriteHeight;
+        int real_scrWidth = (int) (ratio * scrHeight);
 
-        canvas.drawBitmap(bm, curRect, new Rect(0, 0, scrWidth, real_scrHeight), null);
+        canvas.drawBitmap(bm, curRect, new Rect(0, 0, real_scrWidth, scrHeight), null);
     }
 }
