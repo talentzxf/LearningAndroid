@@ -1,22 +1,11 @@
 package com.example.vincentzhang.Sprite;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.util.Log;
 
+import com.example.vincentzhang.Sprite.Terrain.TerrainSystem;
 import com.example.vincentzhang.learnandroid.R;
-
-import org.xml.sax.InputSource;
-
-import java.util.ArrayList;
-
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
-
-import static com.example.vincentzhang.Sprite.CoordinateSystem.getViewPortPos;
 
 /**
  * Created by VincentZhang on 4/15/2017.
@@ -24,51 +13,19 @@ import static com.example.vincentzhang.Sprite.CoordinateSystem.getViewPortPos;
 
 public class SpriteWorld {
     private ImageSprite imgSprite = new ImageSprite();
-    private ArrayList<ArrayList<Integer>> mapData = new ArrayList<>();
     private static final int VIEWPORT_MARGIN = 100;
 
     /**
      * TODO: 1. Terrain should be move to a separate class. 2. Add more types. 3. Make it more customizable. 4. Culling invisible elements.
      */
-    private Bitmap normalTerrain;
-    private Bitmap normalBaldTerrain;
+    private TerrainSystem terrainSystem = new TerrainSystem();
 
     private boolean loadMap(Context context) {
-        String level1 = "level1.xml";
-        Log.i("Begin to load resource:", level1);
-
-
-        // Read data from resource file.
-        try {
-            InputSource inputSource = new InputSource(context.getResources().openRawResource(R.raw.level1));
-
-            XPath xPath = XPathFactory.newInstance().newXPath();
-            String mapDataStrings = xPath.evaluate("//game/map", inputSource).trim();
-            String[] lines = mapDataStrings.split("\n");
-
-            for (String line : lines) {
-                ArrayList<Integer> lineData = new ArrayList<>();
-                String[] dataString = line.trim().split("\\s+");
-                for (String elem : dataString) {
-                    lineData.add(Integer.valueOf(elem));
-                }
-                mapData.add(lineData);
-            }
-
-            Log.i("End of loading file:", "res/xml/level1.xml:" + mapData);
-
-        } catch (XPathExpressionException e) {
-            Log.i("XPath expression wrong", "Xpath wrong?", e);
-            return false;
-        }
-
-        return true;
+        return terrainSystem.init("level1.xml", context.getResources());
     }
 
     public boolean init(Context context) {
         loadMap(context);
-        normalTerrain = BitmapFactory.decodeResource(context.getResources(), R.drawable.normal_terrain);
-        normalBaldTerrain = BitmapFactory.decodeResource(context.getResources(), R.drawable.normal_bald_terrain);
         imgSprite.load(BitmapFactory.decodeResource(context.getResources(), R.drawable.green));
 
         return true;
@@ -113,35 +70,10 @@ public class SpriteWorld {
         CoordinateSystem.setViewPortPos(newViewPortPos);
     }
 
-    private void drawTerrain(Canvas canvas) {
-        int tileWidth = normalBaldTerrain.getScaledWidth(canvas);
-        int tileHeight = normalBaldTerrain.getScaledHeight(canvas);
-        CoordinateSystem.setTileDimension(new Vector2D(tileWidth, tileHeight));
-        Log.i("Tilewidth:", Integer.toString(tileWidth) + ":" + Integer.toString(tileHeight));
-
-        for (int y = 0; y < mapData.size(); y++) {
-            for (int x = 0; x < mapData.get(y).size(); x++) {
-                int realWorld_x = x * tileWidth / 2;
-                int realWorld_y = y * tileHeight - x * tileHeight / 2;
-
-                int scr_x = (int) (realWorld_x - getViewPortPos().getX());
-                int scr_y = (int) (realWorld_y - getViewPortPos().getY());
-                switch (mapData.get(y).get(x)) {
-                    case 1:
-                        canvas.drawBitmap(normalTerrain, scr_x, scr_y, null);
-                        break;
-                    case 2:
-                        canvas.drawBitmap(normalBaldTerrain, scr_x, scr_y, null);
-                        break;
-                }
-            }
-        }
-    }
-
     public void draw(Canvas canvas) {
         CoordinateSystem.setScrDimension(new Vector2D(canvas.getWidth(), canvas.getHeight()));
 
-        drawTerrain(canvas);
+        terrainSystem.draw(canvas);
         imgSprite.draw(canvas);
     }
 

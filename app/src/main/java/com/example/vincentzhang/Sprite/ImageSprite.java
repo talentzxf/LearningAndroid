@@ -92,8 +92,6 @@ public class ImageSprite extends AbstractSprite {
 
     @Override
     public void draw(Canvas canvas) {
-        spriteScrWidth = bm.getScaledWidth(canvas) / colCount;
-        spriteScrHeight = bm.getScaledHeight(canvas) / rowCount;
         ArrayList<Rect> spriteSequence = dirSpriteMap.get(curDirection);
         Rect curRect = spriteSequence.get(curSpriteIndex);
         float ratio = this.spriteWidth / this.spriteHeight;
@@ -104,6 +102,8 @@ public class ImageSprite extends AbstractSprite {
         Vector2D viewPortPos = CoordinateSystem.worldToScr(getSpritePos());
         int spriteViewPosX = (int) viewPortPos.getX();
         int spriteViewPosY = (int) viewPortPos.getY();
+        spriteScrWidth = real_scrWidth;
+        spriteScrHeight = tileHeight;
 
         canvas.drawBitmap(bm, curRect, new Rect(spriteViewPosX, spriteViewPosY, spriteViewPosX + real_scrWidth, spriteViewPosY + tileHeight), null);
     }
