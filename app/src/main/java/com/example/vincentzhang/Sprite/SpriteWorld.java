@@ -16,6 +16,8 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import static com.example.vincentzhang.Sprite.CoordinateSystem.getViewPortPos;
+
 /**
  * Created by VincentZhang on 4/15/2017.
  */
@@ -23,21 +25,13 @@ import javax.xml.xpath.XPathFactory;
 public class SpriteWorld {
     private ImageSprite imgSprite = new ImageSprite();
     private ArrayList<ArrayList<Integer>> mapData = new ArrayList<>();
+    private static final int VIEWPORT_MARGIN = 100;
 
     /**
      * TODO: 1. Terrain should be move to a separate class. 2. Add more types. 3. Make it more customizable. 4. Culling invisible elements.
      */
     private Bitmap normalTerrain;
     private Bitmap normalBaldTerrain;
-
-    private int viewPortX = 0;
-    private int viewPortY = 0;
-    private int scrWidth = -1;
-    private int scrHeight = -1;
-    private int tileWidth = -1;
-    private int tileHeight = -1;
-
-    private boolean viewPortMoving = false;
 
     private boolean loadMap(Context context) {
         String level1 = "level1.xml";
@@ -81,46 +75,57 @@ public class SpriteWorld {
     }
 
     private long steps = 0;
+
     public void update() {
         steps++;
+        if (steps % 2 == 0)
+            imgSprite.update();
 
-        if(this.viewPortMoving == true){
-            if(steps % 2 == 0)
-                imgSprite.update();
+        // Update view port, to at least leave 1 tile to the sprite
+        Vector2D curViewPort = CoordinateSystem.getViewPortPos();
+        Vector2D curSpritePos = imgSprite.getSpritePos();
+        Vector2D scrDim = CoordinateSystem.getScrDimension();
 
-            int speed = 2;
-            switch(imgSprite.getCurDirection()){
-                case DOWN:
-                    viewPortY += speed;
-                    break;
-                case UP:
-                    viewPortY -= speed;
-                    break;
-                case LEFT:
-                    viewPortX -= speed;
-                    break;
-                case RIGHT:
-                    viewPortX += speed;
-                    break;
-            }
+        int spriteWidth = imgSprite.getSpriteWidth();
+        int spriteHeight = imgSprite.getSpriteHeight();
+
+        if(scrDim == null || spriteWidth == -1 || spriteHeight == -1 ){ // CoordinateSystem not inited yet.
+            return ;
         }
+
+        Vector2D newViewPortPos = curViewPort;
+        if(curSpritePos.getX() - curViewPort.getX() < VIEWPORT_MARGIN){
+            newViewPortPos.setX( curSpritePos.getX() - VIEWPORT_MARGIN);
+        }
+
+        if(curSpritePos.getX() + spriteWidth > curViewPort.getX() + scrDim.getX() - VIEWPORT_MARGIN){
+            newViewPortPos.setX( curSpritePos.getX() + spriteWidth + VIEWPORT_MARGIN - scrDim.getX());
+        }
+
+        if(curSpritePos.getY() - curViewPort.getY() < VIEWPORT_MARGIN){
+            newViewPortPos.setY( curSpritePos.getY() - VIEWPORT_MARGIN);
+        }
+
+        if(curSpritePos.getY() + spriteHeight > curViewPort.getY() + scrDim.getY() - VIEWPORT_MARGIN){
+            newViewPortPos.setY( curSpritePos.getY() + VIEWPORT_MARGIN - scrDim.getY() + spriteHeight);
+        }
+
+        CoordinateSystem.setViewPortPos(newViewPortPos);
     }
 
     private void drawTerrain(Canvas canvas) {
-        tileWidth = normalBaldTerrain.getScaledWidth(canvas);
-        tileHeight = normalBaldTerrain.getScaledHeight(canvas);
-
-        imgSprite.setSpriteDim(tileWidth, tileHeight);
-
+        int tileWidth = normalBaldTerrain.getScaledWidth(canvas);
+        int tileHeight = normalBaldTerrain.getScaledHeight(canvas);
+        CoordinateSystem.setTileDimension(new Vector2D(tileWidth, tileHeight));
         Log.i("Tilewidth:", Integer.toString(tileWidth) + ":" + Integer.toString(tileHeight));
 
         for (int y = 0; y < mapData.size(); y++) {
             for (int x = 0; x < mapData.get(y).size(); x++) {
-                int realWorld_x = x * tileWidth/2;
-                int realWorld_y = y * tileHeight - x*tileHeight/2;
+                int realWorld_x = x * tileWidth / 2;
+                int realWorld_y = y * tileHeight - x * tileHeight / 2;
 
-                int scr_x = realWorld_x - viewPortX;
-                int scr_y = realWorld_y - viewPortY;
+                int scr_x = (int) (realWorld_x - getViewPortPos().getX());
+                int scr_y = (int) (realWorld_y - getViewPortPos().getY());
                 switch (mapData.get(y).get(x)) {
                     case 1:
                         canvas.drawBitmap(normalTerrain, scr_x, scr_y, null);
@@ -134,19 +139,18 @@ public class SpriteWorld {
     }
 
     public void draw(Canvas canvas) {
-        scrWidth = canvas.getWidth();
-        scrHeight = canvas.getHeight();
+        CoordinateSystem.setScrDimension(new Vector2D(canvas.getWidth(), canvas.getHeight()));
 
         drawTerrain(canvas);
         imgSprite.draw(canvas);
     }
 
     public void onClick(DIRECTIONS dir) {
-        if(dir == DIRECTIONS.UNKNOWN){
-            viewPortMoving = false;
-        }else{
+        if (dir == DIRECTIONS.UNKNOWN) {
+            imgSprite.setMoving(false);
+        } else {
             imgSprite.setCurDirection(dir);
-            viewPortMoving = true;
+            imgSprite.setMoving(true);
         }
     }
 }

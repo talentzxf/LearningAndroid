@@ -12,73 +12,55 @@ import java.util.Map;
  * Created by VincentZhang on 4/15/2017.
  */
 
-public class ImageSprite implements AbstractSprite {
-
-    private boolean resLoaded = false;
+public class ImageSprite extends AbstractSprite {
     private Bitmap bm;
     private Map<DIRECTIONS, ArrayList<Rect>> dirSpriteMap = new HashMap<DIRECTIONS, ArrayList<Rect>>();
-    private DIRECTIONS curDirection = DIRECTIONS.DOWNLEFT;
+    private DIRECTIONS curDirection = DIRECTIONS.DOWN;
+    int rowCount = 8;
+    int colCount = 4;
+
     private int curSpriteIndex = 0;
     private int spriteWidth = -1;
     private int spriteHeight = -1;
 
-    private int scrWidth = -1;
-    private int scrHeight = -1;
+    private int spriteScrWidth = -1;
+    private int spriteScrHeight = -1;
+
+    private boolean isMoving = false;
+
+    public boolean isMoving() {
+        return isMoving;
+    }
+
+    public void setMoving(boolean moving) {
+        isMoving = moving;
+    }
 
     public void setCurDirection(DIRECTIONS curDirection) {
         this.curDirection = curDirection;
     }
 
-    public DIRECTIONS getCurDirection(){
+    public DIRECTIONS getCurDirection() {
         return curDirection;
     }
 
     public void load(Bitmap bitmap) {
         bm = bitmap;
-        resLoaded = true;
-
+        setResLoaded(true);
         splitImage();
     }
 
     void splitImage() {
         int imgWidth = bm.getWidth();
         int imgHeight = bm.getHeight();
-        int rowCount = 8;
-        int colCount = 4;
+
 
         spriteWidth = imgWidth / colCount;
         spriteHeight = imgHeight / rowCount;
 
         for (int row = 0; row < rowCount; row++) {
             for (int col = 0; col < colCount; col++) {
-                DIRECTIONS targetDir = DIRECTIONS.UNKNOWN;
-                switch (row) {
-                    case 0:
-                        targetDir = DIRECTIONS.DOWN;
-                        break;
-                    case 1:
-                        targetDir = DIRECTIONS.RIGHT;
-                        break;
-                    case 2:
-                        targetDir = DIRECTIONS.UP;
-                        break;
-                    case 3:
-                        targetDir = DIRECTIONS.LEFT;
-                        break;
-                    case 4:
-                        targetDir = DIRECTIONS.DOWNLEFT;
-                        break;
-                    case 5:
-                        targetDir = DIRECTIONS.DOWNRIGHT;
-                        break;
-                    case 6:
-                        targetDir = DIRECTIONS.UPLEFT;
-                        break;
-                    case 7:
-                        targetDir = DIRECTIONS.UPRIGHT;
-                        break;
-                }
-
+                DIRECTIONS targetDir = DIRECTIONS.fromDirNum(row);
                 ArrayList<Rect> rectSequence = dirSpriteMap.get(targetDir);
                 if (rectSequence == null) {
                     rectSequence = new ArrayList<Rect>();
@@ -87,34 +69,42 @@ public class ImageSprite implements AbstractSprite {
                 dirSpriteMap.put(targetDir, rectSequence);
             }
         }
-
-
     }
 
-    @Override
-    public void setSpriteDim(int width, int height) {
-        scrWidth = width;
-        scrHeight = height;
+    public int getSpriteWidth(){
+        return spriteScrWidth;
     }
 
-    @Override
-    public boolean loaded() {
-        return resLoaded;
+    public int getSpriteHeight(){
+        return spriteScrHeight;
     }
 
     @Override
     public void update() {
-        ArrayList<Rect> spriteSequence = dirSpriteMap.get(curDirection);
-        curSpriteIndex = (curSpriteIndex + 1) % spriteSequence.size();
+        if (this.isMoving) {
+            ArrayList<Rect> spriteSequence = dirSpriteMap.get(curDirection);
+            curSpriteIndex = (curSpriteIndex + 1) % spriteSequence.size();
+
+            Vector2D newPos = this.getSpritePos().applyDir(this.getCurDirection(), this.getMoveSpeed());
+            this.setSpritePos(newPos);
+        }
     }
 
     @Override
     public void draw(Canvas canvas) {
+        spriteScrWidth = bm.getScaledWidth(canvas) / colCount;
+        spriteScrHeight = bm.getScaledHeight(canvas) / rowCount;
         ArrayList<Rect> spriteSequence = dirSpriteMap.get(curDirection);
         Rect curRect = spriteSequence.get(curSpriteIndex);
-        float ratio = this.spriteWidth/this.spriteHeight;
-        int real_scrWidth = (int) (ratio * scrHeight);
+        float ratio = this.spriteWidth / this.spriteHeight;
 
-        canvas.drawBitmap(bm, curRect, new Rect(0, 0, real_scrWidth, scrHeight), null);
+        int tileHeight = (int) CoordinateSystem.getTileDimension().getY();
+
+        int real_scrWidth = (int) (ratio * tileHeight);
+        Vector2D viewPortPos = CoordinateSystem.worldToScr(getSpritePos());
+        int spriteViewPosX = (int) viewPortPos.getX();
+        int spriteViewPosY = (int) viewPortPos.getY();
+
+        canvas.drawBitmap(bm, curRect, new Rect(spriteViewPosX, spriteViewPosY, spriteViewPosX + real_scrWidth, spriteViewPosY + tileHeight), null);
     }
 }
