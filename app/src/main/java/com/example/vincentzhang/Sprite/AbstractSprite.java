@@ -36,6 +36,6 @@ public abstract class AbstractSprite {
 
     private boolean resLoaded = false;
 
-    abstract void draw(Canvas canvas);
-    abstract void update();
+    abstract public void draw(Canvas canvas);
+    abstract public void update();
 }

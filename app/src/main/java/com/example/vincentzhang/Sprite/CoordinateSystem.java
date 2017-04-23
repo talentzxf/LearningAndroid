@@ -1,5 +1,6 @@
 package com.example.vincentzhang.Sprite;
 
+
 /**
  * Created by VincentZhang on 4/21/2017.
  */
@@ -47,5 +48,17 @@ public class CoordinateSystem {
 
     public static Vector2D scrToWorld(Vector2D scrPos){
         return scrPos.add(viewPortPos);
+    }
+
+    /**
+     * Return the left-top world coordination of the grid.
+     * @param gridPos
+     * @return
+     */
+    public static Vector2D gridToWorld(Vector2D gridPos){
+        int realWorld_x = (int) (gridPos.getX() * tileDimension.getX());
+        int realWorld_y = (int) (gridPos.getY() * tileDimension.getY() - gridPos.getX() * tileDimension.getX());
+
+        return new Vector2D(realWorld_x, realWorld_y);
     }
 }

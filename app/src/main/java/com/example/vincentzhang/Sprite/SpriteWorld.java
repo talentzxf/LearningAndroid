@@ -15,19 +15,28 @@ public class SpriteWorld {
     private ImageSprite imgSprite = new ImageSprite();
     private static final int VIEWPORT_MARGIN = 100;
 
+    private boolean inited = false;
+
     /**
      * TODO: 1. Terrain should be move to a separate class. 2. Add more types. 3. Make it more customizable. 4. Culling invisible elements.
      */
     private TerrainSystem terrainSystem = new TerrainSystem();
 
-    private boolean loadMap(Context context) {
-        return terrainSystem.init("level1.xml", context.getResources());
+    private boolean loadMap(Context context, Canvas canvas) {
+        String level = "level1";
+        ImageManager.inst().init(level, context.getResources());
+        return terrainSystem.init("level1", context.getResources(), canvas);
     }
 
-    public boolean init(Context context) {
-        loadMap(context);
+    public boolean inited(){
+        return inited;
+    }
+
+    public boolean init(Context context, Canvas canvas) {
+        loadMap(context, canvas);
         imgSprite.load(BitmapFactory.decodeResource(context.getResources(), R.drawable.green));
 
+        inited = true;
         return true;
     }
 

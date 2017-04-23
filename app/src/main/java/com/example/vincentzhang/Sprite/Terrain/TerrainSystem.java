@@ -2,30 +2,22 @@ package com.example.vincentzhang.Sprite.Terrain;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.util.Log;
 
 import com.example.vincentzhang.Sprite.CoordinateSystem;
+import com.example.vincentzhang.Sprite.ImageManager;
 import com.example.vincentzhang.Sprite.Vector2D;
-import com.example.vincentzhang.learnandroid.R;
 
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-
-import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import static com.example.vincentzhang.Sprite.CoordinateSystem.getViewPortPos;
+import static com.example.vincentzhang.Sprite.Utilities.getXmlSource;
 
 /**
  * Created by VincentZhang on 4/22/2017.
@@ -34,27 +26,16 @@ import static com.example.vincentzhang.Sprite.CoordinateSystem.getViewPortPos;
 public class TerrainSystem {
     private boolean inited = false;
     private ArrayList<ArrayList<Integer>> mapData = new ArrayList<>();
-    private Map<Integer, Bitmap> imgMap = new HashMap<>();
+    private BuildingSystem buildingSystem = new BuildingSystem();
+    private int tileDefImgId = -1;
 
-    public static int getId(String resourceName, Class<?> c) {
-        try {
-            Field idField = c.getDeclaredField(resourceName);
-            return idField.getInt(idField);
-        } catch (Exception e) {
-            throw new RuntimeException("No resource ID found for: "
-                    + resourceName + " / " + c, e);
-        }
-    }
-
-    public boolean init(String xml, Resources resources) {
-        Log.i("Begin to load resource:", xml);
+    public boolean init(String level, Resources resources, Canvas canvas) {
+        Log.i("Begin to load resource:", level);
 
         // Read data from resource file.
         try {
-            InputSource inputSource = new InputSource(resources.openRawResource(R.raw.level1));
-
             XPath xPath = XPathFactory.newInstance().newXPath();
-            String mapDataStrings = xPath.evaluate("/game/map", inputSource).trim();
+            String mapDataStrings = xPath.evaluate("/game/map", getXmlSource(resources, level)).trim();
             String[] lines = mapDataStrings.split("\n");
 
             for (String line : lines) {
@@ -66,18 +47,15 @@ public class TerrainSystem {
                 mapData.add(lineData);
             }
 
-            inputSource = new InputSource(resources.openRawResource(R.raw.level1));
-            NodeList imgMaps = (NodeList) xPath.evaluate("/game/imgs/img", inputSource, XPathConstants.NODESET);
-            for (int nodeIdx = 0; nodeIdx < imgMaps.getLength(); nodeIdx++) {
-                Node imgNode = imgMaps.item(nodeIdx);
-                String src = imgNode.getAttributes().getNamedItem("src").getNodeValue();
-                Integer imgId = Integer.valueOf(imgNode.getAttributes().getNamedItem("src").getNodeValue());
+            tileDefImgId = Integer.valueOf(xPath.evaluate("/game/map/@tile_def_imgid", getXmlSource(resources, level) ));
 
-                Bitmap imgBM = BitmapFactory.decodeResource(resources, getId(src, R.drawable.class));
-                imgMap.put(imgId, imgBM);
-            }
+            int tileWidth = getScaledTileWidth(canvas);
+            int tileHeight = getScaledTileHeight(canvas);
+            CoordinateSystem.setTileDimension(new Vector2D(tileWidth, tileHeight));
 
-            Log.i("End of loading file:", "res/xml/level1.xml:" + mapData);
+            buildingSystem.init(level, resources);
+
+            Log.i("End of loading file:", "res/xml/" + level +".xml:" + mapData);
             inited = true;
 
         } catch (XPathExpressionException e) {
@@ -89,17 +67,18 @@ public class TerrainSystem {
     }
 
     public int getScaledTileWidth(Canvas canvas) {
-        return imgMap.get(0).getScaledWidth(canvas);
+        return ImageManager.inst().getImg(tileDefImgId).getScaledWidth(canvas);
     }
 
     public int getScaledTileHeight(Canvas canvas) {
-        return imgMap.get(0).getScaledHeight(canvas);
+        return ImageManager.inst().getImg(tileDefImgId).getScaledHeight(canvas);
     }
 
     public void draw(Canvas canvas) {
         int tileWidth = getScaledTileWidth(canvas);
         int tileHeight = getScaledTileHeight(canvas);
         CoordinateSystem.setTileDimension(new Vector2D(tileWidth, tileHeight));
+
         Log.i("Tilewidth:", Integer.toString(tileWidth) + ":" + Integer.toString(tileHeight));
 
         for (int y = 0; y < mapData.size(); y++) {
@@ -111,12 +90,13 @@ public class TerrainSystem {
                 int scr_y = (int) (realWorld_y - getViewPortPos().getY());
 
                 int imgId = mapData.get(y).get(x);
-                Bitmap bm = imgMap.get(imgId);
+                Bitmap bm = ImageManager.inst().getImg(imgId);
                 if (bm != null)
                     canvas.drawBitmap(bm, new Rect(0, 0, bm.getWidth(), bm.getHeight()),
                             new Rect(scr_x, scr_y, scr_x + tileWidth, scr_y + tileHeight), null);
             }
         }
+        buildingSystem.draw(canvas);
     }
 
 }

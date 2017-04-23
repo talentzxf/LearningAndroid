@@ -20,6 +20,7 @@ public class MyGameView extends SurfaceView implements Runnable, GestureDetector
     private boolean isDrawing = false;
     private final static long FPS = 20;
     private GestureDetector gestureDetector;
+    private Context context;
 
     public SpriteWorld getWorld(){
         return spriteWorld;
@@ -27,15 +28,13 @@ public class MyGameView extends SurfaceView implements Runnable, GestureDetector
 
     public MyGameView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        this.context = context;
 
-        Log.i("Context", "begin to init world");
-        if (spriteWorld.init(context)) {
-            Log.i("Context", "World inited");
-            isDrawing = true;
-            Thread t = new Thread(this);
-            t.start();
-            gestureDetector = new GestureDetector(context, this);
-        }
+        isDrawing = true;
+        Thread t = new Thread(this);
+        t.start();
+        gestureDetector = new GestureDetector(context, this);
+
     }
 
     @Override
@@ -52,7 +51,14 @@ public class MyGameView extends SurfaceView implements Runnable, GestureDetector
         while (isDrawing) {
             if (System.currentTimeMillis() - lastMilliSeconds > 1000/FPS) {
                 Canvas canvas = this.getHolder().lockCanvas();
+
                 if (canvas != null) {
+                    if(!spriteWorld.inited()){
+                        Log.i("Context", "begin to init world");
+                        spriteWorld.init(context, canvas);
+                        Log.i("Context", "World inited");
+                    }
+
                     this.spriteWorld.update();
                     canvas.drawColor(Color.BLACK);
                     this.spriteWorld.draw(canvas);
