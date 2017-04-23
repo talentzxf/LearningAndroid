@@ -41,6 +41,7 @@
     </map>
     <buildings>
         <building x='0' y='0' imgId='4'></building>
-        <building x='1' y='1' imgId='5'></building>
+        <building x='1' y='1' imgId='4'></building>
+        <building x='2' y='2' imgId='4'></building>
     </buildings>
 </game>

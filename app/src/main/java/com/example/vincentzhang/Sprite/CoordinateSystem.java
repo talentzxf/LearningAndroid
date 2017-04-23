@@ -56,8 +56,8 @@ public class CoordinateSystem {
      * @return
      */
     public static Vector2D gridToWorld(Vector2D gridPos){
-        int realWorld_x = (int) (gridPos.getX() * tileDimension.getX());
-        int realWorld_y = (int) (gridPos.getY() * tileDimension.getY() - gridPos.getX() * tileDimension.getX());
+        int realWorld_x = (int) (gridPos.getX() * tileDimension.getX()/2);
+        int realWorld_y = (int) (gridPos.getY() * tileDimension.getY() - gridPos.getX() * tileDimension.getY()/2);
 
         return new Vector2D(realWorld_x, realWorld_y);
     }
