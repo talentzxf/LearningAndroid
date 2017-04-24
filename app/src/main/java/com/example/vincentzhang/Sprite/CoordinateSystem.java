@@ -61,4 +61,14 @@ public class CoordinateSystem {
 
         return new Vector2D(realWorld_x, realWorld_y);
     }
+
+    public static Vector2D worldToGrid(Vector2D worldPos){
+        double worldPosX = worldPos.getX();
+        double worldPosY = worldPos.getY();
+
+        double gridIdX = worldPosX * 2 / tileDimension.getX();
+        double gridIdY = worldPosY / tileDimension.getY() + gridIdX;
+
+        return new Vector2D(gridIdX, gridIdY);
+    }
 }

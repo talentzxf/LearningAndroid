@@ -60,4 +60,15 @@
         android:layout_alignBottom="@+id/leftbutton"
         android:layout_toRightOf="@+id/upbutton" />
 
+    <Button
+        android:id="@+id/button_a"
+        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:text="A"
+        android:layout_alignTop="@+id/rightbutton"
+        android:layout_toRightOf="@+id/rightbutton"
+        android:layout_toEndOf="@+id/rightbutton"
+        android:layout_marginLeft="18dp"
+        android:layout_marginStart="18dp" />
+
 </RelativeLayout>

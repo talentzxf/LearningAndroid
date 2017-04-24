@@ -6,7 +6,11 @@
         <img src="grass" id="3"></img>
         <img src="rock" id="4"></img>
         <img src="tree" id="5"></img>
+        <img src="bomb" id="6"></img>
     </imgs>
+    <weapons>
+        <bomb imgId="6"></bomb>
+    </weapons>
     <map tile_def_imgid="1">
         2 1 1 2 1 1 1 1 1 1 1 1 1 1 2 2
         1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2
@@ -42,6 +46,6 @@
     <buildings>
         <building x='0' y='0' imgId='4'></building>
         <building x='1' y='1' imgId='4'></building>
-        <building x='2' y='2' imgId='4'></building>
+        <building x='3' y='3' imgId='5'></building>
     </buildings>
 </game>

@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 
 import com.example.vincentzhang.Sprite.Terrain.TerrainSystem;
+import com.example.vincentzhang.Sprite.WeaponSystem.WeaponSystem;
 import com.example.vincentzhang.learnandroid.R;
 
 /**
@@ -21,10 +22,12 @@ public class SpriteWorld {
      * TODO: 1. Terrain should be move to a separate class. 2. Add more types. 3. Make it more customizable. 4. Culling invisible elements.
      */
     private TerrainSystem terrainSystem = new TerrainSystem();
+    private WeaponSystem weaponSystem = new WeaponSystem();
 
     private boolean loadMap(Context context, Canvas canvas) {
         String level = "level1";
         ImageManager.inst().init(level, context.getResources());
+        weaponSystem.init(level,context.getResources(), canvas);
         return terrainSystem.init("level1", context.getResources(), canvas);
     }
 
@@ -83,6 +86,7 @@ public class SpriteWorld {
         CoordinateSystem.setScrDimension(new Vector2D(canvas.getWidth(), canvas.getHeight()));
 
         terrainSystem.draw(canvas);
+        weaponSystem.draw(canvas);
         imgSprite.draw(canvas);
     }
 
@@ -92,6 +96,16 @@ public class SpriteWorld {
         } else {
             imgSprite.setCurDirection(dir);
             imgSprite.setMoving(true);
+        }
+    }
+
+    public void onClick(Character but){
+        switch(but){
+            case 'A':
+                Vector2D spritePos = imgSprite.getSpritePos();
+                Vector2D gridPos = CoordinateSystem.worldToGrid(spritePos);
+                weaponSystem.addBomb(gridPos.getX(), gridPos.getY());
+                break;
         }
     }
 }

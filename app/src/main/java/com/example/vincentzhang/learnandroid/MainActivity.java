@@ -54,6 +54,9 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.downbutton:
                     world.onClick(DOWN);
                     break;
+                case R.id.button_a:
+                    world.onClick('A');
+                    break;
             }
 
             return false;
@@ -92,13 +95,14 @@ public class MainActivity extends AppCompatActivity {
         Button rightButton = (Button) findViewById(R.id.rightbutton);
         Button upButton = (Button) findViewById(R.id.upbutton);
         Button downButton = (Button) findViewById(R.id.downbutton);
+        Button AButton = (Button) findViewById(R.id.button_a);
 
         MyOnTouchListener myOnTouchListener = new MyOnTouchListener(gameView.getWorld());
         leftButton.setOnTouchListener(myOnTouchListener);
         rightButton.setOnTouchListener(myOnTouchListener);
         upButton.setOnTouchListener(myOnTouchListener);
         downButton.setOnTouchListener(myOnTouchListener);
-
+        AButton.setOnTouchListener(myOnTouchListener);
     }
 
     @Override

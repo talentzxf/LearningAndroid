@@ -79,12 +79,13 @@ public class TerrainSystem {
         int tileHeight = getScaledTileHeight(canvas);
         CoordinateSystem.setTileDimension(new Vector2D(tileWidth, tileHeight));
 
-        Log.i("Tilewidth:", Integer.toString(tileWidth) + ":" + Integer.toString(tileHeight));
+        // Log.i("Tilewidth:", Integer.toString(tileWidth) + ":" + Integer.toString(tileHeight));
 
         for (int y = 0; y < mapData.size(); y++) {
             for (int x = 0; x < mapData.get(y).size(); x++) {
-                int realWorld_x = x * tileWidth / 2;
-                int realWorld_y = y * tileHeight - x * tileHeight / 2;
+                Vector2D world_pos = CoordinateSystem.gridToWorld(new Vector2D(x,y));
+                int realWorld_x = (int)world_pos.getX();
+                int realWorld_y = (int)world_pos.getY();
 
                 int scr_x = (int) (realWorld_x - getViewPortPos().getX());
                 int scr_y = (int) (realWorld_y - getViewPortPos().getY());
