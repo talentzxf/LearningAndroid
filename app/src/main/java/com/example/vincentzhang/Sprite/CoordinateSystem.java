@@ -66,8 +66,8 @@ public class CoordinateSystem {
         double worldPosX = worldPos.getX();
         double worldPosY = worldPos.getY();
 
-        double gridIdX = worldPosX * 2 / tileDimension.getX();
-        double gridIdY = worldPosY / tileDimension.getY() + gridIdX;
+        int gridIdX = (int)(worldPosX * 2 / tileDimension.getX());
+        int gridIdY = (int)(worldPosY / tileDimension.getY() + gridIdX/2);
 
         return new Vector2D(gridIdX, gridIdY);
     }
