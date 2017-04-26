@@ -7,6 +7,7 @@
         <img src="rock" id="4"></img>
         <img src="tree" id="5"></img>
         <img src="bomb" id="6"></img>
+        <img src="green" id="7"></img>
     </imgs>
     <weapons>
         <bomb imgId="6"></bomb>

@@ -1,7 +1,6 @@
 package com.example.vincentzhang.Sprite;
 
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Rect;
 
 import java.util.ArrayList;
@@ -27,6 +26,10 @@ public class ImageSprite extends AbstractSprite {
     private int spriteScrHeight = -1;
 
     private boolean isMoving = false;
+
+    public ImageSprite(int imgId) {
+        super(imgId);
+    }
 
     public boolean isMoving() {
         return isMoving;
@@ -91,20 +94,10 @@ public class ImageSprite extends AbstractSprite {
     }
 
     @Override
-    public void draw(Canvas canvas) {
+    public Rect getSrcRect() {
         ArrayList<Rect> spriteSequence = dirSpriteMap.get(curDirection);
         Rect curRect = spriteSequence.get(curSpriteIndex);
-        float ratio = this.spriteWidth / this.spriteHeight;
-
-        int tileHeight = (int) CoordinateSystem.getTileDimension().getY();
-
-        int real_scrWidth = (int) (ratio * tileHeight);
-        Vector2D viewPortPos = CoordinateSystem.worldToScr(getSpritePos());
-        int spriteViewPosX = (int) viewPortPos.getX();
-        int spriteViewPosY = (int) viewPortPos.getY();
-        spriteScrWidth = real_scrWidth;
-        spriteScrHeight = tileHeight;
-
-        canvas.drawBitmap(bm, curRect, new Rect(spriteViewPosX, spriteViewPosY, spriteViewPosX + real_scrWidth, spriteViewPosY + tileHeight), null);
+        return curRect;
     }
+
 }

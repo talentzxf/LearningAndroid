@@ -13,7 +13,8 @@ import com.example.vincentzhang.learnandroid.R;
  */
 
 public class SpriteWorld {
-    private ImageSprite imgSprite = new ImageSprite();
+
+    private ImageSprite imgSprite;
     private static final int VIEWPORT_MARGIN = 100;
 
     private boolean inited = false;
@@ -27,6 +28,9 @@ public class SpriteWorld {
     private boolean loadMap(Context context, Canvas canvas) {
         String level = "level1";
         ImageManager.inst().init(level, context.getResources());
+
+        // TODO: Don't hard code here!
+        imgSprite = new ImageSprite(7);
         weaponSystem.init(level,context.getResources(), canvas);
         return terrainSystem.init("level1", context.getResources(), canvas);
     }

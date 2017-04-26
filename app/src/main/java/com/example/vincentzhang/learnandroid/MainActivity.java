@@ -16,11 +16,11 @@ import android.widget.TextView;
 
 import com.example.vincentzhang.Sprite.SpriteWorld;
 
-import static com.example.vincentzhang.Sprite.DIRECTIONS.DOWN;
-import static com.example.vincentzhang.Sprite.DIRECTIONS.LEFT;
-import static com.example.vincentzhang.Sprite.DIRECTIONS.RIGHT;
+import static com.example.vincentzhang.Sprite.DIRECTIONS.DOWNLEFT;
+import static com.example.vincentzhang.Sprite.DIRECTIONS.DOWNRIGHT;
 import static com.example.vincentzhang.Sprite.DIRECTIONS.UNKNOWN;
-import static com.example.vincentzhang.Sprite.DIRECTIONS.UP;
+import static com.example.vincentzhang.Sprite.DIRECTIONS.UPLEFT;
+import static com.example.vincentzhang.Sprite.DIRECTIONS.UPRIGHT;
 
 public class MainActivity extends AppCompatActivity {
     private GestureDetector detector;
@@ -43,16 +43,20 @@ public class MainActivity extends AppCompatActivity {
 
             switch(v.getId()){
                 case R.id.leftbutton:
-                    world.onClick(LEFT);
+                    // world.onClick(LEFT);
+                    world.onClick(DOWNLEFT);
                     break;
                 case R.id.rightbutton:
-                    world.onClick(RIGHT);
+                    // world.onClick(RIGHT);
+                    world.onClick(UPRIGHT);
                     break;
                 case R.id.upbutton:
-                    world.onClick(UP);
+                    // world.onClick(UP);
+                    world.onClick(UPLEFT);
                     break;
                 case R.id.downbutton:
-                    world.onClick(DOWN);
+                    // world.onClick(DOWN);
+                    world.onClick(DOWNRIGHT);
                     break;
                 case R.id.button_a:
                     world.onClick('A');
