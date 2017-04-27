@@ -13,9 +13,4 @@ public class Building extends AbstractSprite{
         super(id);
         this.setSpritePos(CoordinateSystem.gridToWorld(new Vector2D(gridX, gridY)));
     }
-
-    @Override
-    public void update() {
-
-    }
 }

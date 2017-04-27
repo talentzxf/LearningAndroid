@@ -12,6 +12,8 @@ public abstract class AbstractSprite {
     private Vector2D spritePos = new Vector2D();
     private float moveSpeed = 20;
     private Bitmap bm;
+    private Rect mScrRect;
+
 
     public AbstractSprite(int imgId){
         bm = ImageManager.inst().getImg(imgId);
@@ -19,6 +21,10 @@ public abstract class AbstractSprite {
 
     protected Bitmap getBm(){
         return bm;
+    }
+
+    protected Rect getScrRect(){
+        return mScrRect;
     }
 
     public float getMoveSpeed() {
@@ -52,7 +58,7 @@ public abstract class AbstractSprite {
     }
 
     public void draw(Canvas canvas){
-        Rect srcRect = getSrcRect();
+        Rect srcRect = getSrcRect(); // Source rect
 
         float ratio = srcRect.width()/srcRect.height();
         int tileHeight = (int) CoordinateSystem.getTileDimension().getY();
@@ -64,8 +70,16 @@ public abstract class AbstractSprite {
         float spriteScrWidth = real_scrWidth;
         float spriteScrHeight = tileHeight;
 
-        canvas.drawBitmap(bm, srcRect, new Rect(spriteViewPosX, spriteViewPosY, spriteViewPosX + real_scrWidth, spriteViewPosY + tileHeight), null);
+        mScrRect = new Rect(spriteViewPosX, spriteViewPosY, spriteViewPosX + real_scrWidth, spriteViewPosY + tileHeight);
+
+        canvas.drawBitmap(bm, srcRect, mScrRect, null);
     }
 
-    abstract public void update();
+    public void preUpdate(){
+
+    }
+
+    public void postUpdate(){
+
+    }
 }

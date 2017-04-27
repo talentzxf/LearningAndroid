@@ -83,7 +83,7 @@ public class ImageSprite extends AbstractSprite {
     }
 
     @Override
-    public void update() {
+    public void preUpdate() {
         if (this.isMoving) {
             ArrayList<Rect> spriteSequence = dirSpriteMap.get(curDirection);
             curSpriteIndex = (curSpriteIndex + 1) % spriteSequence.size();

@@ -49,10 +49,10 @@ public class SpriteWorld {
 
     private long steps = 0;
 
-    public void update() {
+    public void preUpdate() {
         steps++;
         if (steps % 2 == 0)
-            imgSprite.update();
+            imgSprite.preUpdate();
 
         // Update view port, to at least leave 1 tile to the sprite
         Vector2D curViewPort = CoordinateSystem.getViewPortPos();
@@ -84,6 +84,10 @@ public class SpriteWorld {
         }
 
         CoordinateSystem.setViewPortPos(newViewPortPos);
+    }
+
+    public void postUpdate(){
+        imgSprite.postUpdate();
     }
 
     public void draw(Canvas canvas) {

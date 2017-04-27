@@ -59,9 +59,10 @@ public class MyGameView extends SurfaceView implements Runnable, GestureDetector
                         Log.i("Context", "World inited");
                     }
 
-                    this.spriteWorld.update();
+                    this.spriteWorld.preUpdate();
                     canvas.drawColor(Color.BLACK);
                     this.spriteWorld.draw(canvas);
+                    this.spriteWorld.postUpdate();
                     this.getHolder().unlockCanvasAndPost(canvas);
                     lastMilliSeconds = System.currentTimeMillis();
                 } else {
