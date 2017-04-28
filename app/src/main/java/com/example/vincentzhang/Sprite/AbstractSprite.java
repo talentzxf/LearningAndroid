@@ -2,6 +2,8 @@ package com.example.vincentzhang.Sprite;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
 
 /**
@@ -73,6 +75,11 @@ public abstract class AbstractSprite {
         mScrRect = new Rect(spriteViewPosX, spriteViewPosY, spriteViewPosX + real_scrWidth, spriteViewPosY + tileHeight);
 
         canvas.drawBitmap(bm, srcRect, mScrRect, null);
+        Paint p = new Paint();
+        p.setStyle(Paint.Style.STROKE);
+        p.setStrokeWidth(3);
+        p.setColor(Color.RED);
+        canvas.drawRect(mScrRect, p);
     }
 
     public void preUpdate(){
@@ -81,5 +88,20 @@ public abstract class AbstractSprite {
 
     public void postUpdate(){
 
+    }
+
+    protected void onCollide(AbstractSprite target){
+
+    }
+
+    public boolean detectCollide(AbstractSprite target){
+        // If two rectangles collide
+        if(!Utilities.detectCollide(target.mScrRect, this.mScrRect)){
+            return false;
+        }
+
+        target.onCollide(this);
+        this.onCollide(target);
+        return true;
     }
 }

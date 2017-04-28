@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 
 import com.example.vincentzhang.Sprite.AbstractSprite;
 import com.example.vincentzhang.Sprite.CoordinateSystem;
+import com.example.vincentzhang.Sprite.ImageSprite;
 import com.example.vincentzhang.Sprite.Vector2D;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -41,6 +42,12 @@ public class WeaponSystem {
     public void draw(Canvas canvas){
         for(AbstractSprite bomb:bombs){
             bomb.draw(canvas);
+        }
+    }
+
+    public void detectCollide(ImageSprite imgSprite) {
+        for(AbstractSprite bomb:bombs){
+            bomb.detectCollide(imgSprite);
         }
     }
 }

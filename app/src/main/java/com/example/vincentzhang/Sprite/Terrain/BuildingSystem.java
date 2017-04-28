@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.util.Log;
 
+import com.example.vincentzhang.Sprite.AbstractSprite;
 import com.example.vincentzhang.Sprite.Vector2D;
 
 import org.w3c.dom.Node;
@@ -48,5 +49,14 @@ public class BuildingSystem {
         for(Building building : buildings.values()){
             building.draw(canvas);
         }
+    }
+
+    public AbstractSprite detectCollide(AbstractSprite target){
+        for(Building building: buildings.values()){
+            if(building.detectCollide(target)){
+                return building;
+            }
+        }
+        return null;
     }
 }

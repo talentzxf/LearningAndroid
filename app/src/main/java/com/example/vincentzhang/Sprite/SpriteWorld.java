@@ -3,6 +3,7 @@ package com.example.vincentzhang.Sprite;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 
 import com.example.vincentzhang.Sprite.Terrain.TerrainSystem;
 import com.example.vincentzhang.Sprite.WeaponSystem.WeaponSystem;
@@ -59,11 +60,16 @@ public class SpriteWorld {
         Vector2D curSpritePos = imgSprite.getSpritePos();
         Vector2D scrDim = CoordinateSystem.getScrDimension();
 
-        int spriteWidth = imgSprite.getSpriteWidth();
-        int spriteHeight = imgSprite.getSpriteHeight();
+        Rect spriteRect = imgSprite.getScrRect();
 
-        if(scrDim == null || spriteWidth == -1 || spriteHeight == -1 ){ // CoordinateSystem not inited yet.
+        if(scrDim == null || spriteRect == null){ // CoordinateSystem not inited yet.
             return ;
+        }
+        int spriteWidth = spriteRect.width();
+        int spriteHeight = spriteRect.height();
+
+        if(spriteHeight == 0 || spriteWidth == 0){
+            return;
         }
 
         Vector2D newViewPortPos = curViewPort;
@@ -88,6 +94,9 @@ public class SpriteWorld {
 
     public void postUpdate(){
         imgSprite.postUpdate();
+
+        terrainSystem.detectCollide(imgSprite);
+        weaponSystem.detectCollide(imgSprite);
     }
 
     public void draw(Canvas canvas) {

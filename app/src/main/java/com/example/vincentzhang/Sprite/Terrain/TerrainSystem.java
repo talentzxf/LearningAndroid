@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.util.Log;
 
+import com.example.vincentzhang.Sprite.AbstractSprite;
 import com.example.vincentzhang.Sprite.CoordinateSystem;
 import com.example.vincentzhang.Sprite.ImageManager;
 import com.example.vincentzhang.Sprite.Vector2D;
@@ -98,6 +99,15 @@ public class TerrainSystem {
             }
         }
         buildingSystem.draw(canvas);
+    }
+
+    // Find all buildings or weapons that collide with the target
+    public AbstractSprite detectCollide(AbstractSprite target){
+        AbstractSprite collidedBuilding = buildingSystem.detectCollide(target);
+        if(collidedBuilding != null){
+            return collidedBuilding;
+        }
+        return null;
     }
 
 }

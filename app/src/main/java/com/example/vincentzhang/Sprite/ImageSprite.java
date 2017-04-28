@@ -74,14 +74,6 @@ public class ImageSprite extends AbstractSprite {
         }
     }
 
-    public int getSpriteWidth(){
-        return spriteScrWidth;
-    }
-
-    public int getSpriteHeight(){
-        return spriteScrHeight;
-    }
-
     @Override
     public void preUpdate() {
         if (this.isMoving) {

@@ -3,6 +3,7 @@ package com.example.vincentzhang.Sprite.WeaponSystem;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
 
 import com.example.vincentzhang.Sprite.AbstractSprite;
 
@@ -43,5 +44,10 @@ public class Bomb extends AbstractSprite {
 
         // TODO: Consolidate all preUpdate postUpdate events
         postUpdate();
+    }
+
+    @Override
+    public void onCollide(AbstractSprite sprite){
+        Log.i("Collide", "collide!!!!");
     }
 }
