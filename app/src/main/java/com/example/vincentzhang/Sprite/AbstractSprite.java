@@ -62,7 +62,7 @@ public abstract class AbstractSprite {
     public void draw(Canvas canvas){
         Rect srcRect = getSrcRect(); // Source rect
 
-        float ratio = srcRect.width()/srcRect.height();
+        float ratio = (float)srcRect.width()/(float)srcRect.height();
         int tileHeight = (int) CoordinateSystem.getTileDimension().getY();
 
         int real_scrWidth = (int) (ratio * tileHeight);
