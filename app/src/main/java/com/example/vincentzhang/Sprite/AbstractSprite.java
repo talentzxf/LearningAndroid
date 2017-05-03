@@ -2,9 +2,10 @@ package com.example.vincentzhang.Sprite;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Rect;
+
+import com.example.vincentzhang.Sprite.imgemanagement.ImageManager;
+import com.example.vincentzhang.Sprite.imgemanagement.Space4DTree;
 
 /**
  * Created by VincentZhang on 4/15/2017.
@@ -15,10 +16,12 @@ public abstract class AbstractSprite {
     private float moveSpeed = 20;
     private Bitmap bm;
     private Rect mScrRect;
+    private Space4DTree space4DTree;
 
 
     public AbstractSprite(int imgId){
         bm = ImageManager.inst().getImg(imgId);
+        space4DTree = ImageManager.inst().getSpace4DTree(imgId);
     }
 
     protected Bitmap getBm(){
@@ -73,13 +76,8 @@ public abstract class AbstractSprite {
         float spriteScrHeight = tileHeight;
 
         mScrRect = new Rect(spriteViewPosX, spriteViewPosY, spriteViewPosX + real_scrWidth, spriteViewPosY + tileHeight);
-
         canvas.drawBitmap(bm, srcRect, mScrRect, null);
-        Paint p = new Paint();
-        p.setStyle(Paint.Style.STROKE);
-        p.setStrokeWidth(3);
-        p.setColor(Color.RED);
-        canvas.drawRect(mScrRect, p);
+        space4DTree.draw(canvas, 3, mScrRect);
     }
 
     public void preUpdate(){

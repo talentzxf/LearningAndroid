@@ -8,7 +8,7 @@ import android.util.Log;
 
 import com.example.vincentzhang.Sprite.AbstractSprite;
 import com.example.vincentzhang.Sprite.CoordinateSystem;
-import com.example.vincentzhang.Sprite.ImageManager;
+import com.example.vincentzhang.Sprite.imgemanagement.ImageManager;
 import com.example.vincentzhang.Sprite.Vector2D;
 
 import java.util.ArrayList;

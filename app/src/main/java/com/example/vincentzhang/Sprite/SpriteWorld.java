@@ -7,6 +7,7 @@ import android.graphics.Rect;
 
 import com.example.vincentzhang.Sprite.Terrain.TerrainSystem;
 import com.example.vincentzhang.Sprite.WeaponSystem.WeaponSystem;
+import com.example.vincentzhang.Sprite.imgemanagement.ImageManager;
 import com.example.vincentzhang.learnandroid.R;
 
 /**
@@ -28,7 +29,7 @@ public class SpriteWorld {
 
     private boolean loadMap(Context context, Canvas canvas) {
         String level = "level1";
-        ImageManager.inst().init(level, context.getResources());
+        ImageManager.inst().init(level, context.getResources(), canvas);
 
         // TODO: Don't hard code here!
         imgSprite = new ImageSprite(7);
