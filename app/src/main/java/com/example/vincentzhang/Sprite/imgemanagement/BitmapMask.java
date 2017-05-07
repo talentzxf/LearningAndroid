@@ -80,7 +80,6 @@ public class BitmapMask {
                     pixelCount.set(y, x, topWithMyColPixelCount + rowLeftCount + mineCount);
                 }
             }
-
         } catch (IOException e) {
             Log.e("File error", fileName, e);
         }

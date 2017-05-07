@@ -82,10 +82,12 @@ public class Space4DTree {
     private RectF[][] occupyMatrix = new RectF[2][2];
     private BitmapMask bmMask;
     private Space4DTreeNode rootNode;
+    private int imgId = -1;
 
     public Space4DTree(int id, Bitmap bm) {
         bmMask = new BitmapMask(id, bm);
         rootNode = new Space4DTreeNode(bmMask, new Rect(0, 0, bm.getWidth() - 1, bm.getHeight() - 1));
+        imgId = id;
     }
 
     public void draw(Canvas canvas, int level, Rect targetRect) {

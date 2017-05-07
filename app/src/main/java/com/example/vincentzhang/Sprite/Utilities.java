@@ -54,7 +54,7 @@ public class Utilities {
         int height = (int) (heightRatio * (float) curRect.height());
 
         int curLeft = (int) (targetParentRect.left + (widthRatio * (curRect.left - parentRect.left)));
-        int curTop = (int) (targetParentRect.top + (widthRatio * (curRect.top - parentRect.top)));
+        int curTop = (int) (targetParentRect.top + (heightRatio * (curRect.top - parentRect.top)));
 
         return new Rect(curLeft, curTop, curLeft + width, curTop + height);
     }
