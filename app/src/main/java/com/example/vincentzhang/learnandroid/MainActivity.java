@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.vincentzhang.Sprite.SpriteWorld;
+import com.example.vincentzhang.Sprite.Utilities;
 
 import static com.example.vincentzhang.Sprite.DIRECTIONS.DOWNLEFT;
 import static com.example.vincentzhang.Sprite.DIRECTIONS.DOWNRIGHT;
@@ -76,6 +77,10 @@ public class MainActivity extends AppCompatActivity {
             Log.e("Exception happened!", "Exception during initing main window", e);
             return;
         }
+
+        Log.i("Memory info", "Max memory:" + Runtime.getRuntime().maxMemory() + "," + " Cur memory:" + Runtime.getRuntime().totalMemory());
+
+        Utilities.verifyStoragePermissions(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

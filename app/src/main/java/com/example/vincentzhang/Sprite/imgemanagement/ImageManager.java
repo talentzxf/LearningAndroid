@@ -48,6 +48,7 @@ public class ImageManager {
             Log.e("XPath expression error!", "Unknown xpath expression!");
             return false;
         }
+
         for (int nodeIdx = 0; nodeIdx < imgMaps.getLength(); nodeIdx++) {
             Node imgNode = imgMaps.item(nodeIdx);
             String src = imgNode.getAttributes().getNamedItem("src").getNodeValue();
@@ -56,7 +57,7 @@ public class ImageManager {
 
             Bitmap imgBM = BitmapFactory.decodeResource(resources, getId(src, R.drawable.class));
 
-            Space4DTree space4DTree = new Space4DTree(imgBM);
+            Space4DTree space4DTree = new Space4DTree(imgId, imgBM);
             imgMap.put(imgId, imgBM);
             space4DTreeMap.put(imgId, space4DTree);
             Log.i("End of init img:", "id:" + src);

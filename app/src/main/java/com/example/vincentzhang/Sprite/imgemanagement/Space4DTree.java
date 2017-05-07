@@ -83,9 +83,9 @@ public class Space4DTree {
     private BitmapMask bmMask;
     private Space4DTreeNode rootNode;
 
-    public Space4DTree(Bitmap bm) {
-        bmMask = new BitmapMask(bm);
-        rootNode = new Space4DTreeNode(bmMask, new Rect(0, 0, bm.getWidth(), bm.getHeight()));
+    public Space4DTree(int id, Bitmap bm) {
+        bmMask = new BitmapMask(id, bm);
+        rootNode = new Space4DTreeNode(bmMask, new Rect(0, 0, bm.getWidth() - 1, bm.getHeight() - 1));
     }
 
     public void draw(Canvas canvas, int level, Rect targetRect) {
