@@ -79,7 +79,7 @@ public abstract class AbstractSprite {
 
         mScrRect = new Rect(spriteViewPosX, spriteViewPosY, spriteViewPosX + real_scrWidth, spriteViewPosY + tileHeight);
         canvas.drawBitmap(bm, srcRect, mScrRect, null);
-        space4DTree.draw(canvas, 2, mScrRect);
+        space4DTree.draw(canvas, 4, mScrRect);
     }
 
     public void preUpdate(){

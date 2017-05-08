@@ -102,12 +102,12 @@ public class BitmapMask {
      * @return
      */
     public int getRangePixelCount(Rect range) {
-        int top = range.top;
-        int bottom = range.bottom;
-        int left = range.left;
-        int right = range.right;
+        int t = range.top;
+        int b = range.bottom;
+        int l = range.left;
+        int r = range.right;
 
-        return pixelCount.get(bottom, right) - pixelCount.get(top, left);
+        return pixelCount.get(b, r) - pixelCount.get(t, r) - pixelCount.get(b,l) + pixelCount.get(t,l);
     }
 
 }
