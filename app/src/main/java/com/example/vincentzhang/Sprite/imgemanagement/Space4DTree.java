@@ -93,7 +93,6 @@ public class Space4DTree {
     public void draw(Canvas canvas, int level, Rect targetRect) {
         rootNode.draw(canvas, level, targetRect);
     }
-
 //    public boolean collide(Space4DTree otherTree){
 //        return rootNode.collide(otherTree.rootNode);
 //    }

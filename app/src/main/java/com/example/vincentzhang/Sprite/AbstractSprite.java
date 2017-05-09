@@ -19,11 +19,14 @@ public abstract class AbstractSprite {
     private Space4DTree space4DTree;
     private int imgId = -1;
 
-
     public AbstractSprite(int imgId){
         bm = ImageManager.inst().getImg(imgId);
         space4DTree = ImageManager.inst().getSpace4DTree(imgId);
         this.imgId = imgId;
+    }
+
+    public Space4DTree getSpace4DTree(){
+        return space4DTree;
     }
 
     protected Bitmap getBm(){
@@ -61,10 +64,10 @@ public abstract class AbstractSprite {
     private boolean resLoaded = false;
 
     public Rect getSrcRect(){
-        return new Rect(0,0, bm.getWidth(), bm.getHeight());
+        return new Rect(0,0, bm.getWidth() - 1, bm.getHeight() - 1);
     }
 
-    public void draw(Canvas canvas){
+    public Rect draw(Canvas canvas){
         Rect srcRect = getSrcRect(); // Source rect
 
         float ratio = (float)srcRect.width()/(float)srcRect.height();
@@ -79,7 +82,8 @@ public abstract class AbstractSprite {
 
         mScrRect = new Rect(spriteViewPosX, spriteViewPosY, spriteViewPosX + real_scrWidth, spriteViewPosY + tileHeight);
         canvas.drawBitmap(bm, srcRect, mScrRect, null);
-        space4DTree.draw(canvas, 4, mScrRect);
+
+        return mScrRect;
     }
 
     public void preUpdate(){

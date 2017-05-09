@@ -3,6 +3,7 @@ package com.example.vincentzhang.Sprite.WeaponSystem;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.util.Log;
 
 import com.example.vincentzhang.Sprite.AbstractSprite;
@@ -33,8 +34,8 @@ public class Bomb extends AbstractSprite {
     }
 
     @Override
-    public void draw(Canvas canvas){
-        super.draw(canvas);
+    public Rect draw(Canvas canvas){
+        Rect impactedRect = super.draw(canvas);
 
         Paint textPaint = new Paint( Paint.ANTI_ALIAS_FLAG);
         textPaint.setTextSize( 35);
@@ -44,6 +45,8 @@ public class Bomb extends AbstractSprite {
 
         // TODO: Consolidate all preUpdate postUpdate events
         postUpdate();
+
+        return impactedRect;
     }
 
     @Override
