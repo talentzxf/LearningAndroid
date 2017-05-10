@@ -52,12 +52,19 @@ public class ImageManager {
         for (int nodeIdx = 0; nodeIdx < imgMaps.getLength(); nodeIdx++) {
             Node imgNode = imgMaps.item(nodeIdx);
             String src = imgNode.getAttributes().getNamedItem("src").getNodeValue();
+            Node node = imgNode.getAttributes().getNamedItem("rowCount");
+            String rowCountStr = node == null ? "1": node.getNodeValue();
+            node = imgNode.getAttributes().getNamedItem("colCount");
+            String colCountStr = node == null ? "1":node.getNodeValue();
+            Integer rowCount = rowCountStr == null?1:Integer.valueOf(rowCountStr);
+            Integer colCount = colCountStr == null?1:Integer.valueOf(colCountStr);
+
             Log.i("Initing img:", "id:" + src);
             Integer imgId = Integer.valueOf(imgNode.getAttributes().getNamedItem("id").getNodeValue());
 
             Bitmap imgBM = BitmapFactory.decodeResource(resources, getId(src, R.drawable.class));
 
-            Space4DTree space4DTree = new Space4DTree(imgId, imgBM);
+            Space4DTree space4DTree = new Space4DTree(imgId, imgBM, rowCount, colCount);
             imgMap.put(imgId, imgBM);
             space4DTreeMap.put(imgId, space4DTree);
             Log.i("End of init img:", "id:" + src);

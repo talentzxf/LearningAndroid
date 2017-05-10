@@ -20,7 +20,7 @@ public class Building extends AbstractSprite{
     @Override
     public Rect draw(Canvas canvas) {
         Rect scrRect = super.draw(canvas);
-        getSpace4DTree().draw(canvas, 3, scrRect);
+        // getSpace4DTree().draw(canvas, 3, scrRect);
         return scrRect;
     }
 }

@@ -5,6 +5,7 @@ package com.example.vincentzhang.Sprite;
  */
 
 public class Vector2D {
+    private static final double eps = 0.001;
     private double x = 0.0;
     private double y = 0.0;
 
@@ -75,5 +76,27 @@ public class Vector2D {
         }
 
         return this.add(delta);
+    }
+
+    @Override
+    public int hashCode() {
+        return this.toString().hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Vector2D){
+            Vector2D targetObj = (Vector2D) obj;
+            if(Math.abs( this.getX() - targetObj.getX() ) <= eps
+                    && Math.abs( this.getY() - targetObj.getY() ) <= eps){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return Double.toString(this.getX()) + "," + Double.toString(this.getY());
     }
 }

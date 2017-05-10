@@ -14,6 +14,7 @@ import java.util.Map;
 public class ImageSprite extends AbstractSprite {
     private Bitmap bm;
     private Map<DIRECTIONS, ArrayList<Rect>> dirSpriteMap = new HashMap<DIRECTIONS, ArrayList<Rect>>();
+    private Map<DIRECTIONS, ArrayList<Vector2D>> dirImgRowColumnMap = new HashMap<DIRECTIONS, ArrayList<Vector2D>>();
     private DIRECTIONS curDirection = DIRECTIONS.DOWN;
     int rowCount = 8;
     int colCount = 4;
@@ -70,6 +71,13 @@ public class ImageSprite extends AbstractSprite {
                 }
                 rectSequence.add(new Rect(col * spriteWidth, row * spriteHeight, (col + 1) * spriteWidth, (row + 1) * spriteHeight));
                 dirSpriteMap.put(targetDir, rectSequence);
+
+                ArrayList<Vector2D> rowColumnSequence = dirImgRowColumnMap.get(targetDir);
+                if(rowColumnSequence == null){
+                    rowColumnSequence = new ArrayList<Vector2D>();
+                }
+                rowColumnSequence.add(new Vector2D(col,row));
+                dirImgRowColumnMap.put(targetDir, rowColumnSequence);
             }
         }
     }
@@ -92,4 +100,10 @@ public class ImageSprite extends AbstractSprite {
         return curRect;
     }
 
+    @Override
+    public Vector2D getImgRowColumn() {
+        ArrayList<Vector2D> rowColumnPosList = dirImgRowColumnMap.get(curDirection);
+        Vector2D curRowColumnPos = rowColumnPosList.get(curSpriteIndex);
+        return curRowColumnPos;
+    }
 }

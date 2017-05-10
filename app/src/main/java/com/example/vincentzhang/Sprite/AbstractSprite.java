@@ -67,6 +67,8 @@ public abstract class AbstractSprite {
         return new Rect(0,0, bm.getWidth() - 1, bm.getHeight() - 1);
     }
 
+    public Vector2D getImgRowColumn(){return new Vector2D(0,0);}
+
     public Rect draw(Canvas canvas){
         Rect srcRect = getSrcRect(); // Source rect
 
@@ -82,7 +84,7 @@ public abstract class AbstractSprite {
 
         mScrRect = new Rect(spriteViewPosX, spriteViewPosY, spriteViewPosX + real_scrWidth, spriteViewPosY + tileHeight);
         canvas.drawBitmap(bm, srcRect, mScrRect, null);
-
+        getSpace4DTree().draw(canvas, getImgRowColumn(), 4, mScrRect);
         return mScrRect;
     }
 

@@ -32,6 +32,6 @@ public class Space4DTreeUT {
         cv.drawCircle(200,400,200,pt);
         cv.save( Canvas.ALL_SAVE_FLAG );
 
-        Space4DTree space4DTree = new Space4DTree(bm);
+        Space4DTree space4DTree = new Space4DTree(100,bm,1,1);
     }
 }
