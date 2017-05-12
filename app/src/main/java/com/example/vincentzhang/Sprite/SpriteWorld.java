@@ -96,8 +96,12 @@ public class SpriteWorld {
     public void postUpdate(){
         imgSprite.postUpdate();
 
-        terrainSystem.detectCollide(imgSprite);
-        weaponSystem.detectCollide(imgSprite);
+        if(CollideDetector.isDirtyFlag()){
+            terrainSystem.detectCollide(imgSprite);
+            weaponSystem.detectCollide(imgSprite);
+        }
+
+        CollideDetector.setDirtyFlag(false);
     }
 
     public void draw(Canvas canvas) {
@@ -115,6 +119,7 @@ public class SpriteWorld {
             imgSprite.setCurDirection(dir);
             imgSprite.setMoving(true);
         }
+        CollideDetector.setDirtyFlag(true);
     }
 
     public void onClick(Character but){
@@ -125,5 +130,6 @@ public class SpriteWorld {
                 weaponSystem.addBomb(gridPos.getX(), gridPos.getY());
                 break;
         }
+        CollideDetector.setDirtyFlag(true);
     }
 }

@@ -3,6 +3,7 @@ package com.example.vincentzhang.Sprite;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.util.Log;
 
 import com.example.vincentzhang.Sprite.imgemanagement.ImageManager;
 import com.example.vincentzhang.Sprite.imgemanagement.Space4DTree;
@@ -79,12 +80,10 @@ public abstract class AbstractSprite {
         Vector2D viewPortPos = CoordinateSystem.worldToScr(getSpritePos());
         int spriteViewPosX = (int) viewPortPos.getX();
         int spriteViewPosY = (int) viewPortPos.getY();
-        float spriteScrWidth = real_scrWidth;
-        float spriteScrHeight = tileHeight;
 
         mScrRect = new Rect(spriteViewPosX, spriteViewPosY, spriteViewPosX + real_scrWidth, spriteViewPosY + tileHeight);
         canvas.drawBitmap(bm, srcRect, mScrRect, null);
-        getSpace4DTree().draw(canvas, getImgRowColumn(), 4, mScrRect);
+        // getSpace4DTree().draw(canvas, getImgRowColumn(), 4, mScrRect);
         return mScrRect;
     }
 
@@ -97,12 +96,17 @@ public abstract class AbstractSprite {
     }
 
     protected void onCollide(AbstractSprite target){
-
+        Log.i("Collide!!!!", " really??");
     }
 
     public boolean detectCollide(AbstractSprite target){
         // If two rectangles collide
         if(!Utilities.detectCollide(target.mScrRect, this.mScrRect)){
+            return false;
+        }
+
+        CollideDetector collideDetector = new CollideDetector(this, target);
+        if(!collideDetector.detect()){
             return false;
         }
 

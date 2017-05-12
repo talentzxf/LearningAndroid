@@ -59,6 +59,18 @@ public class Utilities {
         return new Rect(curLeft, curTop, curLeft + width, curTop + height);
     }
 
+    public static Rect mapScrToImageRect(Rect imgRect, Rect scrRect, Rect scrTargetRect) {
+        float widthRatio = (float)imgRect.width()/(float)scrRect.width();
+        int left = (int) (widthRatio * (scrTargetRect.left - scrRect.left) + imgRect.left);
+        int right = (int) (widthRatio * (scrTargetRect.right - scrRect.left) + imgRect.left);
+
+        float heightRatio =  (float)imgRect.height()/(float)scrRect.height();
+        int top = (int) (heightRatio * ( scrTargetRect.top - scrRect.top ) + imgRect.top);
+        int bottom = (int) (heightRatio * ( scrTargetRect.bottom - scrRect.top ) + imgRect.top);
+
+        return new Rect(left, top, right, bottom);
+    }
+
     // Storage Permissions
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
 
@@ -84,5 +96,16 @@ public class Utilities {
             ActivityCompat.requestPermissions(activity, PERMISSIONS_STORAGE,
                     REQUEST_EXTERNAL_STORAGE);
         }
+    }
+
+    public static Rect intersectRect(Rect rect1, Rect rect2) {
+        int l = Math.max(rect1.left, rect2.left);
+        int t = Math.max(rect1.top, rect2.top);
+        int r = Math.min(rect1.right, rect2.right);
+        int b = Math.min(rect1.bottom, rect2.bottom);
+
+        if (l > r || t > b)
+            return null;
+        return new Rect(l, t, r, b);
     }
 }
