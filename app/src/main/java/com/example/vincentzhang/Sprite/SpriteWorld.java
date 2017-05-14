@@ -51,10 +51,18 @@ public class SpriteWorld {
 
     private long steps = 0;
 
-    public void preUpdate() {
-        steps++;
-        if (steps % 2 == 0)
-            imgSprite.preUpdate();
+    public void preUpdate(){
+        updateViewPort();
+        imgSprite.preUpdate();
+    }
+
+    public void beforeCollision() {
+        imgSprite.beforeCollision();
+        this.terrainSystem.beforeCollision();
+        this.weaponSystem.beforeCollision();
+    }
+
+    private void updateViewPort(){
 
         // Update view port, to at least leave 1 tile to the sprite
         Vector2D curViewPort = CoordinateSystem.getViewPortPos();
@@ -93,15 +101,23 @@ public class SpriteWorld {
         CoordinateSystem.setViewPortPos(newViewPortPos);
     }
 
-    public void postUpdate(){
-        imgSprite.postUpdate();
-
+    /**
+     *
+     * @return need reprocess or not.
+     */
+    public boolean processCollision(){
         if(CollideDetector.isDirtyFlag()){
-            terrainSystem.detectCollide(imgSprite);
-            weaponSystem.detectCollide(imgSprite);
+            if( null != terrainSystem.detectCollide(imgSprite) )
+                return true;
+            else if(null != weaponSystem.detectCollide(imgSprite))
+                return true;
         }
 
-        CollideDetector.setDirtyFlag(false);
+        return false;
+    }
+
+    public void postUpdate(){
+        imgSprite.postUpdate();
     }
 
     public void draw(Canvas canvas) {

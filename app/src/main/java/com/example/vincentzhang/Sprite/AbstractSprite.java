@@ -68,11 +68,19 @@ public abstract class AbstractSprite {
         return new Rect(0,0, bm.getWidth() - 1, bm.getHeight() - 1);
     }
 
+    public void preUpdate(){}
+
     public Vector2D getImgRowColumn(){return new Vector2D(0,0);}
 
     public Rect draw(Canvas canvas){
         Rect srcRect = getSrcRect(); // Source rect
+        canvas.drawBitmap(bm, srcRect, mScrRect, null);
+        // getSpace4DTree().draw(canvas, getImgRowColumn(), 4, mScrRect);
+        return mScrRect;
+    }
 
+    public void beforeCollision(){
+        Rect srcRect = getSrcRect(); // Source rect
         float ratio = (float)srcRect.width()/(float)srcRect.height();
         int tileHeight = (int) CoordinateSystem.getTileDimension().getY();
 
@@ -82,13 +90,6 @@ public abstract class AbstractSprite {
         int spriteViewPosY = (int) viewPortPos.getY();
 
         mScrRect = new Rect(spriteViewPosX, spriteViewPosY, spriteViewPosX + real_scrWidth, spriteViewPosY + tileHeight);
-        canvas.drawBitmap(bm, srcRect, mScrRect, null);
-        // getSpace4DTree().draw(canvas, getImgRowColumn(), 4, mScrRect);
-        return mScrRect;
-    }
-
-    public void preUpdate(){
-
     }
 
     public void postUpdate(){

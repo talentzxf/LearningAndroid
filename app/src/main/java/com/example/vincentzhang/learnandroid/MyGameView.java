@@ -9,6 +9,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 
+import com.example.vincentzhang.Sprite.CollideDetector;
 import com.example.vincentzhang.Sprite.SpriteWorld;
 
 /**
@@ -59,8 +60,15 @@ public class MyGameView extends SurfaceView implements Runnable, GestureDetector
                         Log.i("Context", "World inited");
                     }
 
-                    this.spriteWorld.preUpdate();
                     canvas.drawColor(Color.BLACK);
+                    this.spriteWorld.preUpdate();
+                    do{
+                        this.spriteWorld.beforeCollision();
+                    }while( this.spriteWorld.processCollision() );
+
+                    // All collisions should have been handled here.
+                    CollideDetector.setDirtyFlag(false);
+
                     this.spriteWorld.draw(canvas);
                     this.spriteWorld.postUpdate();
                     this.getHolder().unlockCanvasAndPost(canvas);

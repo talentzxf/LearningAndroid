@@ -75,6 +75,10 @@ public class TerrainSystem {
         return ImageManager.inst().getImg(tileDefImgId).getScaledHeight(canvas);
     }
 
+    public void beforeCollision(){
+        buildingSystem.beforeCollision();
+    }
+
     public void draw(Canvas canvas) {
         int tileWidth = getScaledTileWidth(canvas);
         int tileHeight = getScaledTileHeight(canvas);

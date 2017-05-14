@@ -45,9 +45,17 @@ public class WeaponSystem {
         }
     }
 
-    public void detectCollide(ImageSprite imgSprite) {
+    public void beforeCollision(){
         for(AbstractSprite bomb:bombs){
-            bomb.detectCollide(imgSprite);
+            bomb.beforeCollision();
         }
+    }
+
+    public AbstractSprite detectCollide(ImageSprite imgSprite) {
+        for(AbstractSprite bomb:bombs){
+            if( bomb.detectCollide(imgSprite))
+                return bomb;
+        }
+        return null;
     }
 }

@@ -45,7 +45,7 @@
         2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
     </map>
     <buildings>
-        <building x='0' y='0' imgId='4'></building>
+        <building x='0' y='0' imgId='4'  ></building>
         <building x='3' y='3' imgId='5'></building>
     </buildings>
 </game>

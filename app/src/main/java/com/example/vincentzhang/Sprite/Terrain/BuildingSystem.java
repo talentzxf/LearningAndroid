@@ -51,6 +51,12 @@ public class BuildingSystem {
         }
     }
 
+    public void beforeCollision(){
+        for(Building building : buildings.values()){
+            building.beforeCollision();
+        }
+    }
+
     public AbstractSprite detectCollide(AbstractSprite target){
         for(Building building: buildings.values()){
             if(building.detectCollide(target)){
