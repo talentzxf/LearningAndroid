@@ -102,6 +102,9 @@ public abstract class AbstractSprite {
     }
 
     public boolean detectCollide(AbstractSprite target){
+        if(target.mScrRect == null || this.mScrRect == null)
+            return false;
+
         // If two rectangles collide
         if(!Utilities.detectCollide(target.mScrRect, this.mScrRect)){
             return false;

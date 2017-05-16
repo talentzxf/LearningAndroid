@@ -118,6 +118,7 @@ public class SpriteWorld {
 
     public void postUpdate(){
         imgSprite.postUpdate();
+        weaponSystem.postUpdate();
     }
 
     public void draw(Canvas canvas) {

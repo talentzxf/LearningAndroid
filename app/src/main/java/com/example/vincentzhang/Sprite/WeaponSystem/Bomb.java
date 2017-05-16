@@ -16,9 +16,15 @@ public class Bomb extends AbstractSprite {
     private int step = 5;
     private long lastUpdateTime = -1;
 
+    private boolean exploded = false;
+
     public Bomb() {
         // TODO: don't hard code here
         super(6);
+    }
+
+    public boolean isExploded() {
+        return exploded;
     }
 
     @Override
@@ -30,6 +36,10 @@ public class Bomb extends AbstractSprite {
                 step = (step-1 + 5)%5;
                 lastUpdateTime = System.currentTimeMillis();
             }
+        }
+
+        if(step == 0){
+            exploded = true;
         }
     }
 
@@ -43,10 +53,6 @@ public class Bomb extends AbstractSprite {
 
         if(impactedRect != null && getScrRect() != null)
             canvas.drawText(String.valueOf(step), getScrRect().centerX(), getScrRect().centerY(), textPaint);
-
-        // TODO: Consolidate all preUpdate postUpdate events
-        postUpdate();
-
         return impactedRect;
     }
 
