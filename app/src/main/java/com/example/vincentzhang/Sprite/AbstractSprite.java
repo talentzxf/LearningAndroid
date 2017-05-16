@@ -74,7 +74,8 @@ public abstract class AbstractSprite {
 
     public Rect draw(Canvas canvas){
         Rect srcRect = getSrcRect(); // Source rect
-        canvas.drawBitmap(bm, srcRect, mScrRect, null);
+        if(mScrRect != null)
+            canvas.drawBitmap(bm, srcRect, mScrRect, null);
         // getSpace4DTree().draw(canvas, getImgRowColumn(), 4, mScrRect);
         return mScrRect;
     }

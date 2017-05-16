@@ -41,7 +41,8 @@ public class Bomb extends AbstractSprite {
         textPaint.setTextSize( 35);
         textPaint.setColor( Color.RED);
 
-        canvas.drawText(String.valueOf(step), getScrRect().centerX(), getScrRect().centerY(), textPaint);
+        if(impactedRect != null && getScrRect() != null)
+            canvas.drawText(String.valueOf(step), getScrRect().centerX(), getScrRect().centerY(), textPaint);
 
         // TODO: Consolidate all preUpdate postUpdate events
         postUpdate();
