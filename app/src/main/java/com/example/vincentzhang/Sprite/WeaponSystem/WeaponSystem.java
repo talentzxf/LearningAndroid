@@ -18,6 +18,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class WeaponSystem {
 
     private ConcurrentLinkedQueue<Bomb> bombs = new ConcurrentLinkedQueue<>();
+    private ConcurrentLinkedQueue<Explosion> explosions = new ConcurrentLinkedQueue<>();
+
 
     public boolean init(String level, Resources resources, Canvas canvas) {
 //        XPath xPath = XPathFactory.newInstance().newXPath();
@@ -44,11 +46,19 @@ public class WeaponSystem {
         for (AbstractSprite bomb : bombs) {
             bomb.draw(canvas);
         }
+
+        for(AbstractSprite explosion:explosions){
+            explosion.draw(canvas);
+        }
     }
 
     public void beforeCollision() {
         for (AbstractSprite bomb : bombs) {
             bomb.beforeCollision();
+        }
+
+        for(AbstractSprite explosion: explosions){
+            explosion.beforeCollision();
         }
     }
 
@@ -57,6 +67,7 @@ public class WeaponSystem {
             if (bomb.detectCollide(imgSprite))
                 return bomb;
         }
+
         return null;
     }
 
@@ -69,8 +80,22 @@ public class WeaponSystem {
             }
         }
 
+        ArrayList<Explosion> tobeDeletedExplosions = new ArrayList<>();
+        for( Explosion explosion: explosions){
+            if(!explosion.isAlive()){
+                tobeDeletedExplosions.add(explosion);
+            }
+        }
+
         for(Bomb bomb:tobeDeletedBoms){
             bombs.remove(bomb);
+            Explosion newExplosion = new Explosion(8);
+            newExplosion.setSpritePos(bomb.getSpritePos());
+            explosions.add(newExplosion);
+        }
+
+        for(Explosion explosion:tobeDeletedExplosions){
+            explosions.remove(explosion);
         }
     }
 }

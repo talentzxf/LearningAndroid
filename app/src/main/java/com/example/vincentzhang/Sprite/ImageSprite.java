@@ -16,6 +16,8 @@ public class ImageSprite extends AbstractSprite {
     private Map<DIRECTIONS, ArrayList<Rect>> dirSpriteMap = new HashMap<DIRECTIONS, ArrayList<Rect>>();
     private Map<DIRECTIONS, ArrayList<Vector2D>> dirImgRowColumnMap = new HashMap<DIRECTIONS, ArrayList<Vector2D>>();
     private DIRECTIONS curDirection = DIRECTIONS.DOWN;
+
+    // TODO: read this from XML config
     int rowCount = 8;
     int colCount = 4;
 

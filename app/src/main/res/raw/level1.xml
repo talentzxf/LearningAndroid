@@ -8,6 +8,7 @@
         <img src="tree" id="5"></img>
         <img src="bomb" id="6"></img>
         <img src="green" id="7" rowCount="8" colCount="4"></img>
+        <img src="explode" id="8" rowCount="2" colCount="8"></img>
     </imgs>
     <weapons>
         <bomb imgId="6"></bomb>

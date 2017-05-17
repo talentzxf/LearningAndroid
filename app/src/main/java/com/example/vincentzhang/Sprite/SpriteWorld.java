@@ -27,24 +27,21 @@ public class SpriteWorld {
     private TerrainSystem terrainSystem = new TerrainSystem();
     private WeaponSystem weaponSystem = new WeaponSystem();
 
-    private boolean loadMap(Context context, Canvas canvas) {
-        String level = "level1";
-        ImageManager.inst().init(level, context.getResources(), canvas);
-
-        // TODO: Don't hard code here!
-        imgSprite = new ImageSprite(7);
-        weaponSystem.init(level,context.getResources(), canvas);
-        return terrainSystem.init("level1", context.getResources(), canvas);
-    }
-
     public boolean inited(){
         return inited;
     }
 
     public boolean init(Context context, Canvas canvas) {
-        loadMap(context, canvas);
+        String level = "level1";
+        ImageManager.inst().init(level, context.getResources(), canvas);
+
+        weaponSystem.init(level,context.getResources(), canvas);
+
+        // TODO: Don't hard code imgId here!
+        imgSprite = new ImageSprite(7);
         imgSprite.load(BitmapFactory.decodeResource(context.getResources(), R.drawable.green));
 
+        terrainSystem.init("level1", context.getResources(), canvas);
         inited = true;
         return true;
     }
