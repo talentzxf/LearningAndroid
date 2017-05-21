@@ -3,6 +3,8 @@ package com.example.vincentzhang.Sprite;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 
+import com.example.vincentzhang.Sprite.imgemanagement.ImageManager;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,8 +31,7 @@ public class ImageSprite extends AbstractSprite {
 
     public ImageSprite(int imgId) {
         super(imgId);
-
-        this.setSpritePos(new Vector2D(200,200));
+        load(ImageManager.inst().getImg(imgId));
     }
 
     public boolean isMoving() {
@@ -52,7 +53,7 @@ public class ImageSprite extends AbstractSprite {
         return curDirection;
     }
 
-    public void load(Bitmap bitmap) {
+    private void load(Bitmap bitmap) {
         bm = bitmap;
         setResLoaded(true);
         splitImage();

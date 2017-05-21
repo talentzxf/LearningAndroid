@@ -1,4 +1,4 @@
-package com.example.vincentzhang.Sprite.Terrain;
+package com.example.vincentzhang.Sprite.TerrainSystem;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -8,6 +8,8 @@ import android.util.Log;
 
 import com.example.vincentzhang.Sprite.AbstractSprite;
 import com.example.vincentzhang.Sprite.CoordinateSystem;
+import com.example.vincentzhang.Sprite.ImageSprite;
+import com.example.vincentzhang.Sprite.SubSystem;
 import com.example.vincentzhang.Sprite.imgemanagement.ImageManager;
 import com.example.vincentzhang.Sprite.Vector2D;
 
@@ -24,10 +26,10 @@ import static com.example.vincentzhang.Sprite.Utilities.getXmlSource;
  * Created by VincentZhang on 4/22/2017.
  */
 
-public class TerrainSystem {
+public class TerrainSystem implements SubSystem{
     private boolean inited = false;
     private ArrayList<ArrayList<Integer>> mapData = new ArrayList<>();
-    private BuildingSystem buildingSystem = new BuildingSystem();
+
     private int tileDefImgId = -1;
 
     public boolean init(String level, Resources resources, Canvas canvas) {
@@ -54,8 +56,6 @@ public class TerrainSystem {
             int tileHeight = getScaledTileHeight(canvas);
             CoordinateSystem.setTileDimension(new Vector2D(tileWidth, tileHeight));
 
-            buildingSystem.init(level, resources);
-
             Log.i("End of loading file:", "res/xml/" + level +".xml:" + mapData);
             inited = true;
 
@@ -75,8 +75,19 @@ public class TerrainSystem {
         return ImageManager.inst().getImg(tileDefImgId).getScaledHeight(canvas);
     }
 
-    public void beforeCollision(){
-        buildingSystem.beforeCollision();
+    @Override
+    public AbstractSprite detectCollide(ImageSprite imgSprite) {
+        return null;
+    }
+
+    @Override
+    public void preUpdate() {
+
+    }
+
+    @Override
+    public void postUpdate() {
+
     }
 
     public void draw(Canvas canvas) {
@@ -102,16 +113,10 @@ public class TerrainSystem {
                             new Rect(scr_x, scr_y, scr_x + tileWidth, scr_y + tileHeight), null);
             }
         }
-        buildingSystem.draw(canvas);
     }
 
-    // Find all buildings or weapons that collide with the target
-    public AbstractSprite detectCollide(AbstractSprite target){
-        AbstractSprite collidedBuilding = buildingSystem.detectCollide(target);
-        if(collidedBuilding != null){
-            return collidedBuilding;
-        }
-        return null;
+    @Override
+    public void beforeCollision() {
     }
 
 }

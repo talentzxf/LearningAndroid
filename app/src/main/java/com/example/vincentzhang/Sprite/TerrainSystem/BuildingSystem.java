@@ -1,10 +1,12 @@
-package com.example.vincentzhang.Sprite.Terrain;
+package com.example.vincentzhang.Sprite.TerrainSystem;
 
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.util.Log;
 
 import com.example.vincentzhang.Sprite.AbstractSprite;
+import com.example.vincentzhang.Sprite.ImageSprite;
+import com.example.vincentzhang.Sprite.SubSystem;
 import com.example.vincentzhang.Sprite.Vector2D;
 
 import org.w3c.dom.Node;
@@ -24,10 +26,11 @@ import static com.example.vincentzhang.Sprite.Utilities.getXmlSource;
  * Created by VincentZhang on 4/23/2017.
  */
 
-public class BuildingSystem {
+public class BuildingSystem implements SubSystem{
     private Map<Vector2D, Building> buildings = new HashMap<>();
 
-    public boolean init(String level, Resources resources) {
+    @Override
+    public boolean init(String level, Resources resources, Canvas canvas) {
         XPath xPath = XPathFactory.newInstance().newXPath();
         try {
             NodeList buildingNodes = (NodeList) xPath.evaluate("/game/buildings/building", getXmlSource(resources, level), XPathConstants.NODESET);
@@ -57,7 +60,18 @@ public class BuildingSystem {
         }
     }
 
-    public AbstractSprite detectCollide(AbstractSprite target){
+    @Override
+    public void preUpdate() {
+
+    }
+
+    @Override
+    public void postUpdate() {
+
+    }
+
+    @Override
+    public AbstractSprite detectCollide(ImageSprite target) {
         for(Building building: buildings.values()){
             if(building.detectCollide(target)){
                 return building;

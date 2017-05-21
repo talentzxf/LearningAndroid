@@ -1,4 +1,4 @@
-package com.example.vincentzhang.Sprite.Terrain;
+package com.example.vincentzhang.Sprite.TerrainSystem;
 
 
 import android.graphics.Canvas;

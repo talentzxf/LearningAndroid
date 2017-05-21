@@ -34,7 +34,7 @@ public abstract class AbstractSprite {
         return bm;
     }
 
-    protected Rect getScrRect(){
+    public Rect getScrRect(){
         return mScrRect;
     }
 

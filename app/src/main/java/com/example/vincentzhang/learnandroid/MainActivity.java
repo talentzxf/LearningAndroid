@@ -14,7 +14,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.vincentzhang.Sprite.SpriteWorld;
+import com.example.vincentzhang.Sprite.Controller.ButtonEventDispatcher;
+import com.example.vincentzhang.Sprite.Controller.ButtonEventListener;
 import com.example.vincentzhang.Sprite.Utilities;
 
 import static com.example.vincentzhang.Sprite.DIRECTIONS.DOWNLEFT;
@@ -27,9 +28,9 @@ public class MainActivity extends AppCompatActivity {
     private GestureDetector detector;
 
     class MyOnTouchListener implements View.OnTouchListener{
-        private SpriteWorld world;
-        public MyOnTouchListener(SpriteWorld world){
-            this.world = world;
+        private ButtonEventListener l;
+        public MyOnTouchListener(){
+            l = ButtonEventDispatcher.inst();
         }
 
         @Override
@@ -38,29 +39,29 @@ public class MainActivity extends AppCompatActivity {
                 case MotionEvent.ACTION_BUTTON_RELEASE:
                 case MotionEvent.ACTION_CANCEL:
                 case MotionEvent.ACTION_UP:
-                    world.onClick(UNKNOWN);
+                    l.onClick(UNKNOWN);
                     return false;
             }
 
             switch(v.getId()){
                 case R.id.leftbutton:
                     // world.onClick(LEFT);
-                    world.onClick(DOWNLEFT);
+                    l.onClick(DOWNLEFT);
                     break;
                 case R.id.rightbutton:
                     // world.onClick(RIGHT);
-                    world.onClick(UPRIGHT);
+                    l.onClick(UPRIGHT);
                     break;
                 case R.id.upbutton:
                     // world.onClick(UP);
-                    world.onClick(UPLEFT);
+                    l.onClick(UPLEFT);
                     break;
                 case R.id.downbutton:
                     // world.onClick(DOWN);
-                    world.onClick(DOWNRIGHT);
+                    l.onClick(DOWNRIGHT);
                     break;
                 case R.id.button_a:
-                    world.onClick('A');
+                    l.onClick('A');
                     break;
             }
 
@@ -106,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         Button downButton = (Button) findViewById(R.id.downbutton);
         Button AButton = (Button) findViewById(R.id.button_a);
 
-        MyOnTouchListener myOnTouchListener = new MyOnTouchListener(gameView.getWorld());
+        MyOnTouchListener myOnTouchListener = new MyOnTouchListener();
         leftButton.setOnTouchListener(myOnTouchListener);
         rightButton.setOnTouchListener(myOnTouchListener);
         upButton.setOnTouchListener(myOnTouchListener);

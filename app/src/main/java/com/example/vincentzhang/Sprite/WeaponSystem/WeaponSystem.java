@@ -4,8 +4,8 @@ import android.content.res.Resources;
 import android.graphics.Canvas;
 
 import com.example.vincentzhang.Sprite.AbstractSprite;
-import com.example.vincentzhang.Sprite.CoordinateSystem;
 import com.example.vincentzhang.Sprite.ImageSprite;
+import com.example.vincentzhang.Sprite.SubSystem;
 import com.example.vincentzhang.Sprite.Vector2D;
 
 import java.util.ArrayList;
@@ -15,12 +15,13 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * Created by VincentZhang on 4/24/2017.
  */
 
-public class WeaponSystem {
+public class WeaponSystem implements SubSystem {
 
     private ConcurrentLinkedQueue<Bomb> bombs = new ConcurrentLinkedQueue<>();
     private ConcurrentLinkedQueue<Explosion> explosions = new ConcurrentLinkedQueue<>();
 
 
+    @Override
     public boolean init(String level, Resources resources, Canvas canvas) {
 //        XPath xPath = XPathFactory.newInstance().newXPath();
 //        try {
@@ -36,12 +37,13 @@ public class WeaponSystem {
         return true;
     }
 
-    public void addBomb(double gridX, double gridY) {
+    public void addBomb(Vector2D pos){
         Bomb bomb = new Bomb();
-        bomb.setSpritePos(CoordinateSystem.gridToWorld(new Vector2D(gridX, gridY)));
+        bomb.setSpritePos(pos);
         this.bombs.add(bomb);
     }
 
+    @Override
     public void draw(Canvas canvas) {
         for (AbstractSprite bomb : bombs) {
             bomb.draw(canvas);
@@ -52,6 +54,7 @@ public class WeaponSystem {
         }
     }
 
+    @Override
     public void beforeCollision() {
         for (AbstractSprite bomb : bombs) {
             bomb.beforeCollision();
@@ -62,6 +65,7 @@ public class WeaponSystem {
         }
     }
 
+    @Override
     public AbstractSprite detectCollide(ImageSprite imgSprite) {
         for (AbstractSprite bomb : bombs) {
             if (bomb.detectCollide(imgSprite))
@@ -71,6 +75,12 @@ public class WeaponSystem {
         return null;
     }
 
+    @Override
+    public void preUpdate() {
+
+    }
+
+    @Override
     public void postUpdate() {
         ArrayList<Bomb> tobeDeletedBoms = new ArrayList<>();
         for (Bomb bomb : bombs) {

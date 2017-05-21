@@ -45,8 +45,11 @@
         2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
         2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
     </map>
+    <sprites>
+        <sprite name="main_avatar" imgId="7" controller="ButtonController" x="200" y="200" isleading="true"></sprite>
+    </sprites>
     <buildings>
-        <building x='0' y='0' imgId='4'  ></building>
+        <building x='0' y='0' imgId='4'></building>
         <building x='3' y='3' imgId='5'></building>
     </buildings>
 </game>

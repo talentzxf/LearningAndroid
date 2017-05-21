@@ -1,14 +1,16 @@
 package com.example.vincentzhang.Sprite;
 
 import android.content.Context;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 
-import com.example.vincentzhang.Sprite.Terrain.TerrainSystem;
+import com.example.vincentzhang.Sprite.SpriteSystem.SpriteSystem;
+import com.example.vincentzhang.Sprite.TerrainSystem.BuildingSystem;
+import com.example.vincentzhang.Sprite.TerrainSystem.TerrainSystem;
 import com.example.vincentzhang.Sprite.WeaponSystem.WeaponSystem;
 import com.example.vincentzhang.Sprite.imgemanagement.ImageManager;
-import com.example.vincentzhang.learnandroid.R;
+
+import java.util.ArrayList;
 
 /**
  * Created by VincentZhang on 4/15/2017.
@@ -16,16 +18,13 @@ import com.example.vincentzhang.learnandroid.R;
 
 public class SpriteWorld {
 
-    private ImageSprite imgSprite;
     private static final int VIEWPORT_MARGIN = 100;
 
     private boolean inited = false;
 
-    /**
-     * TODO: 1. Terrain should be move to a separate class. 2. Add more types. 3. Make it more customizable. 4. Culling invisible elements.
-     */
-    private TerrainSystem terrainSystem = new TerrainSystem();
-    private WeaponSystem weaponSystem = new WeaponSystem();
+    private ArrayList<SubSystem> subSystems = new ArrayList<>();
+    private WeaponSystem weaponSystem;
+    private SpriteSystem spriteSystem;
 
     public boolean inited(){
         return inited;
@@ -35,13 +34,21 @@ public class SpriteWorld {
         String level = "level1";
         ImageManager.inst().init(level, context.getResources(), canvas);
 
-        weaponSystem.init(level,context.getResources(), canvas);
+        subSystems.add(new TerrainSystem());
 
-        // TODO: Don't hard code imgId here!
-        imgSprite = new ImageSprite(7);
-        imgSprite.load(BitmapFactory.decodeResource(context.getResources(), R.drawable.green));
+        // TODO: Decouple weaponSystem dependency to controller.
+        weaponSystem = new WeaponSystem();
+        subSystems.add(weaponSystem);
+        subSystems.add(new BuildingSystem());
+        SpriteSystem spriteSystem = new SpriteSystem();
+        spriteSystem.setWeaponSystem(weaponSystem);
+        this.spriteSystem = spriteSystem;
+        subSystems.add(spriteSystem);
 
-        terrainSystem.init("level1", context.getResources(), canvas);
+        for(SubSystem subSystem : subSystems){
+            subSystem.init(level,context.getResources(), canvas);
+        }
+
         inited = true;
         return true;
     }
@@ -50,23 +57,29 @@ public class SpriteWorld {
 
     public void preUpdate(){
         updateViewPort();
-        imgSprite.preUpdate();
+        for(SubSystem subSystem : subSystems){
+            subSystem.preUpdate();
+        }
     }
 
     public void beforeCollision() {
-        imgSprite.beforeCollision();
-        this.terrainSystem.beforeCollision();
-        this.weaponSystem.beforeCollision();
+
+        for(SubSystem subSystem : subSystems){
+            subSystem.beforeCollision();
+        }
     }
 
     private void updateViewPort(){
+        if(spriteSystem == null || spriteSystem.getLeadingSprite() == null){
+            return;
+        }
 
         // Update view port, to at least leave 1 tile to the sprite
         Vector2D curViewPort = CoordinateSystem.getViewPortPos();
-        Vector2D curSpritePos = imgSprite.getSpritePos();
+        Vector2D curSpritePos = spriteSystem.getLeadingSprite().getSpritePos();
         Vector2D scrDim = CoordinateSystem.getScrDimension();
 
-        Rect spriteRect = imgSprite.getScrRect();
+        Rect spriteRect = spriteSystem.getLeadingSprite().getScrRect();
 
         if(scrDim == null || spriteRect == null){ // CoordinateSystem not inited yet.
             return ;
@@ -103,47 +116,33 @@ public class SpriteWorld {
      * @return need reprocess or not.
      */
     public boolean processCollision(){
+        if(spriteSystem == null || spriteSystem.getLeadingSprite() == null){
+            return false;
+        }
+
         if(CollideDetector.isDirtyFlag()){
-            if( null != terrainSystem.detectCollide(imgSprite) )
-                return true;
-            else if(null != weaponSystem.detectCollide(imgSprite))
-                return true;
+
+            for(SubSystem subSystem : subSystems){
+                if(null != subSystem.detectCollide(spriteSystem.getLeadingSprite())){
+                    return true;
+                }
+            }
         }
 
         return false;
     }
 
     public void postUpdate(){
-        imgSprite.postUpdate();
-        weaponSystem.postUpdate();
+        for(SubSystem subSystem : subSystems){
+            subSystem.postUpdate();
+        }
     }
 
     public void draw(Canvas canvas) {
         CoordinateSystem.setScrDimension(new Vector2D(canvas.getWidth(), canvas.getHeight()));
 
-        terrainSystem.draw(canvas);
-        weaponSystem.draw(canvas);
-        imgSprite.draw(canvas);
-    }
-
-    public void onClick(DIRECTIONS dir) {
-        if (dir == DIRECTIONS.UNKNOWN) {
-            imgSprite.setMoving(false);
-        } else {
-            imgSprite.setCurDirection(dir);
-            imgSprite.setMoving(true);
+        for(SubSystem subSystem : subSystems){
+            subSystem.draw(canvas);
         }
-        CollideDetector.setDirtyFlag(true);
-    }
-
-    public void onClick(Character but){
-        switch(but){
-            case 'A':
-                Vector2D spritePos = imgSprite.getSpritePos();
-                Vector2D gridPos = CoordinateSystem.worldToGrid(spritePos);
-                weaponSystem.addBomb(gridPos.getX(), gridPos.getY());
-                break;
-        }
-        CollideDetector.setDirtyFlag(true);
     }
 }
