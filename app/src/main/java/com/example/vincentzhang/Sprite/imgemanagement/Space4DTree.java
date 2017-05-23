@@ -18,9 +18,15 @@ public class Space4DTree {
     private BitmapMask bmMask;
     private Map<Vector2D, Space4DTreeNode> rootNodes = new HashMap<>();
     private int imgId = -1;
+    private int rowCount = 1;
+    private int colCount = 1;
 
     public Space4DTree(int id, Bitmap bm, Integer rowCount, Integer colCount) {
         bmMask = new BitmapMask(id, bm);
+
+        this.rowCount = rowCount;
+        this.colCount = colCount;
+
         int spriteWidth = bm.getWidth() / colCount;
         int spriteHeight = bm.getHeight() / rowCount;
 
@@ -57,5 +63,13 @@ public class Space4DTree {
             return;
         }
         rootNodes.get(rowColumnVec).draw(canvas, level, targetRect);
+    }
+
+    public int getRowCount() {
+        return rowCount;
+    }
+
+    public int getColCount(){
+        return colCount;
     }
 }

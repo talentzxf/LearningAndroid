@@ -48,6 +48,7 @@ public class SpriteSystem implements SubSystem {
                 int imgId = Integer.valueOf(spriteNode.getAttributes().getNamedItem("imgId").getNodeValue());
                 float posX = Float.valueOf(spriteNode.getAttributes().getNamedItem("x").getNodeValue());
                 float posY = Float.valueOf(spriteNode.getAttributes().getNamedItem("y").getNodeValue());
+
                 boolean isLeading = Boolean.valueOf(spriteNode.getAttributes().getNamedItem("isleading").getNodeValue());
                 String controller = spriteNode.getAttributes().getNamedItem("controller").getNodeValue();
 

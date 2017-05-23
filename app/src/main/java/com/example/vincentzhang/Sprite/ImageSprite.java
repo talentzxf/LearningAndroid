@@ -15,23 +15,26 @@ import java.util.Map;
 
 public class ImageSprite extends AbstractSprite {
     private Bitmap bm;
-    private Map<DIRECTIONS, ArrayList<Rect>> dirSpriteMap = new HashMap<DIRECTIONS, ArrayList<Rect>>();
+    private Map<DIRECTIONS, ArrayList<Rect>> dirSpriteMap = new HashMap<>();
     private Map<DIRECTIONS, ArrayList<Vector2D>> dirImgRowColumnMap = new HashMap<DIRECTIONS, ArrayList<Vector2D>>();
     private DIRECTIONS curDirection = DIRECTIONS.DOWN;
-
-    // TODO: read this from XML config
-    int rowCount = 8;
-    int colCount = 4;
 
     private int curSpriteIndex = 0;
     private int spriteWidth = -1;
     private int spriteHeight = -1;
+    private int rowNum = 1;
+    private int colNum = 1;
 
     private boolean isMoving = false;
 
     public ImageSprite(int imgId) {
         super(imgId);
-        load(ImageManager.inst().getImg(imgId));
+        rowNum = ImageManager.inst().getSpace4DTree(imgId).getRowCount();
+        colNum = ImageManager.inst().getSpace4DTree(imgId).getColCount();
+
+        bm = ImageManager.inst().getImg(imgId);
+        splitImage();
+        setResLoaded(true);
     }
 
     public boolean isMoving() {
@@ -53,22 +56,16 @@ public class ImageSprite extends AbstractSprite {
         return curDirection;
     }
 
-    private void load(Bitmap bitmap) {
-        bm = bitmap;
-        setResLoaded(true);
-        splitImage();
-    }
-
     void splitImage() {
         int imgWidth = bm.getWidth();
         int imgHeight = bm.getHeight();
 
 
-        spriteWidth = imgWidth / colCount;
-        spriteHeight = imgHeight / rowCount;
+        spriteWidth = imgWidth / colNum;
+        spriteHeight = imgHeight / rowNum;
 
-        for (int row = 0; row < rowCount; row++) {
-            for (int col = 0; col < colCount; col++) {
+        for (int row = 0; row < rowNum; row++) {
+            for (int col = 0; col < colNum; col++) {
                 DIRECTIONS targetDir = DIRECTIONS.fromDirNum(row);
                 ArrayList<Rect> rectSequence = dirSpriteMap.get(targetDir);
                 if (rectSequence == null) {
@@ -120,5 +117,13 @@ public class ImageSprite extends AbstractSprite {
         ArrayList<Vector2D> rowColumnPosList = dirImgRowColumnMap.get(curDirection);
         Vector2D curRowColumnPos = rowColumnPosList.get(curSpriteIndex);
         return curRowColumnPos;
+    }
+
+    public void setRowNum(int rowNum) {
+        this.rowNum = rowNum;
+    }
+
+    public void setColNum(int colNum) {
+        this.colNum = colNum;
     }
 }
