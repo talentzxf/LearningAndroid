@@ -9,8 +9,8 @@ import java.util.Map;
 
 public enum DIRECTIONS {
     UNKNOWN(-1),
-    DOWN(0),
-    RIGHT(1),
+    RIGHT(0),
+    DOWN(1),
     UP(2),
     LEFT(3),
     DOWNLEFT(4),
@@ -37,7 +37,5 @@ public enum DIRECTIONS {
     int getDirNum(){
         return dirNum;
     }
-
-
 
 }

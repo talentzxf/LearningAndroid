@@ -66,7 +66,8 @@ public class ImageSprite extends AbstractSprite {
 
         for (int row = 0; row < rowNum; row++) {
             for (int col = 0; col < colNum; col++) {
-                DIRECTIONS targetDir = DIRECTIONS.fromDirNum(row);
+                DIRECTIONS targetDir = ImageManager.inst().getDirectionArray(getImgId()).get(row);
+
                 ArrayList<Rect> rectSequence = dirSpriteMap.get(targetDir);
                 if (rectSequence == null) {
                     rectSequence = new ArrayList<Rect>();
@@ -117,13 +118,5 @@ public class ImageSprite extends AbstractSprite {
         ArrayList<Vector2D> rowColumnPosList = dirImgRowColumnMap.get(curDirection);
         Vector2D curRowColumnPos = rowColumnPosList.get(curSpriteIndex);
         return curRowColumnPos;
-    }
-
-    public void setRowNum(int rowNum) {
-        this.rowNum = rowNum;
-    }
-
-    public void setColNum(int colNum) {
-        this.colNum = colNum;
     }
 }

@@ -26,6 +26,10 @@ public abstract class AbstractSprite {
         this.imgId = imgId;
     }
 
+    public int getImgId(){
+        return imgId;
+    }
+
     public Space4DTree getSpace4DTree(){
         return space4DTree;
     }
