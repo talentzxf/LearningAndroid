@@ -5,4 +5,5 @@ package com.example.vincentzhang.Sprite.Controller;
  */
 
 public interface Controller {
+    void update();
 }

@@ -45,4 +45,9 @@ public class ButtonController implements ButtonEventListener,Controller{
         }
         CollideDetector.setDirtyFlag(true);
     }
+
+    @Override
+    public void update() {
+
+    }
 }

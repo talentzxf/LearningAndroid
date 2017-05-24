@@ -26,6 +26,13 @@ public class SpriteWorld {
     private WeaponSystem weaponSystem;
     private SpriteSystem spriteSystem;
 
+    private SpriteWorld(){}
+
+    private static SpriteWorld inst = new SpriteWorld();
+    static public SpriteWorld getInst(){
+        return inst;
+    }
+
     public boolean inited(){
         return inited;
     }
@@ -67,6 +74,11 @@ public class SpriteWorld {
         for(SubSystem subSystem : subSystems){
             subSystem.beforeCollision();
         }
+    }
+
+    public ImageSprite getLeadingSprite(){
+        if(spriteSystem == null) return null;
+        return spriteSystem.getLeadingSprite();
     }
 
     private void updateViewPort(){

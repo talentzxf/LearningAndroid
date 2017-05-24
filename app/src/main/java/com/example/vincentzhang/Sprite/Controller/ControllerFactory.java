@@ -9,10 +9,19 @@ import com.example.vincentzhang.Sprite.WeaponSystem.WeaponSystem;
 
 public class ControllerFactory {
     static public Controller createController(String controllerName, ImageSprite target, WeaponSystem weaponSystem){
-        if(controllerName.equals("ButtonController")){
-            return new ButtonController(target, weaponSystem);
+
+        Controller controller = null;
+        switch(controllerName){
+            case "ButtonController":
+                controller = new ButtonController(target, weaponSystem);
+                break;
+            case "EnermyController":
+                controller = new EnermyController(target, weaponSystem);
+                break;
         }
 
-        return null;
+        target.setController(controller);
+
+        return controller;
     }
 }

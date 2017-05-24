@@ -7,6 +7,6 @@ import com.example.vincentzhang.Sprite.DIRECTIONS;
  */
 
 public interface ButtonEventListener {
-    public void onClick(Character c);
-    public void onClick(DIRECTIONS dir);
+    void onClick(Character c);
+    void onClick(DIRECTIONS dir);
 }

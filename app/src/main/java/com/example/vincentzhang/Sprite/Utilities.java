@@ -108,4 +108,20 @@ public class Utilities {
             return null;
         return new Rect(l, t, r, b);
     }
+
+    public static DIRECTIONS calculateDir(Vector2D source, Vector2D target) {
+        Vector2D vec = target.minus(source);
+        double angle = Math.atan2(vec.getY(), vec.getX());
+        if(angle <= -0.75*Math.PI && angle >= -Math.PI){
+            return DIRECTIONS.LEFT;
+        } else if( angle > -0.75*Math.PI && angle <= -0.25*Math.PI ){
+            return DIRECTIONS.UP;
+        } else if( angle > -0.25*Math.PI && angle <= 0.25*Math.PI){
+            return DIRECTIONS.RIGHT;
+        } else if( angle > 0.25*Math.PI && angle <= 0.75 * Math.PI){
+            return DIRECTIONS.DOWN;
+        } else {
+            return DIRECTIONS.LEFT;
+        }
+    }
 }

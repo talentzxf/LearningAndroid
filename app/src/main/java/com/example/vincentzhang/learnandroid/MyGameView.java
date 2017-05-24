@@ -17,7 +17,7 @@ import com.example.vincentzhang.Sprite.SpriteWorld;
  */
 
 public class MyGameView extends SurfaceView implements Runnable, GestureDetector.OnGestureListener{
-    private SpriteWorld spriteWorld = new SpriteWorld();
+    private SpriteWorld spriteWorld = SpriteWorld.getInst();
     private boolean isDrawing = false;
     private final static long FPS = 20;
     private GestureDetector gestureDetector;

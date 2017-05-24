@@ -3,6 +3,7 @@ package com.example.vincentzhang.Sprite;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 
+import com.example.vincentzhang.Sprite.Controller.Controller;
 import com.example.vincentzhang.Sprite.imgemanagement.ImageManager;
 
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ public class ImageSprite extends AbstractSprite {
     private Map<DIRECTIONS, ArrayList<Rect>> dirSpriteMap = new HashMap<>();
     private Map<DIRECTIONS, ArrayList<Vector2D>> dirImgRowColumnMap = new HashMap<DIRECTIONS, ArrayList<Vector2D>>();
     private DIRECTIONS curDirection = DIRECTIONS.DOWN;
+    private Controller controller;
 
     private int curSpriteIndex = 0;
     private int spriteWidth = -1;
@@ -105,6 +107,7 @@ public class ImageSprite extends AbstractSprite {
         return curRect;
     }
 
+    // TODO, use binary search to find the position faster.
     @Override
     protected void onCollide(AbstractSprite target) {
         super.onCollide(target);
@@ -118,5 +121,15 @@ public class ImageSprite extends AbstractSprite {
         ArrayList<Vector2D> rowColumnPosList = dirImgRowColumnMap.get(curDirection);
         Vector2D curRowColumnPos = rowColumnPosList.get(curSpriteIndex);
         return curRowColumnPos;
+    }
+
+    @Override
+    public void postUpdate() {
+        super.postUpdate();
+        controller.update();
+    }
+
+    public void setController(Controller controller) {
+        this.controller = controller;
     }
 }
