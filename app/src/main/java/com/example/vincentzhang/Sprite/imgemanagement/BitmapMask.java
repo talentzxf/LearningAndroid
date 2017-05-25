@@ -5,12 +5,13 @@ import android.graphics.Rect;
 import android.os.Environment;
 import android.util.Log;
 
-import java.io.BufferedWriter;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
-
-import static android.R.attr.x;
 
 /**
  * Created by VincentZhang on 4/29/2017.
@@ -56,33 +57,69 @@ public class BitmapMask {
         mask = new boolean[height][width];
         pixelCount = new Wrapped2DIntArray(height, width);
 
-        String fileName = Environment.getExternalStorageDirectory() + File.separator + "img" + imgId + ".dat";
+        String fileName = Environment.getExternalStorageDirectory() + File.separator + "BombmanGame" + File.separator + "img" + imgId + ".dat";
 
-        try (BufferedWriter writer =
-                     new BufferedWriter(new FileWriter(fileName))) {
-            Log.i("Opened file:", fileName);
-            for (int y = 0; y < height; y++) {
-                for (int x = 0; x < width; x++) {
-                    int pixel = bitmap.getPixel(x, y);
-                    if (pixel == 0) {
-                        mask[y][x] = false;
-                    } else {
-                        mask[y][x] = true;
+        File file = new File(fileName);
+        if(!file.exists()){ // Create the file
+            try {
+                file.getParentFile().mkdirs();
+                file.createNewFile();
+            } catch (IOException e) {
+                Log.i("Error creae file", fileName, e);
+            }
+
+            try (BufferedOutputStream fos = new BufferedOutputStream(new FileOutputStream(fileName))) {
+
+                Log.i("Opened file:", fileName);
+                for (int y = 0; y < height; y++) {
+                    for (int x = 0; x < width; x++) {
+                        int pixel = bitmap.getPixel(x, y);
+                        if (pixel == 0) {
+                            mask[y][x] = false;
+                        } else {
+                            mask[y][x] = true;
+                        }
+
+                        int topWithMyColPixelCount = pixelCount.get(y - 1, x);
+                        int topWithoutMyColPixelCount = pixelCount.get(y - 1, x - 1);
+
+                        int leftTotalCount = pixelCount.get(y, x - 1);
+                        int rowLeftCount = leftTotalCount - topWithoutMyColPixelCount;
+
+                        int mineCount = mask[y][x] ? 1 : 0;
+                        pixelCount.set(y, x, topWithMyColPixelCount + rowLeftCount + mineCount);
+
+                        fos.write(topWithMyColPixelCount + rowLeftCount + mineCount);
                     }
 
-                    int topWithMyColPixelCount = pixelCount.get(y - 1, x);
-                    int topWithoutMyColPixelCount = pixelCount.get(y - 1, x - 1);
-
-                    int leftTotalCount = pixelCount.get(y, x - 1);
-                    int rowLeftCount = leftTotalCount - topWithoutMyColPixelCount;
-
-                    int mineCount = mask[y][x] ? 1 : 0;
-                    pixelCount.set(y, x, topWithMyColPixelCount + rowLeftCount + mineCount);
+                    if(y % 100 == 0)
+                        Log.i("Finished", y + " lines, out of" + height + " lines.");
                 }
+            } catch (IOException e) {
+                Log.e("File error", fileName, e);
             }
-        } catch (IOException e) {
-            Log.e("File error", fileName, e);
+        } else {
+            try (BufferedInputStream fis = new BufferedInputStream(new FileInputStream(fileName))) {
+                for (int y = 0; y < height; y++) {
+                    for (int x = 0; x < width; x++) {
+                        int pixel = bitmap.getPixel(x, y);
+                        if (pixel == 0) {
+                            mask[y][x] = false;
+                        } else {
+                            mask[y][x] = true;
+                        }
+                        pixelCount.set(y,x, fis.read());
+                    }
+
+                    if(y % 100 == 0)
+                        Log.i("Finished reading", y + " lines, out of" + height + " lines.");
+                }
+
+            }catch(IOException e){
+                Log.e("File error", fileName, e);
+            }
         }
+
 
         Log.i("Closed file:", fileName);
     }
