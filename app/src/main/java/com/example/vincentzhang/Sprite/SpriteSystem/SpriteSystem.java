@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.util.Log;
 
 import com.example.vincentzhang.Sprite.AbstractSprite;
+import com.example.vincentzhang.Sprite.ActorSprite;
 import com.example.vincentzhang.Sprite.Controller.ControllerFactory;
 import com.example.vincentzhang.Sprite.ImageSprite;
 import com.example.vincentzhang.Sprite.SubSystem;
@@ -52,7 +53,7 @@ public class SpriteSystem implements SubSystem {
                 boolean isLeading = Boolean.valueOf(spriteNode.getAttributes().getNamedItem("isleading").getNodeValue());
                 String controller = spriteNode.getAttributes().getNamedItem("controller").getNodeValue();
 
-                ImageSprite sprite = new ImageSprite(imgId);
+                ImageSprite sprite = new ActorSprite(imgId);
                 sprite.setSpritePos(new Vector2D(posX, posY));
                 spriteMap.put(name, sprite);
 
