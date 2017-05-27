@@ -62,7 +62,6 @@ class Wrapped2DIntArray {
         Log.i("Read:", "length:" + length);
         ByteBuffer byteBuffer = ByteBuffer.wrap(bytes);
         IntBuffer intBuffer = byteBuffer.asIntBuffer();
-        this.data = new int[width * height];
         intBuffer.get(this.data);
     }
 }

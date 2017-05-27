@@ -11,10 +11,19 @@ import android.graphics.Rect;
 
 public class ActorSprite extends ImageSprite {
     private float hp_max = 100;
-    private float hp = 70;
+    private float hp = 100;
+    private int teamNumber = 0;
 
     public ActorSprite(int imgId) {
         super(imgId);
+    }
+
+    public int getTeamNumber() {
+        return teamNumber;
+    }
+
+    public void setTeamNumber(int teamNumber) {
+        this.teamNumber = teamNumber;
     }
 
     @Override
@@ -35,5 +44,11 @@ public class ActorSprite extends ImageSprite {
         canvas.drawRect(drawRect.left, drawRect.top, drawRect.left + drawRect.width() * this.hp/this.hp_max, drawRect.top + drawRect.height() * 0.07f, paint2);
 
         return retRect;
+    }
+
+    public void reduceHP(int damage) {
+        this.hp -= damage;
+        if(this.hp <= 0 )
+            this.hp = 0;
     }
 }

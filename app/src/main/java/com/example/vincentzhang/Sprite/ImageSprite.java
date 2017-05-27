@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Rect;
 
 import com.example.vincentzhang.Sprite.Controller.Controller;
+import com.example.vincentzhang.Sprite.TerrainSystem.Building;
 import com.example.vincentzhang.Sprite.imgemanagement.ImageManager;
 
 import java.util.ArrayList;
@@ -111,9 +112,14 @@ public class ImageSprite extends AbstractSprite {
     @Override
     protected void onCollide(AbstractSprite target) {
         super.onCollide(target);
-        Vector2D newPos = this.getSpritePos().applyDir(this.getCurDirection(), -1);
-        this.setSpritePos(newPos);
-        CollideDetector.setDirtyFlag(true);
+        this.controller.onCollide(target);
+
+        // If collided with a building, find the correct pos
+        if(target instanceof Building){
+            Vector2D newPos = this.getSpritePos().applyDir(this.getCurDirection(), -1);
+            this.setSpritePos(newPos);
+            CollideDetector.setDirtyFlag(true);
+        }
     }
 
     @Override

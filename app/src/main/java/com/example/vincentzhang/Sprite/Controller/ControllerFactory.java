@@ -1,6 +1,6 @@
 package com.example.vincentzhang.Sprite.Controller;
 
-import com.example.vincentzhang.Sprite.ImageSprite;
+import com.example.vincentzhang.Sprite.ActorSprite;
 import com.example.vincentzhang.Sprite.WeaponSystem.WeaponSystem;
 
 /**
@@ -8,7 +8,7 @@ import com.example.vincentzhang.Sprite.WeaponSystem.WeaponSystem;
  */
 
 public class ControllerFactory {
-    static public Controller createController(String controllerName, ImageSprite target, WeaponSystem weaponSystem){
+    static public Controller createController(String controllerName, ActorSprite target, WeaponSystem weaponSystem){
 
         Controller controller = null;
         switch(controllerName){

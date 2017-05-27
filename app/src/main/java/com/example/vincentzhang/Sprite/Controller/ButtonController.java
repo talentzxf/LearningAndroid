@@ -2,6 +2,7 @@ package com.example.vincentzhang.Sprite.Controller;
 
 import android.graphics.Rect;
 
+import com.example.vincentzhang.Sprite.AbstractSprite;
 import com.example.vincentzhang.Sprite.CollideDetector;
 import com.example.vincentzhang.Sprite.DIRECTIONS;
 import com.example.vincentzhang.Sprite.ImageSprite;
@@ -48,6 +49,11 @@ public class ButtonController implements ButtonEventListener,Controller{
 
     @Override
     public void update() {
+
+    }
+
+    @Override
+    public void onCollide(AbstractSprite target) {
 
     }
 }

@@ -47,8 +47,8 @@
         2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
     </map>
     <sprites>
-        <sprite name="main_avatar" imgId="7" controller="ButtonController" x="200" y="200" isleading="true"></sprite>
-        <sprite name="enermy_avatar" imgId="9" controller="EnermyController" x="400" y="400" isleading="false"></sprite>
+        <sprite name="main_avatar" imgId="7" controller="ButtonController" x="1000" y="1000" isleading="true" team="0"></sprite>
+        <sprite name="enermy_avatar" imgId="9" controller="EnermyController" x="800" y="800" isleading="false" team="1"></sprite>
     </sprites>
     <buildings>
         <building x='0' y='0' imgId='4'></building>

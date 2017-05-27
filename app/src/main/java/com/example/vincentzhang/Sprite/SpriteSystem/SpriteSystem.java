@@ -52,9 +52,11 @@ public class SpriteSystem implements SubSystem {
 
                 boolean isLeading = Boolean.valueOf(spriteNode.getAttributes().getNamedItem("isleading").getNodeValue());
                 String controller = spriteNode.getAttributes().getNamedItem("controller").getNodeValue();
+                int teamNumber = Integer.valueOf(spriteNode.getAttributes().getNamedItem("team").getNodeValue());
 
-                ImageSprite sprite = new ActorSprite(imgId);
+                ActorSprite sprite = new ActorSprite(imgId);
                 sprite.setSpritePos(new Vector2D(posX, posY));
+                sprite.setTeamNumber(teamNumber);
                 spriteMap.put(name, sprite);
 
                 if(weaponSystem != null)
@@ -92,6 +94,14 @@ public class SpriteSystem implements SubSystem {
 
     @Override
     public AbstractSprite detectCollide(ImageSprite imgSprite) {
+        for(ImageSprite sprite : spriteMap.values()){
+            // No need to collide self
+            if(sprite != imgSprite){
+                sprite.detectCollide(imgSprite);
+            }
+        }
+
+        // No need to populate the change.
         return null;
     }
 
