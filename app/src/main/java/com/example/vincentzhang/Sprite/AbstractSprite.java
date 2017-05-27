@@ -86,6 +86,8 @@ public abstract class AbstractSprite {
 
     public void beforeCollision(){
         Rect srcRect = getSrcRect(); // Source rect
+        if(srcRect == null)
+            return;
         float ratio = (float)srcRect.width()/(float)srcRect.height();
         int tileHeight = (int) CoordinateSystem.getTileDimension().getY();
 

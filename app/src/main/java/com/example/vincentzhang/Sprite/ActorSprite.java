@@ -10,12 +10,16 @@ import android.graphics.Rect;
  */
 
 public class ActorSprite extends ImageSprite {
-    private float hp_max = 100;
-    private float hp = 100;
+    private float hp_max = 10000;
+    private float hp = 10000;
     private int teamNumber = 0;
+    private String name;
+    private ActorSprite killedBy;
+    private int killedMonsters = 0;
 
-    public ActorSprite(int imgId) {
+    public ActorSprite(int imgId, String name) {
         super(imgId);
+        this.name = name;
     }
 
     public int getTeamNumber() {
@@ -24,6 +28,10 @@ public class ActorSprite extends ImageSprite {
 
     public void setTeamNumber(int teamNumber) {
         this.teamNumber = teamNumber;
+    }
+
+    public ActorSprite getKilledBy() {
+        return killedBy;
     }
 
     @Override
@@ -46,9 +54,34 @@ public class ActorSprite extends ImageSprite {
         return retRect;
     }
 
-    public void reduceHP(int damage) {
+    /**
+     *
+     * @param damage
+     * @return the sprite is dead or not
+     */
+    public boolean reduceHP(int damage, ActorSprite enermy) {
         this.hp -= damage;
-        if(this.hp <= 0 )
+        if(this.hp <= 0 ){
             this.hp = 0;
+            killedBy = enermy;
+        }
+
+        return this.hp == 0;
+    }
+
+    public boolean isDead() {
+        return this.hp == 0;
+    }
+
+    public void addCredit(int i) {
+        killedMonsters += i;
+    }
+
+    public int getCredit(){
+        return killedMonsters;
+    }
+
+    public void setHp(int hp) {
+        this.hp = hp;
     }
 }

@@ -18,11 +18,11 @@ import com.example.vincentzhang.Sprite.Controller.ButtonEventDispatcher;
 import com.example.vincentzhang.Sprite.Controller.ButtonEventListener;
 import com.example.vincentzhang.Sprite.Utilities;
 
-import static com.example.vincentzhang.Sprite.DIRECTIONS.DOWNLEFT;
-import static com.example.vincentzhang.Sprite.DIRECTIONS.DOWNRIGHT;
+import static com.example.vincentzhang.Sprite.DIRECTIONS.DOWN;
 import static com.example.vincentzhang.Sprite.DIRECTIONS.UNKNOWN;
-import static com.example.vincentzhang.Sprite.DIRECTIONS.UPLEFT;
-import static com.example.vincentzhang.Sprite.DIRECTIONS.UPRIGHT;
+import static com.example.vincentzhang.Sprite.DIRECTIONS.UP;
+import static com.example.vincentzhang.Sprite.DIRECTIONS.RIGHT;
+import static com.example.vincentzhang.Sprite.DIRECTIONS.LEFT;
 
 public class MainActivity extends AppCompatActivity {
     private GestureDetector detector;
@@ -45,20 +45,20 @@ public class MainActivity extends AppCompatActivity {
 
             switch(v.getId()){
                 case R.id.leftbutton:
-                    // world.onClick(LEFT);
-                    l.onClick(DOWNLEFT);
+                     l.onClick(LEFT);
+                    // l.onClick(DOWNLEFT);
                     break;
                 case R.id.rightbutton:
-                    // world.onClick(RIGHT);
-                    l.onClick(UPRIGHT);
+                    l.onClick(RIGHT);
+                    // l.onClick(UPRIGHT);
                     break;
                 case R.id.upbutton:
-                    // world.onClick(UP);
-                    l.onClick(UPLEFT);
+                    l.onClick(UP);
+                    // l.onClick(UPLEFT);
                     break;
                 case R.id.downbutton:
-                    // world.onClick(DOWN);
-                    l.onClick(DOWNRIGHT);
+                    l.onClick(DOWN);
+                    // l.onClick(DOWNRIGHT);
                     break;
                 case R.id.button_a:
                     l.onClick('A');

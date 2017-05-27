@@ -8,6 +8,7 @@ import android.util.Log;
 import com.example.vincentzhang.Sprite.SpriteSystem.SpriteSystem;
 import com.example.vincentzhang.Sprite.TerrainSystem.BuildingSystem;
 import com.example.vincentzhang.Sprite.TerrainSystem.TerrainSystem;
+import com.example.vincentzhang.Sprite.UI.UISystem;
 import com.example.vincentzhang.Sprite.WeaponSystem.WeaponSystem;
 import com.example.vincentzhang.Sprite.imgemanagement.ImageManager;
 
@@ -26,6 +27,7 @@ public class SpriteWorld {
     private ArrayList<SubSystem> subSystems = new ArrayList<>();
     private WeaponSystem weaponSystem;
     private SpriteSystem spriteSystem;
+    private UISystem uiSystem;
 
     private SpriteWorld() {
     }
@@ -55,6 +57,9 @@ public class SpriteWorld {
         this.spriteSystem = spriteSystem;
         subSystems.add(spriteSystem);
 
+        uiSystem = new UISystem();
+        subSystems.add(uiSystem);
+
         for (SubSystem subSystem : subSystems) {
             subSystem.init(level, context.getResources(), canvas);
         }
@@ -79,7 +84,7 @@ public class SpriteWorld {
         }
     }
 
-    public ImageSprite getLeadingSprite() {
+    public ActorSprite getLeadingSprite() {
         if (spriteSystem == null) return null;
         return spriteSystem.getLeadingSprite();
     }

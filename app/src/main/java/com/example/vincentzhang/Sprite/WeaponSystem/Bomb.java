@@ -7,6 +7,7 @@ import android.graphics.Rect;
 import android.util.Log;
 
 import com.example.vincentzhang.Sprite.AbstractSprite;
+import com.example.vincentzhang.Sprite.ActorSprite;
 
 /**
  * Created by VincentZhang on 4/24/2017.
@@ -17,6 +18,7 @@ public class Bomb extends AbstractSprite {
     private long lastUpdateTime = -1;
 
     private boolean exploded = false;
+    private ActorSprite owner;
 
     public Bomb() {
         // TODO: don't hard code here
@@ -59,5 +61,13 @@ public class Bomb extends AbstractSprite {
     @Override
     public void onCollide(AbstractSprite sprite){
         Log.i("Collide", "collide!!!!");
+    }
+
+    public void setOwner(ActorSprite owner) {
+        this.owner = owner;
+    }
+
+    public ActorSprite getOwner(){
+        return this.owner;
     }
 }

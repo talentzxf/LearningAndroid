@@ -15,9 +15,7 @@ import com.example.vincentzhang.Sprite.WeaponSystem.WeaponSystem;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
@@ -31,9 +29,9 @@ import static com.example.vincentzhang.Sprite.Utilities.getXmlSource;
  */
 
 public class SpriteSystem implements SubSystem {
-    private Map<String, ImageSprite> spriteMap = new HashMap<>();
+    private ArrayList<ActorSprite> spriteArray = new ArrayList<>();
     private WeaponSystem weaponSystem;
-    private ImageSprite leadingSprite;
+    private ActorSprite leadingSprite;
 
     public void setWeaponSystem(WeaponSystem weaponSystem){
         this.weaponSystem = weaponSystem;
@@ -55,10 +53,10 @@ public class SpriteSystem implements SubSystem {
                 String controller = spriteNode.getAttributes().getNamedItem("controller").getNodeValue();
                 int teamNumber = Integer.valueOf(spriteNode.getAttributes().getNamedItem("team").getNodeValue());
 
-                ActorSprite sprite = new ActorSprite(imgId);
+                ActorSprite sprite = new ActorSprite(imgId, name);
                 sprite.setSpritePos(new Vector2D(posX, posY));
                 sprite.setTeamNumber(teamNumber);
-                spriteMap.put(name, sprite);
+                spriteArray.add(sprite);
 
                 if(weaponSystem != null)
                     ControllerFactory.createController(controller, sprite, weaponSystem);
@@ -75,31 +73,31 @@ public class SpriteSystem implements SubSystem {
         return true;
     }
 
-    public ImageSprite getLeadingSprite(){
+    public ActorSprite getLeadingSprite(){
         return leadingSprite;
     }
 
-    public Collection<ImageSprite> getAllSprites(){
-        return this.spriteMap.values();
+    public ArrayList<ActorSprite> getAllSprites(){
+        return this.spriteArray;
     }
 
     @Override
     public void draw(Canvas canvas) {
-        for(ImageSprite sprite : spriteMap.values() ){
+        for(ImageSprite sprite : spriteArray ){
             sprite.draw(canvas);
         }
     }
 
     @Override
     public void beforeCollision() {
-        for(ImageSprite sprite : spriteMap.values() ){
+        for(ImageSprite sprite : spriteArray ){
             sprite.beforeCollision();
         }
     }
 
     @Override
     public AbstractSprite detectCollide(ImageSprite imgSprite) {
-        for(ImageSprite sprite : spriteMap.values()){
+        for(ImageSprite sprite : spriteArray){
             // No need to collide self
             if(sprite != imgSprite){
                 sprite.detectCollide(imgSprite);
@@ -112,15 +110,26 @@ public class SpriteSystem implements SubSystem {
 
     @Override
     public void preUpdate() {
-        for(ImageSprite sprite : spriteMap.values() ){
+        for(ImageSprite sprite : spriteArray ){
             sprite.preUpdate();
         }
     }
 
     @Override
     public void postUpdate() {
-        for(ImageSprite sprite : spriteMap.values() ){
+        ArrayList<ActorSprite> deadSprites = new ArrayList<>();
+
+        for(ActorSprite sprite: spriteArray){
             sprite.postUpdate();
+            if(sprite.isDead()){
+                deadSprites.add(sprite);
+            }
+        }
+
+        for(ActorSprite tobeDeletedSprite: deadSprites){
+            spriteArray.remove(tobeDeletedSprite);
+            if(tobeDeletedSprite.getKilledBy() != null)
+                tobeDeletedSprite.getKilledBy().addCredit(1);
         }
     }
 }

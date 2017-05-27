@@ -26,6 +26,7 @@ public class EnermyController implements Controller {
         this.weaponSystem = weaponSystem;
         target.setMoving(true);
         target.setMoveSpeed(8);
+        target.setHp(10);
     }
 
     @Override
@@ -49,7 +50,7 @@ public class EnermyController implements Controller {
                 Vector2D newPos = collideTarget.getSpritePos().applyDir(collideTargetActor.getCurDirection(), -PUSH_DISTANCE);
                 collideTargetActor.setSpritePos(newPos);
 
-                collideTargetActor.reduceHP(damage);
+                collideTargetActor.reduceHP(damage, this.target);
             }
         }
     }

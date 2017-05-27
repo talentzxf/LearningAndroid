@@ -3,9 +3,9 @@ package com.example.vincentzhang.Sprite.Controller;
 import android.graphics.Rect;
 
 import com.example.vincentzhang.Sprite.AbstractSprite;
+import com.example.vincentzhang.Sprite.ActorSprite;
 import com.example.vincentzhang.Sprite.CollideDetector;
 import com.example.vincentzhang.Sprite.DIRECTIONS;
-import com.example.vincentzhang.Sprite.ImageSprite;
 import com.example.vincentzhang.Sprite.Vector2D;
 import com.example.vincentzhang.Sprite.WeaponSystem.WeaponSystem;
 
@@ -14,10 +14,10 @@ import com.example.vincentzhang.Sprite.WeaponSystem.WeaponSystem;
  */
 
 public class ButtonController implements ButtonEventListener,Controller{
-    private ImageSprite target;
+    private ActorSprite target;
     private WeaponSystem weaponSystem;
 
-    public ButtonController(ImageSprite target, WeaponSystem weaponSystem) {
+    public ButtonController(ActorSprite target, WeaponSystem weaponSystem) {
         this.target = target;
         this.weaponSystem = weaponSystem;
         ButtonEventDispatcher.inst().addListener(this);
@@ -41,7 +41,7 @@ public class ButtonController implements ButtonEventListener,Controller{
                 Vector2D spritePos = target.getSpritePos();
                 Rect rect = target.getScrRect();
                 Vector2D newPos = target.getSpritePos().applyDir(target.getCurDirection(), Math.min(rect.width(), rect.height()));
-                weaponSystem.addBomb(newPos);
+                weaponSystem.addBomb(newPos, target);
                 break;
         }
         CollideDetector.setDirtyFlag(true);

@@ -16,54 +16,84 @@ public class Explosion extends AbstractSprite {
     private int spriteWidth = -1;
     private int spriteHeight = -1;
 
-    private long lastUpdateTime = System.currentTimeMillis();
+    private long lastUpdateTime = -1;
 
     // TODO: Don't hard code here
     private int rowCount = 2;
     private int colCount = 8;
+    private long explodeTime = 0;
+
+    private ActorSprite owner;
+
+    public ActorSprite getOwner() {
+        return owner;
+    }
+
+    public void setOwner(ActorSprite owner) {
+        this.owner = owner;
+    }
 
     public Explosion(int imgId) {
         super(imgId);
         spriteWidth = getBm().getWidth() / colCount;
         spriteHeight = getBm().getHeight() / rowCount;
+        explodeTime = System.currentTimeMillis();
+        lastUpdateTime = explodeTime;
+    }
+
+    public Explosion(int imgId, int delayMilliSecs) {
+        this(imgId);
+        this.explodeTime = System.currentTimeMillis() + delayMilliSecs;
+        lastUpdateTime = explodeTime;
     }
 
     @Override
     public Rect getSrcRect() {
-        int row = 0;
-        if(curFrame > 8){
-            row = 1;
+        if (System.currentTimeMillis() > this.explodeTime) {
+            int row = 0;
+            if (curFrame > 8) {
+                row = 1;
+            }
+
+            int col = curFrame % 8;
+
+            if (System.currentTimeMillis() - lastUpdateTime > 100) {
+                curFrame = (curFrame + 1) % (rowCount * colCount);
+                lastUpdateTime = System.currentTimeMillis();
+            }
+
+            return new Rect(col * spriteWidth, row * spriteHeight, (col + 1) * spriteWidth, (row + 1) * spriteHeight);
         }
-
-        int col = curFrame % 8;
-
-        if(System.currentTimeMillis() - lastUpdateTime > 100){
-            curFrame = ( curFrame + 1 )% (rowCount * colCount);
-            lastUpdateTime = System.currentTimeMillis();
-        }
-
-        return new Rect(col * spriteWidth , row * spriteHeight , (col+1) * spriteWidth, (row+1)*spriteHeight);
+        return null;
     }
 
-    public boolean isAlive(){
+    public boolean isAlive() {
         return curFrame != (rowCount * colCount - 1);
     }
 
     @Override
     public void postUpdate() {
-        super.postUpdate();
+        if (System.currentTimeMillis() > this.explodeTime) {
+            super.postUpdate();
+        }
     }
 
     @Override
     protected void onCollide(AbstractSprite target) {
-        super.onCollide(target);
-        if(target instanceof ActorSprite){
-            ((ActorSprite) target).reduceHP(1);
+        if (System.currentTimeMillis() > this.explodeTime) {
+            super.onCollide(target);
+            if (target instanceof ActorSprite) {
+                ActorSprite actorSprite = (ActorSprite) target;
+                actorSprite.reduceHP(1, this.owner);
+            }
         }
     }
 
     @Override
     public Rect draw(Canvas canvas) {
-        return super.draw(canvas);
+        if (System.currentTimeMillis() > this.explodeTime) {
+            super.draw(canvas);
+        }
+        return null;
     }
 }

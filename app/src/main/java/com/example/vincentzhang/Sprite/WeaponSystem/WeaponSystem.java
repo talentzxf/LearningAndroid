@@ -4,6 +4,8 @@ import android.content.res.Resources;
 import android.graphics.Canvas;
 
 import com.example.vincentzhang.Sprite.AbstractSprite;
+import com.example.vincentzhang.Sprite.ActorSprite;
+import com.example.vincentzhang.Sprite.DIRECTIONS;
 import com.example.vincentzhang.Sprite.ImageSprite;
 import com.example.vincentzhang.Sprite.SubSystem;
 import com.example.vincentzhang.Sprite.Vector2D;
@@ -37,9 +39,10 @@ public class WeaponSystem implements SubSystem {
         return true;
     }
 
-    public void addBomb(Vector2D pos){
+    public void addBomb(Vector2D pos, ActorSprite owner){
         Bomb bomb = new Bomb();
         bomb.setSpritePos(pos);
+        bomb.setOwner(owner);
         this.bombs.add(bomb);
     }
 
@@ -104,9 +107,33 @@ public class WeaponSystem implements SubSystem {
 
         for(Bomb bomb:tobeDeletedBoms){
             bombs.remove(bomb);
+
+            // Add cur Pos
             Explosion newExplosion = new Explosion(8);
             newExplosion.setSpritePos(bomb.getSpritePos());
+            newExplosion.setOwner(bomb.getOwner());
             explosions.add(newExplosion);
+
+            int range = 3;
+            for(int i = 1 ; i < range; i++){
+                Explosion explosionUP = new Explosion(8, i * 500);
+                explosionUP.setSpritePos(bomb.getSpritePos().applyDir(DIRECTIONS.UP, bomb.getScrRect().height() * i));
+                explosionUP.setOwner(bomb.getOwner());
+                Explosion explosionDOWN = new Explosion(8, i * 500);
+                explosionDOWN.setSpritePos(bomb.getSpritePos().applyDir(DIRECTIONS.DOWN, bomb.getScrRect().height() * i));
+                explosionDOWN.setOwner(bomb.getOwner());
+                Explosion explosionLEFT = new Explosion(8, i * 500);
+                explosionLEFT.setSpritePos(bomb.getSpritePos().applyDir(DIRECTIONS.LEFT, bomb.getScrRect().width() * i));
+                explosionLEFT.setOwner(bomb.getOwner());
+                Explosion explosionRIGHT = new Explosion(8, i * 500);
+                explosionRIGHT.setSpritePos(bomb.getSpritePos().applyDir(DIRECTIONS.RIGHT, bomb.getScrRect().width() * i));
+                explosionRIGHT.setOwner(bomb.getOwner());
+
+                explosions.add(explosionUP);
+                explosions.add(explosionDOWN);
+                explosions.add(explosionLEFT);
+                explosions.add(explosionRIGHT);
+            }
         }
 
         for(Explosion explosion:tobeDeletedExplosions){
