@@ -3,6 +3,7 @@ package com.example.vincentzhang.Sprite;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.util.Log;
 
 import com.example.vincentzhang.Sprite.SpriteSystem.SpriteSystem;
 import com.example.vincentzhang.Sprite.TerrainSystem.BuildingSystem;
@@ -26,14 +27,16 @@ public class SpriteWorld {
     private WeaponSystem weaponSystem;
     private SpriteSystem spriteSystem;
 
-    private SpriteWorld(){}
+    private SpriteWorld() {
+    }
 
     private static SpriteWorld inst = new SpriteWorld();
-    static public SpriteWorld getInst(){
+
+    static public SpriteWorld getInst() {
         return inst;
     }
 
-    public boolean inited(){
+    public boolean inited() {
         return inited;
     }
 
@@ -52,8 +55,8 @@ public class SpriteWorld {
         this.spriteSystem = spriteSystem;
         subSystems.add(spriteSystem);
 
-        for(SubSystem subSystem : subSystems){
-            subSystem.init(level,context.getResources(), canvas);
+        for (SubSystem subSystem : subSystems) {
+            subSystem.init(level, context.getResources(), canvas);
         }
 
         inited = true;
@@ -62,27 +65,27 @@ public class SpriteWorld {
 
     private long steps = 0;
 
-    public void preUpdate(){
+    public void preUpdate() {
         updateViewPort();
-        for(SubSystem subSystem : subSystems){
+        for (SubSystem subSystem : subSystems) {
             subSystem.preUpdate();
         }
     }
 
     public void beforeCollision() {
 
-        for(SubSystem subSystem : subSystems){
+        for (SubSystem subSystem : subSystems) {
             subSystem.beforeCollision();
         }
     }
 
-    public ImageSprite getLeadingSprite(){
-        if(spriteSystem == null) return null;
+    public ImageSprite getLeadingSprite() {
+        if (spriteSystem == null) return null;
         return spriteSystem.getLeadingSprite();
     }
 
-    private void updateViewPort(){
-        if(spriteSystem == null || spriteSystem.getLeadingSprite() == null){
+    private void updateViewPort() {
+        if (spriteSystem == null || spriteSystem.getLeadingSprite() == null) {
             return;
         }
 
@@ -93,50 +96,52 @@ public class SpriteWorld {
 
         Rect spriteRect = spriteSystem.getLeadingSprite().getScrRect();
 
-        if(scrDim == null || spriteRect == null){ // CoordinateSystem not inited yet.
-            return ;
+        if (scrDim == null || spriteRect == null) { // CoordinateSystem not inited yet.
+            return;
         }
         int spriteWidth = spriteRect.width();
         int spriteHeight = spriteRect.height();
 
-        if(spriteHeight == 0 || spriteWidth == 0){
+        if (spriteHeight == 0 || spriteWidth == 0) {
             return;
         }
 
         Vector2D newViewPortPos = curViewPort;
-        if(curSpritePos.getX() - curViewPort.getX() < VIEWPORT_MARGIN){
-            newViewPortPos.setX( curSpritePos.getX() - VIEWPORT_MARGIN);
+        if (curSpritePos.getX() - curViewPort.getX() < VIEWPORT_MARGIN) {
+            newViewPortPos.setX(curSpritePos.getX() - VIEWPORT_MARGIN);
         }
 
-        if(curSpritePos.getX() + spriteWidth > curViewPort.getX() + scrDim.getX() - VIEWPORT_MARGIN){
-            newViewPortPos.setX( curSpritePos.getX() + spriteWidth + VIEWPORT_MARGIN - scrDim.getX());
+        if (curSpritePos.getX() + spriteWidth > curViewPort.getX() + scrDim.getX() - VIEWPORT_MARGIN) {
+            newViewPortPos.setX(curSpritePos.getX() + spriteWidth + VIEWPORT_MARGIN - scrDim.getX());
         }
 
-        if(curSpritePos.getY() - curViewPort.getY() < VIEWPORT_MARGIN){
-            newViewPortPos.setY( curSpritePos.getY() - VIEWPORT_MARGIN);
+        if (curSpritePos.getY() - curViewPort.getY() < VIEWPORT_MARGIN) {
+            newViewPortPos.setY(curSpritePos.getY() - VIEWPORT_MARGIN);
         }
 
-        if(curSpritePos.getY() + spriteHeight > curViewPort.getY() + scrDim.getY() - VIEWPORT_MARGIN){
-            newViewPortPos.setY( curSpritePos.getY() + VIEWPORT_MARGIN - scrDim.getY() + spriteHeight);
+        if (curSpritePos.getY() + spriteHeight > curViewPort.getY() + scrDim.getY() - VIEWPORT_MARGIN) {
+            newViewPortPos.setY(curSpritePos.getY() + VIEWPORT_MARGIN - scrDim.getY() + spriteHeight);
         }
 
         CoordinateSystem.setViewPortPos(newViewPortPos);
     }
 
     /**
-     *
      * @return need reprocess or not.
      */
-    public boolean processCollision(){
-        if(spriteSystem == null || spriteSystem.getLeadingSprite() == null){
+    public boolean processCollision() {
+        if (spriteSystem == null || spriteSystem.getLeadingSprite() == null) {
             return false;
         }
 
-        if(CollideDetector.isDirtyFlag()){
+        if (CollideDetector.isDirtyFlag()) {
 
-            for(SubSystem subSystem : subSystems){
-                if(null != subSystem.detectCollide(spriteSystem.getLeadingSprite())){
-                    return true;
+            for (SubSystem subSystem : subSystems) {
+                for (ImageSprite target : spriteSystem.getAllSprites()) {
+                    if (null != subSystem.detectCollide(target)) {
+                        Log.i("Collide detected!", subSystem.getClass().toString() + " with " + target.getImgId());
+                        return true;
+                    }
                 }
             }
         }
@@ -144,8 +149,8 @@ public class SpriteWorld {
         return false;
     }
 
-    public void postUpdate(){
-        for(SubSystem subSystem : subSystems){
+    public void postUpdate() {
+        for (SubSystem subSystem : subSystems) {
             subSystem.postUpdate();
         }
     }
@@ -153,7 +158,7 @@ public class SpriteWorld {
     public void draw(Canvas canvas) {
         CoordinateSystem.setScrDimension(new Vector2D(canvas.getWidth(), canvas.getHeight()));
 
-        for(SubSystem subSystem : subSystems){
+        for (SubSystem subSystem : subSystems) {
             subSystem.draw(canvas);
         }
     }

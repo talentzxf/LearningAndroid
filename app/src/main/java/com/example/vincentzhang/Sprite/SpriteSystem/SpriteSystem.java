@@ -15,6 +15,7 @@ import com.example.vincentzhang.Sprite.WeaponSystem.WeaponSystem;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -76,6 +77,10 @@ public class SpriteSystem implements SubSystem {
 
     public ImageSprite getLeadingSprite(){
         return leadingSprite;
+    }
+
+    public Collection<ImageSprite> getAllSprites(){
+        return this.spriteMap.values();
     }
 
     @Override

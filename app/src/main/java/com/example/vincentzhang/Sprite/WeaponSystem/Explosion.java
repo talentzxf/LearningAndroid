@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 
 import com.example.vincentzhang.Sprite.AbstractSprite;
+import com.example.vincentzhang.Sprite.ActorSprite;
 
 /**
  * Created by VincentZhang on 5/17/2017.
@@ -51,6 +52,14 @@ public class Explosion extends AbstractSprite {
     @Override
     public void postUpdate() {
         super.postUpdate();
+    }
+
+    @Override
+    protected void onCollide(AbstractSprite target) {
+        super.onCollide(target);
+        if(target instanceof ActorSprite){
+            ((ActorSprite) target).reduceHP(1);
+        }
     }
 
     @Override

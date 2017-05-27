@@ -60,13 +60,13 @@ public class Utilities {
     }
 
     public static Rect mapScrToImageRect(Rect imgRect, Rect scrRect, Rect scrTargetRect) {
-        float widthRatio = (float)imgRect.width()/(float)scrRect.width();
+        float widthRatio = (float) imgRect.width() / (float) scrRect.width();
         int left = (int) (widthRatio * (scrTargetRect.left - scrRect.left) + imgRect.left);
         int right = (int) (widthRatio * (scrTargetRect.right - scrRect.left) + imgRect.left);
 
-        float heightRatio =  (float)imgRect.height()/(float)scrRect.height();
-        int top = (int) (heightRatio * ( scrTargetRect.top - scrRect.top ) + imgRect.top);
-        int bottom = (int) (heightRatio * ( scrTargetRect.bottom - scrRect.top ) + imgRect.top);
+        float heightRatio = (float) imgRect.height() / (float) scrRect.height();
+        int top = (int) (heightRatio * (scrTargetRect.top - scrRect.top) + imgRect.top);
+        int bottom = (int) (heightRatio * (scrTargetRect.bottom - scrRect.top) + imgRect.top);
 
         return new Rect(left, top, right, bottom);
     }
@@ -109,17 +109,33 @@ public class Utilities {
         return new Rect(l, t, r, b);
     }
 
+    private static boolean in(double v, double min, double max) {
+        if (v <= max && v >= min) {
+            return true;
+        }
+        return false;
+    }
+
     public static DIRECTIONS calculateDir(Vector2D source, Vector2D target) {
         Vector2D vec = target.minus(source);
         double angle = Math.atan2(vec.getY(), vec.getX());
-        if(angle <= -0.75*Math.PI && angle >= -Math.PI){
+
+        if (in(angle, -Math.PI, -0.875 * Math.PI)) {
             return DIRECTIONS.LEFT;
-        } else if( angle > -0.75*Math.PI && angle <= -0.25*Math.PI ){
+        } else if (in(angle, -0.875 * Math.PI, -0.625 * Math.PI)) {
+            return DIRECTIONS.UPLEFT;
+        } else if (in(angle, -0.625 * Math.PI, -0.375 * Math.PI)) {
             return DIRECTIONS.UP;
-        } else if( angle > -0.25*Math.PI && angle <= 0.25*Math.PI){
+        } else if (in(angle, -0.375 * Math.PI, -0.125 * Math.PI)) {
+            return DIRECTIONS.UPRIGHT;
+        } else if (in(angle, -0.125 * Math.PI, 0.125 * Math.PI)) {
             return DIRECTIONS.RIGHT;
-        } else if( angle > 0.25*Math.PI && angle <= 0.75 * Math.PI){
+        } else if (in(angle, 0.125 * Math.PI, 0.375 * Math.PI)) {
+            return DIRECTIONS.DOWNRIGHT;
+        } else if (in(angle, 0.375 * Math.PI, 0.625 * Math.PI)) {
             return DIRECTIONS.DOWN;
+        } else if (in(angle, 0.625 * Math.PI, 0.875 * Math.PI)) {
+            return DIRECTIONS.DOWNLEFT;
         } else {
             return DIRECTIONS.LEFT;
         }
