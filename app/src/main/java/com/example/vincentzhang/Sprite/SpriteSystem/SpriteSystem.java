@@ -10,7 +10,6 @@ import com.example.vincentzhang.Sprite.Controller.ControllerFactory;
 import com.example.vincentzhang.Sprite.ImageSprite;
 import com.example.vincentzhang.Sprite.SubSystem;
 import com.example.vincentzhang.Sprite.Vector2D;
-import com.example.vincentzhang.Sprite.WeaponSystem.WeaponSystem;
 
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -30,12 +29,8 @@ import static com.example.vincentzhang.Sprite.Utilities.getXmlSource;
 
 public class SpriteSystem implements SubSystem {
     private ArrayList<ActorSprite> spriteArray = new ArrayList<>();
-    private WeaponSystem weaponSystem;
     private ActorSprite leadingSprite;
 
-    public void setWeaponSystem(WeaponSystem weaponSystem){
-        this.weaponSystem = weaponSystem;
-    }
     @Override
     public boolean init(String level, Resources resources, Canvas canvas) {
         XPath xPath = XPathFactory.newInstance().newXPath();
@@ -56,10 +51,9 @@ public class SpriteSystem implements SubSystem {
                 ActorSprite sprite = new ActorSprite(imgId, name);
                 sprite.setSpritePos(new Vector2D(posX, posY));
                 sprite.setTeamNumber(teamNumber);
-                spriteArray.add(sprite);
+                addSprite(sprite);
 
-                if(weaponSystem != null)
-                    ControllerFactory.createController(controller, sprite, weaponSystem);
+                ControllerFactory.createController(controller, sprite);
 
                 if(isLeading){
                     leadingSprite = sprite;
@@ -71,6 +65,10 @@ public class SpriteSystem implements SubSystem {
             return false;
         }
         return true;
+    }
+
+    public void addSprite(ActorSprite sprite){
+        this.spriteArray.add(sprite);
     }
 
     public ActorSprite getLeadingSprite(){

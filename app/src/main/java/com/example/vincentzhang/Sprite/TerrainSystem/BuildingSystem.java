@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.util.Log;
 
 import com.example.vincentzhang.Sprite.AbstractSprite;
+import com.example.vincentzhang.Sprite.Controller.ControllerFactory;
 import com.example.vincentzhang.Sprite.ImageSprite;
 import com.example.vincentzhang.Sprite.SubSystem;
 import com.example.vincentzhang.Sprite.Vector2D;
@@ -39,7 +40,16 @@ public class BuildingSystem implements SubSystem{
                 int imgId = Integer.valueOf(buildingNode.getAttributes().getNamedItem("imgId").getNodeValue());
                 int gridX = Integer.valueOf(buildingNode.getAttributes().getNamedItem("x").getNodeValue());
                 int gridY = Integer.valueOf(buildingNode.getAttributes().getNamedItem("y").getNodeValue());
-                buildings.put(new Vector2D(gridX, gridY), new Building(imgId, gridX, gridY));
+
+                Node controllerNode = buildingNode.getAttributes().getNamedItem("controller");
+                String controller = controllerNode == null ? null: controllerNode.getNodeValue();
+                Building newBuilding = new Building(imgId, gridX, gridY);
+
+                if(controller != null){
+                    ControllerFactory.createController(controller, newBuilding);
+                }
+
+                buildings.put(new Vector2D(gridX, gridY), newBuilding);
             }
         } catch (XPathExpressionException e) {
             Log.e("Xpath expression error:", "Error!");
@@ -67,7 +77,9 @@ public class BuildingSystem implements SubSystem{
 
     @Override
     public void postUpdate() {
-
+        for(Building building: buildings.values()){
+            building.postUpdate();
+        }
     }
 
     @Override

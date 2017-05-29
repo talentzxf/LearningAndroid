@@ -32,6 +32,7 @@ public class ImageManager {
     private Map<Integer, Bitmap> imgMap = new HashMap<>();
     private Map<Integer, Space4DTree> space4DTreeMap = new HashMap<>();
     private Map<Integer, ArrayList<DIRECTIONS>> dirArrayMap = new HashMap<>();
+    private Map<Integer, Float> imgSizeScaleMap = new HashMap<>();
 
     private static ImageManager instance = new ImageManager();
 
@@ -63,6 +64,8 @@ public class ImageManager {
             Integer colCount = colCountStr == null?1:Integer.valueOf(colCountStr);
             Node dirArrayNode = imgNode.getAttributes().getNamedItem("directions");
             String dirArray = dirArrayNode == null? "DOWN,RIGHT,UP,LEFT,DOWNLEFT,DOWNRIGHT,UPLEFT,UPRIGHT":dirArrayNode.getNodeValue();
+            Node sizeScaleNode = imgNode.getAttributes().getNamedItem("scale");
+            Float sizeScale = sizeScaleNode == null? 1.0f:Float.valueOf(sizeScaleNode.getNodeValue());
 
             Log.i("Initing img:", "id:" + src);
             Integer imgId = Integer.valueOf(imgNode.getAttributes().getNamedItem("id").getNodeValue());
@@ -72,6 +75,7 @@ public class ImageManager {
             Space4DTree space4DTree = new Space4DTree(imgId, imgBM, rowCount, colCount);
             imgMap.put(imgId, imgBM);
             space4DTreeMap.put(imgId, space4DTree);
+            imgSizeScaleMap.put(imgId, sizeScale);
 
             ArrayList<DIRECTIONS> dirList = new ArrayList<>();
             for(String dirStr : dirArray.split(",") ){
@@ -94,5 +98,13 @@ public class ImageManager {
 
     public ArrayList<DIRECTIONS> getDirectionArray(int id){
         return dirArrayMap.get(id);
+    }
+
+    public float getSizeScale(int imgId) {
+        Float sizeScale = imgSizeScaleMap.get(imgId);
+        if(sizeScale == null){
+            return 1.0f;
+        }
+        return sizeScale;
     }
 }

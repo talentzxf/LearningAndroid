@@ -10,6 +10,7 @@
         <img src="green" id="7" rowCount="8" colCount="4"></img>
         <img src="explode" id="8" rowCount="2" colCount="8"></img>
         <img src="scorpion" id="9" rowCount="8" colCount="8" directions="LEFT,UPLEFT,UP,UPRIGHT,RIGHT,DOWNRIGHT,DOWN,DOWNLEFT"></img>
+        <img src="scorpion_lair" id="10" scale="1.5"></img>
     </imgs>
     <weapons>
         <bomb imgId="6"></bomb>
@@ -48,10 +49,10 @@
     </map>
     <sprites>
         <sprite name="main_avatar" imgId="7" controller="ButtonController" x="1000" y="1000" isleading="true" team="0"></sprite>
-        <sprite name="enermy_avatar" imgId="9" controller="EnermyController" x="800" y="800" isleading="false" team="1"></sprite>
     </sprites>
     <buildings>
         <building x='0' y='0' imgId='4'></building>
         <building x='3' y='3' imgId='5'></building>
+        <building x='8' y='8' imgId='10' controller="ScorpionLairController"></building>
     </buildings>
 </game>

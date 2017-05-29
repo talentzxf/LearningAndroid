@@ -14,7 +14,7 @@ import java.util.Map;
  * Created by VincentZhang on 4/15/2017.
  */
 
-public class ImageSprite extends AbstractSprite {
+public class ImageSprite extends ControllerAbstractSprite {
     private Bitmap bm;
     private Map<DIRECTIONS, ArrayList<Rect>> dirSpriteMap = new HashMap<>();
     private Map<DIRECTIONS, ArrayList<Vector2D>> dirImgRowColumnMap = new HashMap<DIRECTIONS, ArrayList<Vector2D>>();

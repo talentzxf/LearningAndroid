@@ -10,8 +10,8 @@ import android.graphics.Rect;
  */
 
 public class ActorSprite extends ImageSprite {
-    private float hp_max = 10000;
-    private float hp = 10000;
+    private float hp_max = 1000;
+    private float hp = 1000;
     private int teamNumber = 0;
     private String name;
     private ActorSprite killedBy;

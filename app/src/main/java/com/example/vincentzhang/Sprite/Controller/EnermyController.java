@@ -4,12 +4,12 @@ import android.util.Log;
 
 import com.example.vincentzhang.Sprite.AbstractSprite;
 import com.example.vincentzhang.Sprite.ActorSprite;
+import com.example.vincentzhang.Sprite.ControllerAbstractSprite;
 import com.example.vincentzhang.Sprite.DIRECTIONS;
 import com.example.vincentzhang.Sprite.ImageSprite;
 import com.example.vincentzhang.Sprite.SpriteWorld;
 import com.example.vincentzhang.Sprite.Utilities;
 import com.example.vincentzhang.Sprite.Vector2D;
-import com.example.vincentzhang.Sprite.WeaponSystem.WeaponSystem;
 
 /**
  * Created by VincentZhang on 5/24/2017.
@@ -17,16 +17,17 @@ import com.example.vincentzhang.Sprite.WeaponSystem.WeaponSystem;
 
 public class EnermyController implements Controller {
     private ActorSprite target;
-    private WeaponSystem weaponSystem;
 
     private final int PUSH_DISTANCE = 20;
     private int damage = 10;
-    public EnermyController(ActorSprite target, WeaponSystem weaponSystem) {
-        this.target = target;
-        this.weaponSystem = weaponSystem;
-        target.setMoving(true);
-        target.setMoveSpeed(8);
-        target.setHp(10);
+    public EnermyController(ControllerAbstractSprite target) {
+        if(!(target instanceof ActorSprite)){
+            throw new RuntimeException("EnermyController can only accept ActorSprite!");
+        }
+        this.target = (ActorSprite) target;
+        this.target.setMoving(true);
+        this.target.setMoveSpeed(8);
+        this.target.setHp(100);
     }
 
     @Override

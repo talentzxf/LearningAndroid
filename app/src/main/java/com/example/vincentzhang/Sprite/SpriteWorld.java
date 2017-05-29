@@ -53,7 +53,6 @@ public class SpriteWorld {
         subSystems.add(weaponSystem);
         subSystems.add(new BuildingSystem());
         SpriteSystem spriteSystem = new SpriteSystem();
-        spriteSystem.setWeaponSystem(weaponSystem);
         this.spriteSystem = spriteSystem;
         subSystems.add(spriteSystem);
 
@@ -166,5 +165,13 @@ public class SpriteWorld {
         for (SubSystem subSystem : subSystems) {
             subSystem.draw(canvas);
         }
+    }
+
+    public SpriteSystem getSpriteSystem() {
+        return spriteSystem;
+    }
+
+    public WeaponSystem getWeaponSystem() {
+        return weaponSystem;
     }
 }

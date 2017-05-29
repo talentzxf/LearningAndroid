@@ -5,9 +5,10 @@ import android.graphics.Rect;
 import com.example.vincentzhang.Sprite.AbstractSprite;
 import com.example.vincentzhang.Sprite.ActorSprite;
 import com.example.vincentzhang.Sprite.CollideDetector;
+import com.example.vincentzhang.Sprite.ControllerAbstractSprite;
 import com.example.vincentzhang.Sprite.DIRECTIONS;
+import com.example.vincentzhang.Sprite.SpriteWorld;
 import com.example.vincentzhang.Sprite.Vector2D;
-import com.example.vincentzhang.Sprite.WeaponSystem.WeaponSystem;
 
 /**
  * Created by VincentZhang on 5/20/2017.
@@ -15,11 +16,12 @@ import com.example.vincentzhang.Sprite.WeaponSystem.WeaponSystem;
 
 public class ButtonController implements ButtonEventListener,Controller{
     private ActorSprite target;
-    private WeaponSystem weaponSystem;
 
-    public ButtonController(ActorSprite target, WeaponSystem weaponSystem) {
-        this.target = target;
-        this.weaponSystem = weaponSystem;
+    public ButtonController(ControllerAbstractSprite target) {
+        if(!(target instanceof ActorSprite)){
+            throw new RuntimeException("ButtonController can only accept ActorSprite!");
+        }
+        this.target = (ActorSprite) target;
         ButtonEventDispatcher.inst().addListener(this);
     }
 
@@ -41,7 +43,7 @@ public class ButtonController implements ButtonEventListener,Controller{
                 Vector2D spritePos = target.getSpritePos();
                 Rect rect = target.getScrRect();
                 Vector2D newPos = target.getSpritePos().applyDir(target.getCurDirection(), Math.min(rect.width(), rect.height()));
-                weaponSystem.addBomb(newPos, target);
+                SpriteWorld.getInst().getWeaponSystem().addBomb(newPos, target);
                 break;
         }
         CollideDetector.setDirtyFlag(true);
