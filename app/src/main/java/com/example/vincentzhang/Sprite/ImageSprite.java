@@ -131,7 +131,8 @@ public class ImageSprite extends ControllerAbstractSprite {
     @Override
     public void postUpdate() {
         super.postUpdate();
-        controller.update();
+        if(controller != null)
+            controller.update();
     }
 
     public void setController(Controller controller) {
