@@ -19,7 +19,6 @@ public class ScorpionLairController implements BuildingController {
         this.target = target;
     }
 
-    //  <sprite name="enermy_avatar" imgId="9" controller="EnermyController" x="800" y="800" isleading="false" team="1"></sprite>
     @Override
     public void update() {
         if(lastScorpionTime == -1 || System.currentTimeMillis() - lastScorpionTime > 5000){

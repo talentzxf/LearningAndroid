@@ -17,6 +17,11 @@ public class Building extends ControllerAbstractSprite {
         this.setSpritePos(CoordinateSystem.gridToWorld(new Vector2D(gridX, gridY)));
     }
 
+    public Building(int id, Vector2D pos){
+        super(id);
+        this.setSpritePos(pos);
+    }
+
     @Override
     public Rect draw(Canvas canvas) {
         Rect scrRect = super.draw(canvas);

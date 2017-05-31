@@ -27,6 +27,7 @@ public class SpriteWorld {
     private ArrayList<SubSystem> subSystems = new ArrayList<>();
     private WeaponSystem weaponSystem;
     private SpriteSystem spriteSystem;
+    private BuildingSystem buildingSystem;
     private UISystem uiSystem;
 
     private SpriteWorld() {
@@ -51,7 +52,8 @@ public class SpriteWorld {
         // TODO: Decouple weaponSystem dependency to controller.
         weaponSystem = new WeaponSystem();
         subSystems.add(weaponSystem);
-        subSystems.add(new BuildingSystem());
+        buildingSystem = new BuildingSystem();
+        subSystems.add(buildingSystem);
         SpriteSystem spriteSystem = new SpriteSystem();
         this.spriteSystem = spriteSystem;
         subSystems.add(spriteSystem);
@@ -173,5 +175,9 @@ public class SpriteWorld {
 
     public WeaponSystem getWeaponSystem() {
         return weaponSystem;
+    }
+
+    public BuildingSystem getBuildingSystem(){
+        return buildingSystem;
     }
 }

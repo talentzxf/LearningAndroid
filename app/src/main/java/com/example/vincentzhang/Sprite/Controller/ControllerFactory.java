@@ -37,7 +37,6 @@ public class ControllerFactory {
             Log.e("Constructor error", "InvocationTargetException", e);
         }
 
-
         target.setController(controller);
 
         return controller;

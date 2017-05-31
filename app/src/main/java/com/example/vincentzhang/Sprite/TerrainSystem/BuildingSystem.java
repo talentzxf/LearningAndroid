@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.example.vincentzhang.Sprite.AbstractSprite;
 import com.example.vincentzhang.Sprite.Controller.ControllerFactory;
+import com.example.vincentzhang.Sprite.CoordinateSystem;
 import com.example.vincentzhang.Sprite.ImageSprite;
 import com.example.vincentzhang.Sprite.SubSystem;
 import com.example.vincentzhang.Sprite.Vector2D;
@@ -90,5 +91,9 @@ public class BuildingSystem implements SubSystem{
             }
         }
         return null;
+    }
+
+    public void addBuilding(Building newBuilding) {
+        buildings.put(CoordinateSystem.worldToGrid(newBuilding.getSpritePos()), newBuilding);
     }
 }
