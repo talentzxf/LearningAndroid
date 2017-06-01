@@ -18,17 +18,21 @@ import java.util.ArrayList;
  * Created by VincentZhang on 4/15/2017.
  */
 
-public class SpriteWorld {
+public class SpriteWorld extends Thread{
 
     private static final int VIEWPORT_MARGIN = 100;
 
     private boolean inited = false;
+    private boolean initThreadStarted = false;
+    private Context context;
+    private Canvas canvas;
 
     private ArrayList<SubSystem> subSystems = new ArrayList<>();
     private WeaponSystem weaponSystem;
     private SpriteSystem spriteSystem;
     private BuildingSystem buildingSystem;
     private UISystem uiSystem;
+    private LoadingThread loadingThread = new LoadingThread();
 
     private SpriteWorld() {
     }
@@ -41,6 +45,11 @@ public class SpriteWorld {
 
     public boolean inited() {
         return inited;
+    }
+
+    @Override
+    public void run() {
+        this.init(context, canvas);
     }
 
     public boolean init(Context context, Canvas canvas) {
@@ -186,5 +195,14 @@ public class SpriteWorld {
 
     public BuildingSystem getBuildingSystem(){
         return buildingSystem;
+    }
+
+    public void start_init(Context context, Canvas canvas) {
+        this.context = context;
+        this.canvas = canvas;
+        if(!initThreadStarted){
+            initThreadStarted = true;
+            this.start();
+        }
     }
 }

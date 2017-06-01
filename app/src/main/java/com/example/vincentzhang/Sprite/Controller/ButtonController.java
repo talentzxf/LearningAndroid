@@ -50,6 +50,7 @@ public class ButtonController implements ButtonEventListener, Controller {
                 Rect rect = target.getScrRect();
                 Vector2D newPos = target.getSpritePos().applyDir(target.getCurDirection(), Math.min(rect.width(), rect.height()));
                 Building newBuilding = new Building(11, newPos);
+                newBuilding.setDestroyable(false);
                 ControllerFactory.createController("HospitalController", newBuilding);
                 SpriteWorld.getInst().getBuildingSystem().addBuilding(newBuilding);
             }
