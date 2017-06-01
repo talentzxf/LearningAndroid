@@ -5,6 +5,8 @@ import android.graphics.Rect;
 
 import com.example.vincentzhang.Sprite.AbstractSprite;
 import com.example.vincentzhang.Sprite.ActorSprite;
+import com.example.vincentzhang.Sprite.HasLifeAbstractSprite;
+import com.example.vincentzhang.Sprite.Vector2D;
 
 /**
  * Created by VincentZhang on 5/17/2017.
@@ -50,12 +52,10 @@ public class Explosion extends AbstractSprite {
     @Override
     public Rect getSrcRect() {
         if (System.currentTimeMillis() > this.explodeTime) {
-            int row = 0;
-            if (curFrame > 8) {
-                row = 1;
-            }
+            Vector2D imgRowCol = this.getImgRowColumn();
 
-            int col = curFrame % 8;
+            int row = (int) imgRowCol.getY();
+            int col = (int) imgRowCol.getX();
 
             if (System.currentTimeMillis() - lastUpdateTime > 100) {
                 curFrame = (curFrame + 1) % (rowCount * colCount);
@@ -82,9 +82,9 @@ public class Explosion extends AbstractSprite {
     protected void onCollide(AbstractSprite target) {
         if (System.currentTimeMillis() > this.explodeTime) {
             super.onCollide(target);
-            if (target instanceof ActorSprite) {
-                ActorSprite actorSprite = (ActorSprite) target;
-                actorSprite.reduceHP(1, this.owner);
+            if (target instanceof HasLifeAbstractSprite) {
+                HasLifeAbstractSprite targetSprite = (HasLifeAbstractSprite) target;
+                targetSprite.reduceHP(1, this.owner);
             }
         }
     }
@@ -95,5 +95,17 @@ public class Explosion extends AbstractSprite {
             super.draw(canvas);
         }
         return null;
+    }
+
+    @Override
+    public Vector2D getImgRowColumn() {
+        int row = 0;
+        if (curFrame > 8) {
+            row = 1;
+        }
+
+        int col = curFrame % 8;
+
+        return new Vector2D(col, row);
     }
 }

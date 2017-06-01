@@ -3,7 +3,6 @@ package com.example.vincentzhang.Sprite;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
-import android.util.Log;
 
 import com.example.vincentzhang.Sprite.imgemanagement.ImageManager;
 import com.example.vincentzhang.Sprite.imgemanagement.Space4DTree;
@@ -109,7 +108,7 @@ public abstract class AbstractSprite {
     }
 
     protected void onCollide(AbstractSprite target) {
-        Log.i("Collide!!!!", " really??");
+        // Log.i("Collide!!!!", " really??");
     }
 
     public boolean detectCollide(AbstractSprite target) {

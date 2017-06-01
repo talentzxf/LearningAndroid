@@ -1,7 +1,5 @@
 package com.example.vincentzhang.Sprite.Controller;
 
-import android.util.Log;
-
 import com.example.vincentzhang.Sprite.AbstractSprite;
 import com.example.vincentzhang.Sprite.ActorSprite;
 import com.example.vincentzhang.Sprite.ControllerAbstractSprite;
@@ -46,7 +44,7 @@ public class EnermyController implements Controller {
             ActorSprite curActor = target;
 
             if(collideTargetActor.getTeamNumber() != curActor.getTeamNumber()){
-                Log.i("Collide", "Collide with enermy!!!!");
+                // Log.i("Collide", "Collide with enermy!!!!");
 
                 Vector2D newPos = collideTarget.getSpritePos().applyDir(collideTargetActor.getCurDirection(), -PUSH_DISTANCE);
                 collideTargetActor.setSpritePos(newPos);

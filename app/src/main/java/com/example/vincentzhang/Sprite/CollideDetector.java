@@ -1,7 +1,6 @@
 package com.example.vincentzhang.Sprite;
 
 import android.graphics.Rect;
-import android.util.Log;
 
 import com.example.vincentzhang.Sprite.imgemanagement.BitmapMask;
 import com.example.vincentzhang.Sprite.imgemanagement.Space4DTree;
@@ -26,7 +25,8 @@ public class CollideDetector {
     private Rect targetScrRect;
 
     public static boolean isDirtyFlag() {
-        return dirtyFlag;
+        // return dirtyFlag;
+        return true;
     }
 
     public static void setDirtyFlag(boolean dirtyFlag) {
@@ -63,7 +63,7 @@ public class CollideDetector {
 
             // Less than 4 pixels, regard as collided.
             if(scrNodeRect.width() <= 2 && scrNodeRect.height() <= 2){
-                Log.i("Effort 1","Detected:" + detectCount + " times");
+                // Log.i("Effort 1","Detected:" + detectCount + " times");
                 return true;
             }
 
@@ -78,7 +78,7 @@ public class CollideDetector {
 
             if(targetBM.getRangePixelCount(intersecRect) > 0){
                 if(curNode.isLeafNode()){
-                    Log.i("Effort 2","Detected:" + detectCount + " times");
+                    // Log.i("Effort 2","Detected:" + detectCount + " times");
                     return true;
                 }
 
@@ -88,7 +88,7 @@ public class CollideDetector {
                 }
             }
         }
-        Log.i("Effort 3","Not Detected collide! Effort:" + detectCount + " times");
+        // Log.i("Effort 3","Not Detected collide! Effort:" + detectCount + " times");
         return false;
     }
 }

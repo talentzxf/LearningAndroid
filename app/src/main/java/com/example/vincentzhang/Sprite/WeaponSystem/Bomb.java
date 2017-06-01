@@ -4,7 +4,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.util.Log;
 
 import com.example.vincentzhang.Sprite.AbstractSprite;
 import com.example.vincentzhang.Sprite.ActorSprite;
@@ -60,7 +59,7 @@ public class Bomb extends AbstractSprite {
 
     @Override
     public void onCollide(AbstractSprite sprite){
-        Log.i("Collide", "collide!!!!");
+        // Log.i("Collide", "collide!!!!");
     }
 
     public void setOwner(ActorSprite owner) {

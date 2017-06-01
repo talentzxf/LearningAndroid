@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import com.example.vincentzhang.Sprite.AbstractSprite;
 import com.example.vincentzhang.Sprite.ActorSprite;
 import com.example.vincentzhang.Sprite.DIRECTIONS;
+import com.example.vincentzhang.Sprite.HasLifeAbstractSprite;
 import com.example.vincentzhang.Sprite.ImageSprite;
 import com.example.vincentzhang.Sprite.SubSystem;
 import com.example.vincentzhang.Sprite.Vector2D;
@@ -81,6 +82,12 @@ public class WeaponSystem implements SubSystem {
         }
 
         return null;
+    }
+
+    public void detectExplodeDamage(HasLifeAbstractSprite target){
+        for(AbstractSprite explosion: explosions){
+            explosion.detectCollide(target);
+        }
     }
 
     @Override

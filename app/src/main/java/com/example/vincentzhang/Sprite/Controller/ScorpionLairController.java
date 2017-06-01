@@ -21,7 +21,7 @@ public class ScorpionLairController implements BuildingController {
 
     @Override
     public void update() {
-        if(lastScorpionTime == -1 || System.currentTimeMillis() - lastScorpionTime > 5000){
+        if(lastScorpionTime == -1 || System.currentTimeMillis() - lastScorpionTime > 500000){
             ActorSprite newScorpion = new ActorSprite(9, "enermy_avatar");
             newScorpion.setTeamNumber(1); // TODO should be configurable here.
             ControllerFactory.createController("EnermyController", newScorpion);

@@ -3,9 +3,9 @@ package com.example.vincentzhang.Sprite;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Rect;
-import android.util.Log;
 
 import com.example.vincentzhang.Sprite.SpriteSystem.SpriteSystem;
+import com.example.vincentzhang.Sprite.TerrainSystem.Building;
 import com.example.vincentzhang.Sprite.TerrainSystem.BuildingSystem;
 import com.example.vincentzhang.Sprite.TerrainSystem.TerrainSystem;
 import com.example.vincentzhang.Sprite.UI.UISystem;
@@ -143,12 +143,19 @@ public class SpriteWorld {
         if (CollideDetector.isDirtyFlag()) {
 
             for (SubSystem subSystem : subSystems) {
-                for (ImageSprite target : spriteSystem.getAllSprites()) {
-                    if (null != subSystem.detectCollide(target)) {
-                        Log.i("Collide detected!", subSystem.getClass().toString() + " with " + target.getImgId());
-                        return true;
+                if(subSystem != spriteSystem){
+                    for (ImageSprite target : spriteSystem.getAllSprites()) {
+                        if (null != subSystem.detectCollide(target)) {
+                            // Log.i("Collide detected!", subSystem.getClass().toString() + " with " + target.getImgId());
+                            return true;
+                        }
                     }
                 }
+            }
+
+            // Bulidings can be destroyed
+            for(Building building: buildingSystem.getDestroyableBuildings()){
+                weaponSystem.detectExplodeDamage(building);
             }
         }
 

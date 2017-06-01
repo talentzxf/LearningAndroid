@@ -4,14 +4,15 @@ package com.example.vincentzhang.Sprite.TerrainSystem;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 
-import com.example.vincentzhang.Sprite.ControllerAbstractSprite;
 import com.example.vincentzhang.Sprite.CoordinateSystem;
+import com.example.vincentzhang.Sprite.HasLifeAbstractSprite;
 import com.example.vincentzhang.Sprite.Vector2D;
 
 /**
  * Created by VincentZhang on 4/23/2017.
  */
-public class Building extends ControllerAbstractSprite {
+public class Building extends HasLifeAbstractSprite {
+
     public Building(int id, int gridX, int gridY) {
         super(id);
         this.setSpritePos(CoordinateSystem.gridToWorld(new Vector2D(gridX, gridY)));
