@@ -32,7 +32,6 @@ public class SpriteWorld extends Thread{
     private SpriteSystem spriteSystem;
     private BuildingSystem buildingSystem;
     private UISystem uiSystem;
-    private LoadingThread loadingThread = new LoadingThread();
 
     private SpriteWorld() {
     }
