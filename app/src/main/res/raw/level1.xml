@@ -12,6 +12,7 @@
         <img src="scorpion" id="9" rowCount="8" colCount="8" directions="LEFT,UPLEFT,UP,UPRIGHT,RIGHT,DOWNRIGHT,DOWN,DOWNLEFT"></img>
         <img src="scorpion_lair" id="10" scale="1.5"></img>
         <img src="hospital" id="11"></img>
+        <img src="dragonball" id="12" rowCount="2" colCount="2"></img>
     </imgs>
     <weapons>
         <bomb imgId="6"></bomb>

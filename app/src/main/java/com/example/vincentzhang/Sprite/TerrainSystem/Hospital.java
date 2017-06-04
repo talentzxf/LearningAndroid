@@ -49,8 +49,8 @@ public class Hospital extends Building {
             Paint p = new Paint();
             p.setStyle(Paint.Style.FILL);
             // p.setARGB(0x0F,0x00,0xF0,0x00);
-            p.setColor(Color.GREEN);
-            p.setAlpha(50);
+            p.setColor(Color.BLUE);
+            p.setAlpha(20);
 
             Rect scrRect = this.getScrRect();
             if(scrRect != null)

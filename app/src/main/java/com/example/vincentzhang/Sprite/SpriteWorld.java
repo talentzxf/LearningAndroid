@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 
+import com.example.vincentzhang.Sprite.ResourceSystem.ResourceSystem;
 import com.example.vincentzhang.Sprite.SpriteSystem.SpriteSystem;
 import com.example.vincentzhang.Sprite.TerrainSystem.Building;
 import com.example.vincentzhang.Sprite.TerrainSystem.BuildingSystem;
@@ -71,6 +72,8 @@ public class SpriteWorld extends Thread {
 
         uiSystem = new UISystem();
         subSystems.add(uiSystem);
+
+        subSystems.add(new ResourceSystem());
 
         for (SubSystem subSystem : subSystems) {
             subSystem.init(level, context.getResources(), canvas);
