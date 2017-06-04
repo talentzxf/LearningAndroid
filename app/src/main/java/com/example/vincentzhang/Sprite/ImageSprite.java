@@ -109,7 +109,7 @@ public class ImageSprite extends HasLifeAbstractSprite {
 
     // TODO, use binary search to find the position faster.
     @Override
-    protected void onCollide(AbstractSprite target) {
+    protected void onCollide(AbstractCollidableSprite target) {
         super.onCollide(target);
         this.controller.onCollide(target);
 

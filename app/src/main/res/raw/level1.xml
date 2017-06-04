@@ -49,7 +49,7 @@
         2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
     </map>
     <sprites>
-        <sprite name="main_avatar" imgId="7" controller="ButtonController" x="1000" y="1000" isleading="true" team="0"></sprite>
+        <sprite name="main_avatar" imgId="7" controller="ButtonController" x="1000" y="1000" isleading="true" team="0" maxHp="10000" hp="10000"></sprite>
     </sprites>
     <buildings>
         <building x='0' y='0' imgId='4' destroyable="false"></building>

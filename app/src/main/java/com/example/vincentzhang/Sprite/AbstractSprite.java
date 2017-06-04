@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 
 import com.example.vincentzhang.Sprite.imgemanagement.ImageManager;
-import com.example.vincentzhang.Sprite.imgemanagement.Space4DTree;
 
 /**
  * Created by VincentZhang on 4/15/2017.
@@ -16,13 +15,15 @@ public abstract class AbstractSprite {
     private float moveSpeed = 20;
     private Bitmap bm;
     private Rect mScrRect;
-    private Space4DTree space4DTree;
+
     private int imgId = -1;
     private float sizeScale = 1.0f;
 
     public AbstractSprite(int imgId) {
+        if(imgId == -1)
+            return;
         bm = ImageManager.inst().getImg(imgId);
-        space4DTree = ImageManager.inst().getSpace4DTree(imgId);
+
         this.imgId = imgId;
         this.sizeScale = ImageManager.inst().getSizeScale(imgId);
     }
@@ -31,8 +32,12 @@ public abstract class AbstractSprite {
         return imgId;
     }
 
-    public Space4DTree getSpace4DTree() {
-        return space4DTree;
+    public float getSizeScale() {
+        return sizeScale;
+    }
+
+    public void setSizeScale(float sizeScale) {
+        this.sizeScale = sizeScale;
     }
 
     protected Bitmap getBm() {
@@ -41,6 +46,21 @@ public abstract class AbstractSprite {
 
     public Rect getScrRect() {
         return mScrRect;
+    }
+
+    public void beforeCollision() {
+        Rect srcRect = getSrcRect(); // Source rect
+        if(srcRect == null)
+            return;
+        float ratio = (float)srcRect.width()/(float)srcRect.height();
+        int tileHeight = (int) (CoordinateSystem.getTileDimension().getY() * getSizeScale());
+
+        int real_scrWidth = (int) (ratio * tileHeight);
+        Vector2D viewPortPos = CoordinateSystem.worldToScr(getSpritePos());
+        int spriteViewPosX = (int) viewPortPos.getX();
+        int spriteViewPosY = (int) viewPortPos.getY();
+
+        mScrRect = new Rect(spriteViewPosX, spriteViewPosY, spriteViewPosX + real_scrWidth, spriteViewPosY + tileHeight);
     }
 
     public float getMoveSpeed() {
@@ -73,7 +93,8 @@ public abstract class AbstractSprite {
         return new Rect(0, 0, bm.getWidth() - 1, bm.getHeight() - 1);
     }
 
-    public void preUpdate() {
+    public void preUpdate(){
+
     }
 
     public Vector2D getImgRowColumn() {
@@ -88,45 +109,9 @@ public abstract class AbstractSprite {
         return mScrRect;
     }
 
-    public void beforeCollision() {
-        Rect srcRect = getSrcRect(); // Source rect
-        if(srcRect == null)
-            return;
-        float ratio = (float)srcRect.width()/(float)srcRect.height();
-        int tileHeight = (int) (CoordinateSystem.getTileDimension().getY() * sizeScale);
-
-        int real_scrWidth = (int) (ratio * tileHeight);
-        Vector2D viewPortPos = CoordinateSystem.worldToScr(getSpritePos());
-        int spriteViewPosX = (int) viewPortPos.getX();
-        int spriteViewPosY = (int) viewPortPos.getY();
-
-        mScrRect = new Rect(spriteViewPosX, spriteViewPosY, spriteViewPosX + real_scrWidth, spriteViewPosY + tileHeight);
-    }
-
     public void postUpdate() {
 
     }
 
-    protected void onCollide(AbstractSprite target) {
-        // Log.i("Collide!!!!", " really??");
-    }
 
-    public boolean detectCollide(AbstractSprite target) {
-        if (target.mScrRect == null || this.mScrRect == null)
-            return false;
-
-        // If two rectangles collide
-        if (!Utilities.detectCollide(target.mScrRect, this.mScrRect)) {
-            return false;
-        }
-
-        CollideDetector collideDetector = new CollideDetector(this, target);
-        if (!collideDetector.detect()) {
-            return false;
-        }
-
-        target.onCollide(this);
-        this.onCollide(target);
-        return true;
-    }
 }

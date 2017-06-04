@@ -13,12 +13,14 @@ import com.example.vincentzhang.Sprite.WeaponSystem.WeaponSystem;
 import com.example.vincentzhang.Sprite.imgemanagement.ImageManager;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by VincentZhang on 4/15/2017.
  */
 
-public class SpriteWorld extends Thread{
+public class SpriteWorld extends Thread {
 
     private static final int VIEWPORT_MARGIN = 100;
 
@@ -32,6 +34,7 @@ public class SpriteWorld extends Thread{
     private SpriteSystem spriteSystem;
     private BuildingSystem buildingSystem;
     private UISystem uiSystem;
+    private Object nearestSprite;
 
     private SpriteWorld() {
     }
@@ -57,11 +60,11 @@ public class SpriteWorld extends Thread{
 
         subSystems.add(new TerrainSystem());
 
+        buildingSystem = new BuildingSystem();
+        subSystems.add(buildingSystem);
         // TODO: Decouple weaponSystem dependency to controller.
         weaponSystem = new WeaponSystem();
         subSystems.add(weaponSystem);
-        buildingSystem = new BuildingSystem();
-        subSystems.add(buildingSystem);
         SpriteSystem spriteSystem = new SpriteSystem();
         this.spriteSystem = spriteSystem;
         subSystems.add(spriteSystem);
@@ -151,18 +154,16 @@ public class SpriteWorld extends Thread{
         if (CollideDetector.isDirtyFlag()) {
 
             for (SubSystem subSystem : subSystems) {
-                if(subSystem != spriteSystem){
-                    for (ImageSprite target : spriteSystem.getAllSprites()) {
-                        if (null != subSystem.detectCollide(target)) {
-                            // Log.i("Collide detected!", subSystem.getClass().toString() + " with " + target.getImgId());
-                            return true;
-                        }
+                for (ImageSprite target : spriteSystem.getAllSprites()) {
+                    if (null != subSystem.detectCollide(target)) {
+                        // Log.i("Collide detected!", subSystem.getClass().toString() + " with " + target.getImgId());
+                        return true;
                     }
                 }
             }
 
             // Bulidings can be destroyed
-            for(Building building: buildingSystem.getDestroyableBuildings()){
+            for (Building building : buildingSystem.getDestroyableBuildings()) {
                 weaponSystem.detectExplodeDamage(building);
             }
         }
@@ -192,16 +193,36 @@ public class SpriteWorld extends Thread{
         return weaponSystem;
     }
 
-    public BuildingSystem getBuildingSystem(){
+    public BuildingSystem getBuildingSystem() {
         return buildingSystem;
     }
 
     public void start_init(Context context, Canvas canvas) {
         this.context = context;
         this.canvas = canvas;
-        if(!initThreadStarted){
+        if (!initThreadStarted) {
             initThreadStarted = true;
             this.start();
         }
+    }
+
+    public HasLifeAbstractSprite getNearestInjuredSprite(Vector2D centerPos , int teamNumber, int distance) {
+        List<HasLifeAbstractSprite> distanceSortedSpriteList = new ArrayList<>();
+        for (ActorSprite sprite : this.spriteSystem.getAllSprites()) {
+            if(sprite.getTeamNumber() == teamNumber){
+                if(sprite.getSpritePos().distSquare(centerPos) < distance * distance){
+                    if(sprite.isInjured())
+                        distanceSortedSpriteList.add(sprite);
+                }
+            }
+        }
+
+        if(distanceSortedSpriteList.size() == 0){
+            return null;
+        }
+
+        Collections.sort(distanceSortedSpriteList, new Utilities.SpriteDistanceComparator(centerPos) );
+
+        return distanceSortedSpriteList.get(0);
     }
 }

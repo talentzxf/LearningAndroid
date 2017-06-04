@@ -48,9 +48,23 @@ public class SpriteSystem implements SubSystem {
                 String controller = spriteNode.getAttributes().getNamedItem("controller").getNodeValue();
                 int teamNumber = Integer.valueOf(spriteNode.getAttributes().getNamedItem("team").getNodeValue());
 
+                Node maxHpNode = spriteNode.getAttributes().getNamedItem("maxHp");
+                Node hpNode = spriteNode.getAttributes().getNamedItem("hp");
+
                 ActorSprite sprite = new ActorSprite(imgId, name);
                 sprite.setSpritePos(new Vector2D(posX, posY));
                 sprite.setTeamNumber(teamNumber);
+
+                if(maxHpNode != null){
+                    int maxHp = Integer.valueOf(maxHpNode.getNodeValue());
+                    sprite.setMaxHp(maxHp);
+                }
+
+                if(hpNode != null){
+                    int hp = Integer.valueOf(hpNode.getNodeValue());
+                    sprite.setHp(hp);
+                }
+
                 addSprite(sprite);
 
                 ControllerFactory.createController(controller, sprite);
@@ -58,7 +72,6 @@ public class SpriteSystem implements SubSystem {
                 if(isLeading){
                     leadingSprite = sprite;
                 }
-
             }
         } catch (XPathExpressionException e) {
             Log.e("Xpath expression error:", "Error!");

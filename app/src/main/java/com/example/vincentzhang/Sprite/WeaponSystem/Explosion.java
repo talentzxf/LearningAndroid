@@ -3,7 +3,7 @@ package com.example.vincentzhang.Sprite.WeaponSystem;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 
-import com.example.vincentzhang.Sprite.AbstractSprite;
+import com.example.vincentzhang.Sprite.AbstractCollidableSprite;
 import com.example.vincentzhang.Sprite.ActorSprite;
 import com.example.vincentzhang.Sprite.HasLifeAbstractSprite;
 import com.example.vincentzhang.Sprite.Vector2D;
@@ -12,7 +12,7 @@ import com.example.vincentzhang.Sprite.Vector2D;
  * Created by VincentZhang on 5/17/2017.
  */
 
-public class Explosion extends AbstractSprite {
+public class Explosion extends AbstractCollidableSprite {
     private int curFrame = 0;
 
     private int spriteWidth = -1;
@@ -79,7 +79,7 @@ public class Explosion extends AbstractSprite {
     }
 
     @Override
-    protected void onCollide(AbstractSprite target) {
+    protected void onCollide(AbstractCollidableSprite target) {
         if (System.currentTimeMillis() > this.explodeTime) {
             super.onCollide(target);
             if (target instanceof HasLifeAbstractSprite) {

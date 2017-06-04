@@ -5,14 +5,14 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
-import com.example.vincentzhang.Sprite.AbstractSprite;
+import com.example.vincentzhang.Sprite.AbstractCollidableSprite;
 import com.example.vincentzhang.Sprite.ActorSprite;
 
 /**
  * Created by VincentZhang on 4/24/2017.
  */
 
-public class Bomb extends AbstractSprite {
+public class Bomb extends AbstractCollidableSprite {
     private int step = 5;
     private long lastUpdateTime = -1;
 
@@ -58,7 +58,7 @@ public class Bomb extends AbstractSprite {
     }
 
     @Override
-    public void onCollide(AbstractSprite sprite){
+    public void onCollide(AbstractCollidableSprite sprite){
         // Log.i("Collide", "collide!!!!");
     }
 

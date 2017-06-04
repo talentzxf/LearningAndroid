@@ -99,4 +99,12 @@ public class Vector2D {
     public String toString() {
         return Double.toString(this.getX()) + "," + Double.toString(this.getY());
     }
+
+    public double distSquare(Vector2D centerPos) {
+        return (centerPos.getX() - this.getX()) * (centerPos.getX() - this.getX()) + (centerPos.getY() - this.getY()) * (centerPos.getY() - this.getY());
+    }
+
+    public double dist(Vector2D centerPos){
+        return Math.sqrt(distSquare(centerPos));
+    }
 }

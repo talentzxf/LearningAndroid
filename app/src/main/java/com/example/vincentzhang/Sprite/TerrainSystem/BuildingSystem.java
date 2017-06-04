@@ -81,7 +81,9 @@ public class BuildingSystem implements SubSystem{
 
     @Override
     public void preUpdate() {
-
+        for(Building building : buildings){
+            building.preUpdate();
+        }
     }
 
     @Override

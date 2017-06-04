@@ -12,6 +12,8 @@ import com.example.vincentzhang.learnandroid.R;
 import org.xml.sax.InputSource;
 
 import java.lang.reflect.Field;
+import java.util.Comparator;
+import java.util.Random;
 
 /**
  * Created by VincentZhang on 4/23/2017.
@@ -138,6 +140,30 @@ public class Utilities {
             return DIRECTIONS.DOWNLEFT;
         } else {
             return DIRECTIONS.LEFT;
+        }
+    }
+
+    public static int randInRange(int min, int max) {
+        Random rand = new Random();
+        int randInt = rand.nextInt(max-min);
+
+        return min + randInt;
+    }
+
+    static class SpriteDistanceComparator implements Comparator {
+        public Vector2D centerPos;
+
+        SpriteDistanceComparator(Vector2D centerPos){
+            this.centerPos = centerPos;
+        }
+
+        @Override
+        public int compare(Object o1, Object o2) {
+            ActorSprite as1 = (ActorSprite) o1;
+            ActorSprite as2 = (ActorSprite) o2;
+            double dist1 = as1.getSpritePos().distSquare(centerPos);
+            double dist2 = as2.getSpritePos().distSquare(centerPos);
+            return (int) (dist1 - dist2);
         }
     }
 }

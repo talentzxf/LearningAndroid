@@ -8,7 +8,7 @@ import com.example.vincentzhang.Sprite.CollideDetector;
 import com.example.vincentzhang.Sprite.ControllerAbstractSprite;
 import com.example.vincentzhang.Sprite.DIRECTIONS;
 import com.example.vincentzhang.Sprite.SpriteWorld;
-import com.example.vincentzhang.Sprite.TerrainSystem.Building;
+import com.example.vincentzhang.Sprite.TerrainSystem.Hospital;
 import com.example.vincentzhang.Sprite.Vector2D;
 
 /**
@@ -49,10 +49,13 @@ public class ButtonController implements ButtonEventListener, Controller {
             case 'B': {
                 Rect rect = target.getScrRect();
                 Vector2D newPos = target.getSpritePos().applyDir(target.getCurDirection(), Math.min(rect.width(), rect.height()));
-                Building newBuilding = new Building(11, newPos);
-                newBuilding.setDestroyable(false);
-                ControllerFactory.createController("HospitalController", newBuilding);
-                SpriteWorld.getInst().getBuildingSystem().addBuilding(newBuilding);
+                // Building newBuilding = new Building(11, newPos);
+                Hospital hospital = new Hospital(11, newPos);
+                hospital.setDistance(500);
+                hospital.setDestroyable(false);
+                hospital.setTeamNumber(target.getTeamNumber());
+                ControllerFactory.createController("HospitalController", hospital);
+                SpriteWorld.getInst().getBuildingSystem().addBuilding(hospital);
             }
             break;
         }

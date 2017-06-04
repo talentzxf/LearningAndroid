@@ -18,8 +18,11 @@ public class HasLifeAbstractSprite extends ControllerAbstractSprite {
 
     private boolean destroyable = true;
 
-    public void setHp(int hp) {
-        this.hp = hp;
+    public void setHp(float hp) {
+        if(hp <= hp_max)
+            this.hp = hp;
+        else
+            this.hp = this.hp_max;
     }
 
     public void addCredit(int i) {
@@ -94,5 +97,19 @@ public class HasLifeAbstractSprite extends ControllerAbstractSprite {
 
     public boolean isDestroyable() {
         return destroyable;
+    }
+
+    public void setMaxHp(int maxHp) {
+        this.hp_max = maxHp;
+    }
+
+    public boolean isInjured() {
+        if(this.hp < this.hp_max)
+           return true;
+        return false;
+    }
+
+    public void addHp(float i) {
+        this.setHp(this.hp + i);
     }
 }

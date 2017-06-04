@@ -33,7 +33,7 @@ public class CollideDetector {
         CollideDetector.dirtyFlag = dirtyFlag;
     }
 
-    public CollideDetector(AbstractSprite collider, AbstractSprite target){
+    public CollideDetector(AbstractCollidableSprite collider, AbstractCollidableSprite target){
         this.colliderTree = collider.getSpace4DTree();
         this.colliderRowColumn = collider.getImgRowColumn();
         this.colliderScrRect = collider.getScrRect();
