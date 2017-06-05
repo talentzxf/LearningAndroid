@@ -99,12 +99,8 @@ public class Explosion extends AbstractCollidableSprite {
 
     @Override
     public Vector2D getImgRowColumn() {
-        int row = 0;
-        if (curFrame > 8) {
-            row = 1;
-        }
-
-        int col = curFrame % 8;
+        int row = curFrame / colCount;
+        int col = curFrame % colCount;
 
         return new Vector2D(col, row);
     }

@@ -20,9 +20,13 @@ public class ResourceSystem implements SubSystem {
 
     @Override
     public boolean init(String level, Resources resources, Canvas canvas) {
-        Resource db = new DragonBall(12);
-        db.setSpritePos(new Vector2D(100,200));
-        resourceArray.add(db);
+        Resource coin = new Coin(12);
+        coin.setSpritePos(new Vector2D(100,200));
+
+        Resource timber = new Timber(13);
+        timber.setSpritePos(new Vector2D(300,400));
+        resourceArray.add(coin);
+        resourceArray.add(timber);
         return false;
     }
 
