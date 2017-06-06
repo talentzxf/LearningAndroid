@@ -7,5 +7,6 @@ package com.example.vincentzhang.Sprite.ResourceSystem;
 public class Timber extends Resource {
     public Timber(int imgId) {
         super(imgId);
+        type = ResourceType.TIMBER;
     }
 }

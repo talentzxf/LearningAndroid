@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.example.vincentzhang.Sprite.AbstractCollidableSprite;
 import com.example.vincentzhang.Sprite.CoordinateSystem;
+import com.example.vincentzhang.Sprite.SpriteWorld;
 import com.example.vincentzhang.Sprite.Vector2D;
 
 /**
@@ -13,8 +14,8 @@ import com.example.vincentzhang.Sprite.Vector2D;
 public class Resource extends AbstractCollidableSprite {
     private boolean used = false;
     private boolean flying = false;
-
     private float flySpeed = 100.f;
+    protected ResourceType type = ResourceType.UNKNOWN;
 
     public Resource(int imgId) {
         super(imgId);
@@ -22,7 +23,7 @@ public class Resource extends AbstractCollidableSprite {
 
     @Override
     protected void onCollide(AbstractCollidableSprite target) {
-        if(!flying){
+        if (!flying) {
             super.onCollide(target);
             Log.i("Collide coin!!!!", " Collide Coin!!");
             used = false;
@@ -33,7 +34,7 @@ public class Resource extends AbstractCollidableSprite {
     @Override
     public void postUpdate() {
         super.postUpdate();
-        if(flying){
+        if (flying) {
             // Fly to up right corner
             int scrWidth = (int) CoordinateSystem.getScrDimension().getX();
             Vector2D targetScrPos = new Vector2D(scrWidth - 100, 0);
@@ -44,9 +45,11 @@ public class Resource extends AbstractCollidableSprite {
 
             this.setSpritePos(CoordinateSystem.scrToWorld(nextScrPos));
 
-            if(nextScrPos.distSquare(targetScrPos) <= flySpeed * flySpeed){
+            if (nextScrPos.distSquare(targetScrPos) <= flySpeed * flySpeed) {
                 used = true;
                 flying = false;
+
+                SpriteWorld.getInst().getLeadingSprite().addResource(type, 1);
             }
         }
     }

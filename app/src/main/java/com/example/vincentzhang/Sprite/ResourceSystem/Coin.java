@@ -20,6 +20,7 @@ public class Coin extends Resource {
         super(imgId);
         spriteWidth = getBm().getWidth() / colCount;
         spriteHeight = getBm().getHeight() / rowCount;
+        type = ResourceType.COIN;
     }
 
     @Override

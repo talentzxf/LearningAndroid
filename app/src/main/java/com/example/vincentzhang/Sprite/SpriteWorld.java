@@ -34,6 +34,7 @@ public class SpriteWorld extends Thread {
     private WeaponSystem weaponSystem;
     private SpriteSystem spriteSystem;
     private BuildingSystem buildingSystem;
+    private ResourceSystem resourceSystem;
     private UISystem uiSystem;
     private Object nearestSprite;
 
@@ -67,7 +68,8 @@ public class SpriteWorld extends Thread {
         weaponSystem = new WeaponSystem();
         subSystems.add(weaponSystem);
 
-        subSystems.add(new ResourceSystem());
+        resourceSystem = new ResourceSystem();
+        subSystems.add(resourceSystem);
 
         SpriteSystem spriteSystem = new SpriteSystem();
         this.spriteSystem = spriteSystem;
@@ -201,6 +203,10 @@ public class SpriteWorld extends Thread {
         return buildingSystem;
     }
 
+    public ResourceSystem getResourceSystem() {
+        return resourceSystem;
+    }
+
     public void start_init(Context context, Canvas canvas) {
         this.context = context;
         this.canvas = canvas;
@@ -210,22 +216,22 @@ public class SpriteWorld extends Thread {
         }
     }
 
-    public HasLifeAbstractSprite getNearestInjuredSprite(Vector2D centerPos , int teamNumber, int distance) {
+    public HasLifeAbstractSprite getNearestInjuredSprite(Vector2D centerPos, int teamNumber, int distance) {
         List<HasLifeAbstractSprite> distanceSortedSpriteList = new ArrayList<>();
         for (ActorSprite sprite : this.spriteSystem.getAllSprites()) {
-            if(sprite.getTeamNumber() == teamNumber){
-                if(sprite.getSpritePos().distSquare(centerPos) < distance * distance){
-                    if(sprite.isInjured())
+            if (sprite.getTeamNumber() == teamNumber) {
+                if (sprite.getSpritePos().distSquare(centerPos) < distance * distance) {
+                    if (sprite.isInjured())
                         distanceSortedSpriteList.add(sprite);
                 }
             }
         }
 
-        if(distanceSortedSpriteList.size() == 0){
+        if (distanceSortedSpriteList.size() == 0) {
             return null;
         }
 
-        Collections.sort(distanceSortedSpriteList, new Utilities.SpriteDistanceComparator(centerPos) );
+        Collections.sort(distanceSortedSpriteList, new Utilities.SpriteDistanceComparator(centerPos));
 
         return distanceSortedSpriteList.get(0);
     }

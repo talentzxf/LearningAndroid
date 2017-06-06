@@ -6,7 +6,6 @@ import android.graphics.Canvas;
 import com.example.vincentzhang.Sprite.AbstractSprite;
 import com.example.vincentzhang.Sprite.ImageSprite;
 import com.example.vincentzhang.Sprite.SubSystem;
-import com.example.vincentzhang.Sprite.Vector2D;
 
 import java.util.ArrayList;
 
@@ -20,14 +19,11 @@ public class ResourceSystem implements SubSystem {
 
     @Override
     public boolean init(String level, Resources resources, Canvas canvas) {
-        Resource coin = new Coin(12);
-        coin.setSpritePos(new Vector2D(100,200));
-
-        Resource timber = new Timber(13);
-        timber.setSpritePos(new Vector2D(300,400));
-        resourceArray.add(coin);
-        resourceArray.add(timber);
         return false;
+    }
+
+    public void addResource(Resource resource){
+        resourceArray.add(resource);
     }
 
     @Override
