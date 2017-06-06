@@ -107,4 +107,13 @@ public class Vector2D {
     public double dist(Vector2D centerPos){
         return Math.sqrt(distSquare(centerPos));
     }
+    public Vector2D uniform(){
+        double length = Math.sqrt(x*x + y*y);
+        return new Vector2D(x/length, y / length);
+    }
+
+    // Advance toward the target
+    public Vector2D advance(Vector2D target, float speed) {
+        return this.add(target.minus(this).uniform().multiply(speed));
+    }
 }

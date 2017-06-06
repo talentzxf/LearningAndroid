@@ -46,6 +46,10 @@ public class ResourceSystem implements SubSystem {
 
     @Override
     public AbstractSprite detectCollide(ImageSprite imgSprite) {
+        for(Resource resource:resourceArray){
+            resource.detectCollide(imgSprite);
+        }
+
         return null;
     }
 
@@ -58,8 +62,17 @@ public class ResourceSystem implements SubSystem {
 
     @Override
     public void postUpdate() {
+
+        ArrayList<Resource> tobeDeletedResources = new ArrayList<>();
+
         for(Resource resource:resourceArray){
             resource.postUpdate();
+            if(resource.isUsed())
+                tobeDeletedResources.add(resource);
+        }
+
+        for(Resource tobeDeletedResource: tobeDeletedResources){
+            resourceArray.remove(tobeDeletedResource);
         }
     }
 }

@@ -66,14 +66,15 @@ public class SpriteWorld extends Thread {
         // TODO: Decouple weaponSystem dependency to controller.
         weaponSystem = new WeaponSystem();
         subSystems.add(weaponSystem);
+
+        subSystems.add(new ResourceSystem());
+
         SpriteSystem spriteSystem = new SpriteSystem();
         this.spriteSystem = spriteSystem;
         subSystems.add(spriteSystem);
 
         uiSystem = new UISystem();
         subSystems.add(uiSystem);
-
-        subSystems.add(new ResourceSystem());
 
         for (SubSystem subSystem : subSystems) {
             subSystem.init(level, context.getResources(), canvas);
