@@ -25,9 +25,12 @@ public class Resource extends AbstractCollidableSprite {
     protected void onCollide(AbstractCollidableSprite target) {
         if (!flying) {
             super.onCollide(target);
-            Log.i("Collide coin!!!!", " Collide Coin!!");
-            used = false;
-            flying = true;
+
+            if(target == SpriteWorld.getInst().getLeadingSprite()){
+                Log.i("Collide coin!!!!", " Collide Coin!!");
+                used = false;
+                flying = true;
+            }
         }
     }
 
@@ -48,7 +51,6 @@ public class Resource extends AbstractCollidableSprite {
             if (nextScrPos.distSquare(targetScrPos) <= flySpeed * flySpeed) {
                 used = true;
                 flying = false;
-
                 SpriteWorld.getInst().getLeadingSprite().addResource(type, 1);
             }
         }

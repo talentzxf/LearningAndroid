@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.Rect;
 
 import com.example.vincentzhang.Sprite.Controller.Controller;
+import com.example.vincentzhang.Sprite.TerrainSystem.Building;
+import com.example.vincentzhang.Sprite.WeaponSystem.Explosion;
 import com.example.vincentzhang.Sprite.imgemanagement.ImageManager;
 
 import java.util.ArrayList;
@@ -114,10 +116,20 @@ public class ImageSprite extends HasLifeAbstractSprite {
         this.controller.onCollide(target);
 
         // If collided with a building, find the correct pos
-        if(!(target instanceof ImageSprite)){
-            Vector2D newPos = this.getSpritePos().applyDir(this.getCurDirection(), -1);
-            this.setSpritePos(newPos);
-            CollideDetector.setDirtyFlag(true);
+        if(target instanceof Building || target instanceof Explosion){
+
+            Vector2D oldCenterPos = getOldCenterPos();
+            Vector2D curCenterPos = getCurCenterPos();
+            if(oldCenterPos.getX() <= 0 || oldCenterPos.getY() <= 0 || oldCenterPos.equals(curCenterPos)){
+                Vector2D newPos = this.getSpritePos().applyDir(this.getCurDirection(), -1);
+                this.setSpritePos(newPos);
+                CollideDetector.setDirtyFlag(true);
+            } else {
+                // Center better be stable before & after collision.
+                Vector2D newCenterPos = oldCenterPos.advance(curCenterPos, 1);
+                this.setSpriteCenterPos(newCenterPos);
+                CollideDetector.setDirtyFlag(true);
+            }
         }
     }
 

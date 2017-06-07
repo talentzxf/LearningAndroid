@@ -19,6 +19,9 @@ public abstract class AbstractSprite {
     private int imgId = -1;
     private float sizeScale = 1.0f;
 
+    private Vector2D oldCenterPos = new Vector2D(-1,-1);
+    private Vector2D curCenterPos = new Vector2D(-1,-1);
+
     public AbstractSprite(int imgId) {
         if(imgId == -1)
             return;
@@ -26,6 +29,14 @@ public abstract class AbstractSprite {
 
         this.imgId = imgId;
         this.sizeScale = ImageManager.inst().getSizeScale(imgId);
+    }
+
+    public Vector2D getOldCenterPos() {
+        return oldCenterPos;
+    }
+
+    public Vector2D getCurCenterPos() {
+        return curCenterPos;
     }
 
     public int getImgId() {
@@ -60,7 +71,13 @@ public abstract class AbstractSprite {
         int spriteViewPosX = (int) viewPortPos.getX();
         int spriteViewPosY = (int) viewPortPos.getY();
 
+        // Record previous center position.
+        if(mScrRect != null)
+            this.oldCenterPos = CoordinateSystem.scrToWorld(new Vector2D(mScrRect.centerX(), mScrRect.centerY()));
+
         mScrRect = new Rect(spriteViewPosX, spriteViewPosY, spriteViewPosX + real_scrWidth, spriteViewPosY + tileHeight);
+
+        this.curCenterPos = CoordinateSystem.scrToWorld(new Vector2D(mScrRect.centerX(), mScrRect.centerY()));;
     }
 
     public float getMoveSpeed() {
@@ -77,6 +94,15 @@ public abstract class AbstractSprite {
 
     public void setSpritePos(Vector2D spritePos) {
         this.spritePos = spritePos;
+    }
+
+    public void setSpriteCenterPos(Vector2D newCenterPos){
+        if(mScrRect != null){
+            double newLeft = newCenterPos.getX() - mScrRect.width()/2.0f;
+            double newTop = newCenterPos.getY() - mScrRect.height()/2.0f;
+            this.setSpritePos(new Vector2D(newLeft, newTop));
+        }
+
     }
 
     public void setResLoaded(boolean resLoaded) {
