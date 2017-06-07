@@ -118,7 +118,6 @@ public class ImageSprite extends HasLifeAbstractSprite {
 
         // Hard code, not good!
         if(target instanceof Building || target instanceof Explosion || target instanceof Bomb){
-
             Vector2D oldCenterPos = getOldCenterPos();
             Vector2D curCenterPos = getCurCenterPos();
             if(oldCenterPos.getX() <= 0 || oldCenterPos.getY() <= 0 || oldCenterPos.equals(curCenterPos)){

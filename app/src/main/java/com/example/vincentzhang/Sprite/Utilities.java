@@ -159,8 +159,8 @@ public class Utilities {
 
         @Override
         public int compare(Object o1, Object o2) {
-            ActorSprite as1 = (ActorSprite) o1;
-            ActorSprite as2 = (ActorSprite) o2;
+            AbstractSprite as1 = (AbstractSprite) o1;
+            AbstractSprite as2 = (AbstractSprite) o2;
             double dist1 = as1.getSpritePos().distSquare(centerPos);
             double dist2 = as2.getSpritePos().distSquare(centerPos);
             return (int) (dist1 - dist2);

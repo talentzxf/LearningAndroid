@@ -235,4 +235,33 @@ public class SpriteWorld extends Thread {
 
         return distanceSortedSpriteList.get(0);
     }
+
+    public HasLifeAbstractSprite getNearestEnermySprite(Vector2D centerPos, int teamNumber, int distance) {
+        if(centerPos.getX() < 0 || centerPos.getY() < 0)
+            return null;
+
+        List<HasLifeAbstractSprite> distanceSortedSpriteList = new ArrayList<>();
+        for (ActorSprite sprite : this.spriteSystem.getAllSprites()) {
+            if (sprite.getTeamNumber() != teamNumber) {
+                if (sprite.getSpritePos().distSquare(centerPos) < distance * distance) {
+                    distanceSortedSpriteList.add(sprite);
+                }
+            }
+        }
+
+        for (Building building : this.buildingSystem.getDestroyableBuildings()) {
+            if (building.getTeamNumber() != teamNumber) {
+                if (building.getSpritePos().distSquare(centerPos) < distance * distance) {
+                    distanceSortedSpriteList.add(building);
+                }
+            }
+        }
+
+        if (distanceSortedSpriteList.size() == 0) {
+            return null;
+        }
+
+        Collections.sort(distanceSortedSpriteList, new Utilities.SpriteDistanceComparator(centerPos));
+        return distanceSortedSpriteList.get(0);
+    }
 }

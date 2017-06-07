@@ -52,7 +52,9 @@ public class ButtonController implements ButtonEventListener, Controller {
                 // Building newBuilding = new Building(11, newPos);
                 Hospital hospital = new Hospital(11, newPos);
                 hospital.setDistance(500);
-                hospital.setDestroyable(false);
+                hospital.setDestroyable(true);
+                hospital.setMaxHp(1000);
+                hospital.setHp(1000);
                 hospital.setTeamNumber(target.getTeamNumber());
                 ControllerFactory.createController("HospitalController", hospital);
                 SpriteWorld.getInst().getBuildingSystem().addBuilding(hospital);

@@ -4,8 +4,9 @@ import com.example.vincentzhang.Sprite.AbstractSprite;
 import com.example.vincentzhang.Sprite.ActorSprite;
 import com.example.vincentzhang.Sprite.ControllerAbstractSprite;
 import com.example.vincentzhang.Sprite.DIRECTIONS;
-import com.example.vincentzhang.Sprite.ImageSprite;
+import com.example.vincentzhang.Sprite.HasLifeAbstractSprite;
 import com.example.vincentzhang.Sprite.SpriteWorld;
+import com.example.vincentzhang.Sprite.TerrainSystem.Building;
 import com.example.vincentzhang.Sprite.Utilities;
 import com.example.vincentzhang.Sprite.Vector2D;
 
@@ -13,14 +14,18 @@ import com.example.vincentzhang.Sprite.Vector2D;
  * Created by VincentZhang on 5/24/2017.
  */
 
-public class EnermyController implements Controller {
+public class ScorpionController implements Controller {
     private ActorSprite target;
 
     private final int PUSH_DISTANCE = 20;
     private int damage = 10;
-    public EnermyController(ControllerAbstractSprite target) {
+    private int distance = 500;
+
+    private Vector2D dstPos;
+
+    public ScorpionController(ControllerAbstractSprite target) {
         if(!(target instanceof ActorSprite)){
-            throw new RuntimeException("EnermyController can only accept ActorSprite!");
+            throw new RuntimeException("ScorpionController can only accept ActorSprite!");
         }
         this.target = (ActorSprite) target;
         this.target.setMoving(true);
@@ -30,11 +35,14 @@ public class EnermyController implements Controller {
 
     @Override
     public void update(){
-        ImageSprite leadingSprite = SpriteWorld.getInst().getLeadingSprite();
-        DIRECTIONS nextDir = Utilities.calculateDir( target.getSpritePos(), leadingSprite.getSpritePos());
-        target.setCurDirection(nextDir);
+        // ImageSprite leadingSprite = SpriteWorld.getInst().getLeadingSprite();
+        HasLifeAbstractSprite sprite = SpriteWorld.getInst().getNearestEnermySprite(target.getCurCenterPos(), target.getTeamNumber(), distance);
+        if(sprite != null){
+            DIRECTIONS nextDir = Utilities.calculateDir( target.getSpritePos(), sprite.getSpritePos());
+            target.setCurDirection(nextDir);
+        } else {
 
-
+        }
     }
 
     @Override
@@ -50,6 +58,10 @@ public class EnermyController implements Controller {
                 collideTargetActor.setSpritePos(newPos);
 
                 collideTargetActor.reduceHP(damage, this.target);
+            }
+        } else if( collideTarget instanceof Building){ // Attack enermy building
+            if(((Building) collideTarget).getTeamNumber() != target.getTeamNumber()){
+                ((Building) collideTarget).reduceHP(damage, this.target);
             }
         }
     }

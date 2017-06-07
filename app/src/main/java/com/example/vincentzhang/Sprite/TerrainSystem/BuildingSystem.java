@@ -51,14 +51,17 @@ public class BuildingSystem implements SubSystem{
                     newBuilding.setDestroyable(destroyable);
                 }
 
+                Node teamNode = buildingNode.getAttributes().getNamedItem("team");
+                if(teamNode != null){
+                    int teamNumber = Integer.valueOf(teamNode.getNodeValue());
+                    newBuilding.setTeamNumber(teamNumber);
+                }
+
                 if(controller != null){
                     ControllerFactory.createController(controller, newBuilding);
                 }
 
-                buildings.add(newBuilding);
-                if(newBuilding.isDestroyable()){
-                    destroyableBuildings.add(newBuilding);
-                }
+                addBuilding(newBuilding);
             }
         } catch (XPathExpressionException e) {
             Log.e("Xpath expression error:", "Error!");
@@ -114,6 +117,10 @@ public class BuildingSystem implements SubSystem{
 
     public void addBuilding(Building newBuilding) {
         buildings.add(newBuilding);
+
+        if(newBuilding.isDestroyable()){
+            destroyableBuildings.add(newBuilding);
+        }
     }
 
     public ConcurrentLinkedQueue<Building> getDestroyableBuildings() {
