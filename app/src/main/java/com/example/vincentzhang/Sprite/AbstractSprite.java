@@ -71,10 +71,6 @@ public abstract class AbstractSprite {
         int spriteViewPosX = (int) viewPortPos.getX();
         int spriteViewPosY = (int) viewPortPos.getY();
 
-        // Record previous center position.
-        if(mScrRect != null)
-            this.oldCenterPos = CoordinateSystem.scrToWorld(new Vector2D(mScrRect.centerX(), mScrRect.centerY()));
-
         mScrRect = new Rect(spriteViewPosX, spriteViewPosY, spriteViewPosX + real_scrWidth, spriteViewPosY + tileHeight);
 
         this.curCenterPos = CoordinateSystem.scrToWorld(new Vector2D(mScrRect.centerX(), mScrRect.centerY()));;
@@ -120,7 +116,9 @@ public abstract class AbstractSprite {
     }
 
     public void preUpdate(){
-
+        // Record previous center position.
+        if(mScrRect != null)
+            this.oldCenterPos = CoordinateSystem.scrToWorld(new Vector2D(mScrRect.centerX(), mScrRect.centerY()));
     }
 
     public Vector2D getImgRowColumn() {

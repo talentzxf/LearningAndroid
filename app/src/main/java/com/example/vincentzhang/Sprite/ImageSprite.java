@@ -5,6 +5,7 @@ import android.graphics.Rect;
 
 import com.example.vincentzhang.Sprite.Controller.Controller;
 import com.example.vincentzhang.Sprite.TerrainSystem.Building;
+import com.example.vincentzhang.Sprite.WeaponSystem.Bomb;
 import com.example.vincentzhang.Sprite.WeaponSystem.Explosion;
 import com.example.vincentzhang.Sprite.imgemanagement.ImageManager;
 
@@ -115,8 +116,8 @@ public class ImageSprite extends HasLifeAbstractSprite {
         super.onCollide(target);
         this.controller.onCollide(target);
 
-        // If collided with a building, find the correct pos
-        if(target instanceof Building || target instanceof Explosion){
+        // Hard code, not good!
+        if(target instanceof Building || target instanceof Explosion || target instanceof Bomb){
 
             Vector2D oldCenterPos = getOldCenterPos();
             Vector2D curCenterPos = getCurCenterPos();
@@ -126,8 +127,11 @@ public class ImageSprite extends HasLifeAbstractSprite {
                 CollideDetector.setDirtyFlag(true);
             } else {
                 // Center better be stable before & after collision.
-                Vector2D newCenterPos = oldCenterPos.advance(curCenterPos, 1);
-                this.setSpriteCenterPos(newCenterPos);
+                // Vector2D newCenterPos = oldCenterPos.advance(curCenterPos, 1);
+
+                DIRECTIONS moveDir = Utilities.calculateDir(oldCenterPos, curCenterPos);
+                this.setSpritePos(this.getSpritePos().applyDir(moveDir, -1));
+
                 CollideDetector.setDirtyFlag(true);
             }
         }
