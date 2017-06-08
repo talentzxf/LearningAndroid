@@ -79,7 +79,8 @@ public class WeaponSystem implements SubSystem {
 
         for(AbstractCollidableSprite explosion: explosions){
             if(explosion.detectCollide(imgSprite))
-                return explosion;
+                //return explosion;
+                return null;
         }
 
         return null;

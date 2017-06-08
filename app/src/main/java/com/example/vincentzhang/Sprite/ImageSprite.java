@@ -91,6 +91,7 @@ public class ImageSprite extends HasLifeAbstractSprite {
     // TODO: Performance optimization, find the feasible position through binary search.
     @Override
     public void preUpdate(){
+        super.preUpdate();
         if(this.isMoving){
             ArrayList<Rect> spriteSequence = dirSpriteMap.get(curDirection);
             curSpriteIndex = (curSpriteIndex + 1) % spriteSequence.size();
@@ -118,19 +119,28 @@ public class ImageSprite extends HasLifeAbstractSprite {
         if(target instanceof Building || target instanceof Explosion || target instanceof Bomb){
             Vector2D oldCenterPos = getOldCenterPos();
             Vector2D curCenterPos = getCurCenterPos();
-            if(oldCenterPos.getX() <= 0 || oldCenterPos.getY() <= 0 || oldCenterPos.equals(curCenterPos)){
-                Vector2D newPos = this.getSpritePos().applyDir(this.getCurDirection(), -1);
-                this.setSpritePos(newPos);
-                CollideDetector.setDirtyFlag(true);
-            } else {
-                // Center better be stable before & after collision.
-                // Vector2D newCenterPos = oldCenterPos.advance(curCenterPos, 1);
+//            if(oldCenterPos.getX() <= 0 || oldCenterPos.getY() <= 0 || oldCenterPos.equals(curCenterPos)){
+//                Vector2D newPos = this.getSpritePos().applyDir(this.getCurDirection(), -1);
+//                this.setSpritePos(newPos);
+//                CollideDetector.setDirtyFlag(true);
+//            } else {
+//                // Center better be stable before & after collision.
+//                // Vector2D newCenterPos = oldCenterPos.advance(curCenterPos, 1);
+//
+//                DIRECTIONS moveDir = Utilities.calculateDir(oldCenterPos, curCenterPos);
+//                this.setSpritePos(this.getSpritePos().applyDir(moveDir, -1));
+//
+//                CollideDetector.setDirtyFlag(true);
+//            }
 
-                DIRECTIONS moveDir = Utilities.calculateDir(oldCenterPos, curCenterPos);
-                this.setSpritePos(this.getSpritePos().applyDir(moveDir, -1));
+            double half_dist = oldCenterPos.dist(curCenterPos)/2;
 
-                CollideDetector.setDirtyFlag(true);
-            }
+            Vector2D targetCenterPos = target.getCurCenterPos();
+            // Move the sprite away
+            DIRECTIONS moveDir = Utilities.calculateDir(targetCenterPos, curCenterPos);
+            Vector2D newPos = this.getSpritePos().applyDir(moveDir, half_dist > 1? half_dist:1);
+            this.setSpritePos(newPos);
+            CollideDetector.setDirtyFlag(true);
         }
     }
 

@@ -29,7 +29,7 @@ public class HospitalController implements Controller {
         HasLifeAbstractSprite targetSprite = SpriteWorld.getInst().getNearestInjuredSprite( target.getSpritePos(), target.getTeamNumber(), target.getDistance());
         target.setHealTarget(targetSprite);
         if(targetSprite != null)
-            targetSprite.addHp(1);
+            targetSprite.addHp(5);
     }
 
     @Override

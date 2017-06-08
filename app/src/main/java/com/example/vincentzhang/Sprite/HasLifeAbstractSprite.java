@@ -78,6 +78,10 @@ public class HasLifeAbstractSprite extends ControllerAbstractSprite {
     public Rect draw(Canvas canvas) {
         Rect retRect = super.draw(canvas);
 
+        if(getScrRect() == null){
+            return retRect;
+        }
+
         if(destroyable){
             Paint paint = new Paint();
             paint.setColor(Color.BLACK);
