@@ -10,6 +10,8 @@ import com.example.vincentzhang.Sprite.TerrainSystem.Building;
 import com.example.vincentzhang.Sprite.Utilities;
 import com.example.vincentzhang.Sprite.Vector2D;
 
+import java.util.ArrayList;
+
 /**
  * Created by VincentZhang on 5/24/2017.
  */
@@ -21,10 +23,11 @@ public class ScorpionController implements Controller {
     private int damage = 10;
     private int distance = 500;
 
-    private Vector2D dstPos;
+    private ArrayList<Vector2D> patrolPoints = new ArrayList<>();
+    private int curPatrolDstIdx = 0;
 
     public ScorpionController(ControllerAbstractSprite target) {
-        if(!(target instanceof ActorSprite)){
+        if (!(target instanceof ActorSprite)) {
             throw new RuntimeException("ScorpionController can only accept ActorSprite!");
         }
         this.target = (ActorSprite) target;
@@ -34,24 +37,37 @@ public class ScorpionController implements Controller {
     }
 
     @Override
-    public void update(){
+    public void update() {
         // ImageSprite leadingSprite = SpriteWorld.getInst().getLeadingSprite();
         HasLifeAbstractSprite sprite = SpriteWorld.getInst().getNearestEnermySprite(target.getCurCenterPos(), target.getTeamNumber(), distance);
-        if(sprite != null){
-            DIRECTIONS nextDir = Utilities.calculateDir( target.getSpritePos(), sprite.getSpritePos());
+        if (sprite != null) {
+            DIRECTIONS nextDir = Utilities.calculateDir(target.getSpritePos(), sprite.getSpritePos());
+            target.setMoving(true);
             target.setCurDirection(nextDir);
-        } else {
+        } else { // Patrol around the lair
+            if (patrolPoints.size() != 0) {
+                Vector2D curPatrolDst = patrolPoints.get(curPatrolDstIdx);
+                DIRECTIONS nextDir = Utilities.calculateDir(target.getSpritePos(), curPatrolDst);
+                target.setMoving(true);
+                target.setCurDirection(nextDir);
 
+                if (target.getSpritePos().equals(curPatrolDst, 30)) {
+                    curPatrolDstIdx = (curPatrolDstIdx + 1) % patrolPoints.size();
+                }
+
+            } else {
+                target.setMoving(false);
+            }
         }
     }
 
     @Override
     public void onCollide(AbstractSprite collideTarget) {
-        if(collideTarget instanceof ActorSprite){
+        if (collideTarget instanceof ActorSprite) {
             ActorSprite collideTargetActor = (ActorSprite) collideTarget;
             ActorSprite curActor = target;
 
-            if(collideTargetActor.getTeamNumber() != curActor.getTeamNumber()){
+            if (collideTargetActor.getTeamNumber() != curActor.getTeamNumber()) {
                 // Log.i("Collide", "Collide with enermy!!!!");
 
                 Vector2D newPos = collideTarget.getSpritePos().applyDir(collideTargetActor.getCurDirection(), -PUSH_DISTANCE);
@@ -59,10 +75,14 @@ public class ScorpionController implements Controller {
 
                 collideTargetActor.reduceHP(damage, this.target);
             }
-        } else if( collideTarget instanceof Building){ // Attack enermy building
-            if(((Building) collideTarget).getTeamNumber() != target.getTeamNumber()){
+        } else if (collideTarget instanceof Building) { // Attack enermy building
+            if (((Building) collideTarget).getTeamNumber() != target.getTeamNumber()) {
                 ((Building) collideTarget).reduceHP(damage, this.target);
             }
         }
+    }
+
+    public void addPatrolPoint(Vector2D patrolPoint) {
+        patrolPoints.add(patrolPoint);
     }
 }

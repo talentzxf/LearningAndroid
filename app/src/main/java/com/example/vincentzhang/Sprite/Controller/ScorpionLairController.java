@@ -27,6 +27,16 @@ public class ScorpionLairController implements BuildingController {
             Vector2D newSpritePos = target.getSpritePos().applyDir(DIRECTIONS.DOWNRIGHT, target.getScrRect().width());
             newScorpion.setSpritePos(newSpritePos);
             ControllerFactory.createController("ScorpionController", newScorpion);
+
+            ScorpionController scorpionController = (ScorpionController) newScorpion.getController();
+
+            int guardRange = 200;
+
+            scorpionController.addPatrolPoint(target.getSpritePos().applyDir(DIRECTIONS.DOWNRIGHT, target.getScrRect().width() + guardRange));
+            scorpionController.addPatrolPoint(target.getSpritePos().applyDir(DIRECTIONS.RIGHT, target.getScrRect().width() + guardRange).applyDir(DIRECTIONS.UP,guardRange));
+            scorpionController.addPatrolPoint(target.getSpritePos().applyDir(DIRECTIONS.LEFT, guardRange).applyDir(DIRECTIONS.UP, guardRange));
+            scorpionController.addPatrolPoint(target.getSpritePos().applyDir(DIRECTIONS.DOWN, target.getScrRect().height() + guardRange).applyDir(DIRECTIONS.LEFT, guardRange));
+
             SpriteWorld.getInst().getSpriteSystem().addSprite(newScorpion);
             lastScorpionTime = System.currentTimeMillis();
         }

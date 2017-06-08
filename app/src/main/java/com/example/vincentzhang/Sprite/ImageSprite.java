@@ -3,7 +3,6 @@ package com.example.vincentzhang.Sprite;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 
-import com.example.vincentzhang.Sprite.Controller.Controller;
 import com.example.vincentzhang.Sprite.TerrainSystem.Building;
 import com.example.vincentzhang.Sprite.WeaponSystem.Bomb;
 import com.example.vincentzhang.Sprite.WeaponSystem.Explosion;
@@ -22,7 +21,6 @@ public class ImageSprite extends HasLifeAbstractSprite {
     private Map<DIRECTIONS, ArrayList<Rect>> dirSpriteMap = new HashMap<>();
     private Map<DIRECTIONS, ArrayList<Vector2D>> dirImgRowColumnMap = new HashMap<DIRECTIONS, ArrayList<Vector2D>>();
     private DIRECTIONS curDirection = DIRECTIONS.DOWN;
-    private Controller controller;
 
     private int curSpriteIndex = 0;
     private int spriteWidth = -1;
@@ -114,7 +112,7 @@ public class ImageSprite extends HasLifeAbstractSprite {
     @Override
     protected void onCollide(AbstractCollidableSprite target) {
         super.onCollide(target);
-        this.controller.onCollide(target);
+        this.getController().onCollide(target);
 
         // Hard code, not good!
         if(target instanceof Building || target instanceof Explosion || target instanceof Bomb){
@@ -146,11 +144,7 @@ public class ImageSprite extends HasLifeAbstractSprite {
     @Override
     public void postUpdate() {
         super.postUpdate();
-        if(controller != null)
-            controller.update();
-    }
-
-    public void setController(Controller controller) {
-        this.controller = controller;
+        if(getController() != null)
+            getController().update();
     }
 }

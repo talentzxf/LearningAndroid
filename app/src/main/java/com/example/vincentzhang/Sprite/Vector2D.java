@@ -95,6 +95,17 @@ public class Vector2D {
         return false;
     }
 
+    public boolean equals(Object obj, float eps) {
+        if(obj instanceof Vector2D){
+            Vector2D targetObj = (Vector2D) obj;
+            if(Math.abs( this.getX() - targetObj.getX() ) <= eps
+                    && Math.abs( this.getY() - targetObj.getY() ) <= eps){
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public String toString() {
         return Double.toString(this.getX()) + "," + Double.toString(this.getY());
