@@ -120,6 +120,9 @@ public class Vector2D {
     }
     public Vector2D uniform(){
         double length = Math.sqrt(x*x + y*y);
+        if(length == 0){
+            return new Vector2D(0.0,0.0);
+        }
         return new Vector2D(x/length, y / length);
     }
 

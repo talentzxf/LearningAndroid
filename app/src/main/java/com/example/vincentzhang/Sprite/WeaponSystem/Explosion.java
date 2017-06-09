@@ -5,6 +5,7 @@ import android.graphics.Rect;
 
 import com.example.vincentzhang.Sprite.AbstractCollidableSprite;
 import com.example.vincentzhang.Sprite.ActorSprite;
+import com.example.vincentzhang.Sprite.DIRECTIONS;
 import com.example.vincentzhang.Sprite.HasLifeAbstractSprite;
 import com.example.vincentzhang.Sprite.Vector2D;
 
@@ -27,6 +28,8 @@ public class Explosion extends AbstractCollidableSprite {
 
     private ActorSprite owner;
 
+    private DIRECTIONS explodeDir;
+
     public ActorSprite getOwner() {
         return owner;
     }
@@ -35,16 +38,17 @@ public class Explosion extends AbstractCollidableSprite {
         this.owner = owner;
     }
 
-    public Explosion(int imgId) {
+    public Explosion(int imgId, DIRECTIONS explodeDir) {
         super(imgId);
         spriteWidth = getBm().getWidth() / colCount;
         spriteHeight = getBm().getHeight() / rowCount;
         explodeTime = System.currentTimeMillis();
         lastUpdateTime = explodeTime;
+        this.explodeDir = explodeDir;
     }
 
-    public Explosion(int imgId, int delayMilliSecs) {
-        this(imgId);
+    public Explosion(int imgId, DIRECTIONS explodeDir, int delayMilliSecs) {
+        this(imgId, explodeDir);
         this.explodeTime = System.currentTimeMillis() + delayMilliSecs;
         lastUpdateTime = explodeTime;
     }
@@ -84,7 +88,22 @@ public class Explosion extends AbstractCollidableSprite {
             super.onCollide(target);
             if (target instanceof HasLifeAbstractSprite) {
                 HasLifeAbstractSprite targetSprite = (HasLifeAbstractSprite) target;
-                targetSprite.reduceHP(1, this.owner);
+                targetSprite.reduceHP(10, this.owner);
+
+                if(target instanceof ActorSprite){
+                    // Shock the sprite
+                    Vector2D explosionCenter = this.getCurCenterPos();
+                    Vector2D spriteCenter = target.getCurCenterPos();
+
+                    double dist = explosionCenter.dist(spriteCenter);
+
+                    // Suck in
+                    // target.setSpriteCenterPos(spriteCenter.advance(explosionCenter, (float) dist));
+
+                    // Blow off
+                    float explodeDist = (float) (-0.5*dist);
+                    target.setSpriteCenterPos(spriteCenter.advance(explosionCenter, explodeDist));
+                }
             }
         }
     }

@@ -25,6 +25,7 @@ public class ScorpionController implements Controller {
 
     private ArrayList<Vector2D> patrolPoints = new ArrayList<>();
     private int curPatrolDstIdx = 0;
+    private boolean isTracking = false;
 
     public ScorpionController(ControllerAbstractSprite target) {
         if (!(target instanceof ActorSprite)) {
@@ -44,7 +45,13 @@ public class ScorpionController implements Controller {
             DIRECTIONS nextDir = Utilities.calculateDir(target.getSpritePos(), sprite.getSpritePos());
             target.setMoving(true);
             target.setCurDirection(nextDir);
+            // Previously not tracking, actively advance to avoid infinite loop
+            if(!isTracking){
+                target.setSpritePos(target.getSpritePos().applyDir(nextDir, target.getMoveSpeed()));
+            }
+            isTracking = true;
         } else { // Patrol around the lair
+            isTracking = false;
             if (patrolPoints.size() != 0) {
                 Vector2D curPatrolDst = patrolPoints.get(curPatrolDstIdx);
                 DIRECTIONS nextDir = Utilities.calculateDir(target.getSpritePos(), curPatrolDst);

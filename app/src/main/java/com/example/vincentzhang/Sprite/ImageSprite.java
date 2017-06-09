@@ -3,9 +3,7 @@ package com.example.vincentzhang.Sprite;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 
-import com.example.vincentzhang.Sprite.TerrainSystem.Building;
 import com.example.vincentzhang.Sprite.WeaponSystem.Bomb;
-import com.example.vincentzhang.Sprite.WeaponSystem.Explosion;
 import com.example.vincentzhang.Sprite.imgemanagement.ImageManager;
 
 import java.util.ArrayList;
@@ -116,7 +114,7 @@ public class ImageSprite extends HasLifeAbstractSprite {
         this.getController().onCollide(target);
 
         // Hard code, not good!
-        if(target instanceof Building || target instanceof Explosion || target instanceof Bomb){
+        if(target instanceof Bomb){
             Vector2D oldCenterPos = getOldCenterPos();
             Vector2D curCenterPos = getCurCenterPos();
 //            if(oldCenterPos.getX() <= 0 || oldCenterPos.getY() <= 0 || oldCenterPos.equals(curCenterPos)){

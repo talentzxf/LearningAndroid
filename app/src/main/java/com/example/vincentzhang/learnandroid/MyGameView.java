@@ -69,9 +69,11 @@ public class MyGameView extends SurfaceView implements Runnable, GestureDetector
                         drawLoadingGif(movie, canvas);
                     } else {
                         this.spriteWorld.preUpdate();
+                        int solveCollisionRounds = 1;
                         do {
                             this.spriteWorld.beforeCollision();
-                        } while (this.spriteWorld.processCollision());
+                            solveCollisionRounds++;
+                        } while (this.spriteWorld.processCollision() && solveCollisionRounds < 100);
 
                         // All collisions should have been handled here.
                         CollideDetector.setDirtyFlag(false);
