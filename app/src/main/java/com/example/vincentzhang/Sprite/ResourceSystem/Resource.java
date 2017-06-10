@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.example.vincentzhang.Sprite.AbstractCollidableSprite;
 import com.example.vincentzhang.Sprite.CoordinateSystem;
+import com.example.vincentzhang.Sprite.SequentialAbstractCollidableSprite;
 import com.example.vincentzhang.Sprite.SpriteWorld;
 import com.example.vincentzhang.Sprite.Vector2D;
 
@@ -11,7 +12,7 @@ import com.example.vincentzhang.Sprite.Vector2D;
  * Created by VincentZhang on 6/4/2017.
  */
 
-public class Resource extends AbstractCollidableSprite {
+public class Resource extends SequentialAbstractCollidableSprite {
     private boolean used = false;
     private boolean flying = false;
     private float flySpeed = 100.f;

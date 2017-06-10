@@ -7,23 +7,15 @@ import com.example.vincentzhang.Sprite.AbstractCollidableSprite;
 import com.example.vincentzhang.Sprite.ActorSprite;
 import com.example.vincentzhang.Sprite.DIRECTIONS;
 import com.example.vincentzhang.Sprite.HasLifeAbstractSprite;
+import com.example.vincentzhang.Sprite.SequentialAbstractCollidableSprite;
 import com.example.vincentzhang.Sprite.Vector2D;
 
 /**
  * Created by VincentZhang on 5/17/2017.
  */
 
-public class Explosion extends AbstractCollidableSprite {
-    private int curFrame = 0;
-
-    private int spriteWidth = -1;
-    private int spriteHeight = -1;
-
-    private long lastUpdateTime = -1;
-
+public class Explosion extends SequentialAbstractCollidableSprite {
     // TODO: Don't hard code here
-    private int rowCount = 2;
-    private int colCount = 8;
     private long explodeTime = 0;
 
     private ActorSprite owner;
@@ -40,39 +32,19 @@ public class Explosion extends AbstractCollidableSprite {
 
     public Explosion(int imgId, DIRECTIONS explodeDir) {
         super(imgId);
-        spriteWidth = getBm().getWidth() / colCount;
-        spriteHeight = getBm().getHeight() / rowCount;
+
         explodeTime = System.currentTimeMillis();
-        lastUpdateTime = explodeTime;
         this.explodeDir = explodeDir;
+        this.setStopAtLast(true);
     }
 
     public Explosion(int imgId, DIRECTIONS explodeDir, int delayMilliSecs) {
         this(imgId, explodeDir);
         this.explodeTime = System.currentTimeMillis() + delayMilliSecs;
-        lastUpdateTime = explodeTime;
-    }
-
-    @Override
-    public Rect getSrcRect() {
-        if (System.currentTimeMillis() > this.explodeTime) {
-            Vector2D imgRowCol = this.getImgRowColumn();
-
-            int row = (int) imgRowCol.getY();
-            int col = (int) imgRowCol.getX();
-
-            if (System.currentTimeMillis() - lastUpdateTime > 100) {
-                curFrame = (curFrame + 1) % (rowCount * colCount);
-                lastUpdateTime = System.currentTimeMillis();
-            }
-
-            return new Rect(col * spriteWidth, row * spriteHeight, (col + 1) * spriteWidth, (row + 1) * spriteHeight);
-        }
-        return null;
     }
 
     public boolean isAlive() {
-        return curFrame != (rowCount * colCount - 1);
+        return !stoppedAtLast();
     }
 
     @Override
@@ -80,6 +52,13 @@ public class Explosion extends AbstractCollidableSprite {
         if (System.currentTimeMillis() > this.explodeTime) {
             super.postUpdate();
         }
+    }
+
+    @Override
+    public Rect getSrcRect() {
+        if(System.currentTimeMillis() > this.explodeTime)
+            return super.getSrcRect();
+        return null;
     }
 
     @Override
@@ -114,13 +93,5 @@ public class Explosion extends AbstractCollidableSprite {
             super.draw(canvas);
         }
         return null;
-    }
-
-    @Override
-    public Vector2D getImgRowColumn() {
-        int row = curFrame / colCount;
-        int col = curFrame % colCount;
-
-        return new Vector2D(col, row);
     }
 }

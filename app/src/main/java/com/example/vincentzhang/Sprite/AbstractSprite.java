@@ -98,7 +98,6 @@ public abstract class AbstractSprite {
             double newTop = newCenterPos.getY() - mScrRect.height()/2.0f;
             this.setSpritePos(new Vector2D(newLeft, newTop));
         }
-
     }
 
     public void setResLoaded(boolean resLoaded) {

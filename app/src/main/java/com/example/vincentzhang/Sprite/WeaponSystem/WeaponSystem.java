@@ -125,16 +125,18 @@ public class WeaponSystem implements SubSystem {
 
             int range = 3;
             for(int i = 1 ; i < range; i++){
-                Explosion explosionUP = new Explosion(8, DIRECTIONS.UP, i * 500);
+                int delay = 1000;
+
+                Explosion explosionUP = new Explosion(8, DIRECTIONS.UP, i * delay);
                 explosionUP.setSpritePos(bomb.getSpritePos().applyDir(DIRECTIONS.UP, bomb.getScrRect().height() * i));
                 explosionUP.setOwner(bomb.getOwner());
-                Explosion explosionDOWN = new Explosion(8, DIRECTIONS.DOWN, i * 500);
+                Explosion explosionDOWN = new Explosion(8, DIRECTIONS.DOWN, i * delay);
                 explosionDOWN.setSpritePos(bomb.getSpritePos().applyDir(DIRECTIONS.DOWN, bomb.getScrRect().height() * i));
                 explosionDOWN.setOwner(bomb.getOwner());
-                Explosion explosionLEFT = new Explosion(8, DIRECTIONS.LEFT, i * 500);
+                Explosion explosionLEFT = new Explosion(8, DIRECTIONS.LEFT, i * delay);
                 explosionLEFT.setSpritePos(bomb.getSpritePos().applyDir(DIRECTIONS.LEFT, bomb.getScrRect().width() * i));
                 explosionLEFT.setOwner(bomb.getOwner());
-                Explosion explosionRIGHT = new Explosion(8, DIRECTIONS.RIGHT, i * 500);
+                Explosion explosionRIGHT = new Explosion(8, DIRECTIONS.RIGHT, i * delay);
                 explosionRIGHT.setSpritePos(bomb.getSpritePos().applyDir(DIRECTIONS.RIGHT, bomb.getScrRect().width() * i));
                 explosionRIGHT.setOwner(bomb.getOwner());
 

@@ -18,12 +18,12 @@ import com.example.vincentzhang.Sprite.Vector2D;
  */
 public class Building extends HasLifeAbstractSprite {
 
-    public Building(int id, int gridX, int gridY) {
+    public Building(Integer id, Integer gridX, Integer gridY) {
         super(id);
         this.setSpritePos(CoordinateSystem.gridToWorld(new Vector2D(gridX, gridY)));
     }
 
-    public Building(int id, Vector2D pos){
+    public Building(Integer id, Vector2D pos){
         super(id);
         this.setSpritePos(pos);
     }
