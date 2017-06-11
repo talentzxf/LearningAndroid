@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 
 import com.example.vincentzhang.Sprite.CoordinateSystem;
+import com.example.vincentzhang.Sprite.SpriteWorld;
 import com.example.vincentzhang.Sprite.Vector2D;
 import com.example.vincentzhang.Sprite.WeaponSystem.Bullet;
 import com.example.vincentzhang.Sprite.WeaponSystem.Lightning;
@@ -13,8 +14,8 @@ import com.example.vincentzhang.Sprite.WeaponSystem.Lightning;
  */
 
 public class MagicTower extends Building {
-    Bullet topBullet = null;
-    Lightning lightning = new Lightning();
+    private Bullet topBullet = null;
+    private Lightning lightning = new Lightning();
 
     public MagicTower(Integer id, Integer gridX, Integer gridY) {
         super(id, gridX, gridY);
@@ -31,6 +32,10 @@ public class MagicTower extends Building {
             topBullet.preUpdate();
 
         lightning.preUpdate();
+
+        if(getScrRect() != null)
+            lightning.setScrStart(new Vector2D(getScrRect().centerX(), getScrRect().top));
+            lightning.setScrTarget(CoordinateSystem.worldToScr(SpriteWorld.getInst().getLeadingSprite().getCurCenterPos()));
     }
 
     @Override

@@ -5,13 +5,33 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Rect;
 
+import com.example.vincentzhang.Sprite.Vector2D;
+
 /**
  * Created by VincentZhang on 6/10/2017.
  */
 
 public class Lightning extends Bullet {
+
+    // The start and end position in Screen coordination.
+    private Vector2D scrStart;
+    private Vector2D scrCurrentEnd;
+
+    private Vector2D scrTarget;
+
+    private float speed = 10.0f;
+
     public Lightning() {
         super(17);
+    }
+
+    public void setScrStart(Vector2D scrStart) {
+        this.scrStart = scrStart;
+        this.scrCurrentEnd = this.scrStart.clone();
+    }
+
+    public void setScrTarget(Vector2D scrTarget) {
+        this.scrTarget = scrTarget;
     }
 
     @Override
@@ -26,10 +46,23 @@ public class Lightning extends Bullet {
 
         if (getScrRect() != null) {
             // Bitmap rotatedBitmap = Bitmap.createBitmap(getBm(), srcRect.left, srcRect.top, srcRect.width(), srcRect.height(), mat, true);
+            if(scrTarget != null && scrStart != null){
+                float deltaX = (float) (scrTarget.getX() - scrStart.getX());
+                float deltaY = (float) (scrTarget.getY() - scrStart.getY());
+                float angle = (float) (180.0 * Math.atan2(deltaY, deltaX)/ Math.PI - 90);
 
-            mat.postRotate(30.0f);
-            mat.postTranslate(getScrRect().left, getScrRect().top);
-            canvas.drawBitmap(getBm().currentBitmap(), mat, null);
+                float height = getScrRect().height();
+                float distToEnd = (float) scrStart.dist(scrTarget);
+                float scale = distToEnd / height;
+
+                mat.preRotate(angle);
+                mat.postTranslate((float)this.scrStart.getX(), (float)this.scrStart.getY());
+
+                Matrix scaleMatrix = new Matrix();
+                scaleMatrix.setScale(1.0f,scale);
+                mat.preConcat(scaleMatrix);
+                canvas.drawBitmap(getBm().currentBitmap(), mat, null);
+            }
         }
         // getSpace4DTree().draw(canvas, getImgRowColumn(), 4, mScrRect);
         return srcRect;
@@ -39,5 +72,8 @@ public class Lightning extends Bullet {
     public void postUpdate() {
         super.postUpdate();
         getBm().advance();
+
+        if(scrCurrentEnd != null && scrTarget != null)
+            this.scrCurrentEnd.advance(this.scrTarget, speed);
     }
 }

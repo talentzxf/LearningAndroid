@@ -130,4 +130,8 @@ public class Vector2D {
     public Vector2D advance(Vector2D target, float speed) {
         return this.add(target.minus(this).uniform().multiply(speed));
     }
+
+    public Vector2D clone(){
+        return new Vector2D(this.getX(), this.getY());
+    }
 }
