@@ -7,7 +7,6 @@ import com.example.vincentzhang.Sprite.SequentialAbstractCollidableSprite;
  */
 
 public class Bullet extends SequentialAbstractCollidableSprite {
-
     private boolean inited = false;
 
     public Bullet(int imgId) {

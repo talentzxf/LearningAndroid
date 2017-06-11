@@ -68,11 +68,11 @@ public class TerrainSystem implements SubSystem{
     }
 
     public int getScaledTileWidth(Canvas canvas) {
-        return ImageManager.inst().getImg(tileDefImgId).getScaledWidth(canvas);
+        return ImageManager.inst().getImg(tileDefImgId).currentBitmap().getScaledWidth(canvas);
     }
 
     public int getScaledTileHeight(Canvas canvas) {
-        return ImageManager.inst().getImg(tileDefImgId).getScaledHeight(canvas);
+        return ImageManager.inst().getImg(tileDefImgId).currentBitmap().getScaledHeight(canvas);
     }
 
     @Override
@@ -107,7 +107,7 @@ public class TerrainSystem implements SubSystem{
                 int scr_y = (int) (realWorld_y - getViewPortPos().getY());
 
                 int imgId = mapData.get(y).get(x);
-                Bitmap bm = ImageManager.inst().getImg(imgId);
+                Bitmap bm = ImageManager.inst().getImg(imgId).currentBitmap();
                 if (bm != null)
                     canvas.drawBitmap(bm, new Rect(0, 0, bm.getWidth(), bm.getHeight()),
                             new Rect(scr_x, scr_y, scr_x + tileWidth, scr_y + tileHeight), null);

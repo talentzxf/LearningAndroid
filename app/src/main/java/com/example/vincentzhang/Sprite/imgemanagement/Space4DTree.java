@@ -17,12 +17,12 @@ import java.util.Map;
 public class Space4DTree {
     private BitmapMask bmMask;
     private Map<Vector2D, Space4DTreeNode> rootNodes = new HashMap<>();
-    private int imgId = -1;
+    private String imgId;
     private int rowCount = 1;
     private int colCount = 1;
 
-    public Space4DTree(int id, Bitmap bm, Integer rowCount, Integer colCount) {
-        bmMask = new BitmapMask(id, bm);
+    public Space4DTree(String imgId, Bitmap bm, Integer rowCount, Integer colCount) {
+        bmMask = new BitmapMask(imgId, bm);
 
         this.rowCount = rowCount;
         this.colCount = colCount;
@@ -37,7 +37,7 @@ public class Space4DTree {
                 rootNodes.put(new Vector2D(c, r), rootNode);
             }
         }
-        imgId = id;
+        this.imgId = imgId;
     }
 
     public Space4DTreeNode getRootNode(Vector2D rowCol){

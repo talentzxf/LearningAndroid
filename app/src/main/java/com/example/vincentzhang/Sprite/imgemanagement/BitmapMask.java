@@ -73,10 +73,8 @@ public class BitmapMask {
      * The count of pixels from 0,0 to given coordiate x,y
      */
 
-    private int imgId = -1;
-
     // TODO: Save as zip file to save space.
-    public BitmapMask(Integer imgId, Bitmap bitmap) {
+    public BitmapMask(String imgId, Bitmap bitmap) {
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
         mask = new BitSet(height * width);

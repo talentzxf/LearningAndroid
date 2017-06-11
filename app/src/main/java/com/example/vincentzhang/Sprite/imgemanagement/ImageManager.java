@@ -29,10 +29,9 @@ import static com.example.vincentzhang.Sprite.Utilities.getXmlSource;
  * Singleton
  */
 public class ImageManager {
-    private Map<Integer, Bitmap> imgMap = new HashMap<>();
-    private Map<Integer, Space4DTree> space4DTreeMap = new HashMap<>();
-    private Map<Integer, ArrayList<DIRECTIONS>> dirArrayMap = new HashMap<>();
-    private Map<Integer, Float> imgSizeScaleMap = new HashMap<>();
+
+    // Key is Image Id. Formate: img_id
+    private Map<Integer, SpriteImage> imgMap = new HashMap<>();
 
     private static ImageManager instance = new ImageManager();
 
@@ -70,41 +69,38 @@ public class ImageManager {
             Log.i("Initing img:", "id:" + src);
             Integer imgId = Integer.valueOf(imgNode.getAttributes().getNamedItem("id").getNodeValue());
 
-            Bitmap imgBM = BitmapFactory.decodeResource(resources, getId(src, R.drawable.class));
+            SpriteImage spriteImage = new SpriteImage();
+            String[] srcList = src.split(",");
+            for(int i = 0 ; i < srcList.length; i++){
+                String subSrc = srcList[i];
+                Bitmap imgBM = BitmapFactory.decodeResource(resources, getId(subSrc, R.drawable.class));
 
-            Space4DTree space4DTree = new Space4DTree(imgId, imgBM, rowCount, colCount);
-            imgMap.put(imgId, imgBM);
-            space4DTreeMap.put(imgId, space4DTree);
-            imgSizeScaleMap.put(imgId, sizeScale);
+                String stringImgId = null;
+                if(srcList.length == 1){
+                    stringImgId = Integer.toString(imgId);
+                } else {
+                    stringImgId = imgId + "_" + i;
+                }
 
-            ArrayList<DIRECTIONS> dirList = new ArrayList<>();
-            for(String dirStr : dirArray.split(",") ){
-                dirList.add(DIRECTIONS.valueOf(dirStr));
+                Space4DTree space4DTree = new Space4DTree(stringImgId, imgBM, rowCount, colCount);
+
+                spriteImage.setScale(sizeScale);
+
+                ArrayList<DIRECTIONS> dirList = new ArrayList<>();
+                for(String dirStr : dirArray.split(",") ){
+                    dirList.add(DIRECTIONS.valueOf(dirStr));
+                }
+                spriteImage.addBitImage(imgBM,space4DTree,dirList);
+
+                imgMap.put(imgId, spriteImage);
             }
-
-            dirArrayMap.put(imgId, dirList);
 
             Log.i("End of init img:", "id:" + src);
         }
         return true;
     }
 
-    public Bitmap getImg(int id) {
-        return imgMap.get(id);
-    }
-    public Space4DTree getSpace4DTree(int id){
-        return space4DTreeMap.get(id);
-    }
-
-    public ArrayList<DIRECTIONS> getDirectionArray(int id){
-        return dirArrayMap.get(id);
-    }
-
-    public float getSizeScale(int imgId) {
-        Float sizeScale = imgSizeScaleMap.get(imgId);
-        if(sizeScale == null){
-            return 1.0f;
-        }
-        return sizeScale;
+    public SpriteImage getImg(int id) {
+        return this.imgMap.get(id);
     }
 }

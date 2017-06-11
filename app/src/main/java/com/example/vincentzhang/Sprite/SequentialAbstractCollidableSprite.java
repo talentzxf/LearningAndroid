@@ -2,8 +2,6 @@ package com.example.vincentzhang.Sprite;
 
 import android.graphics.Rect;
 
-import com.example.vincentzhang.Sprite.imgemanagement.ImageManager;
-
 /**
  * Created by VincentZhang on 6/10/2017.
  */
@@ -22,8 +20,8 @@ public class SequentialAbstractCollidableSprite extends AbstractCollidableSprite
     public SequentialAbstractCollidableSprite(int imgId) {
         super(imgId);
 
-        rowCount = ImageManager.inst().getSpace4DTree(imgId).getRowCount();
-        colCount = ImageManager.inst().getSpace4DTree(imgId).getColCount();
+        rowCount = getSpace4DTree().getRowCount();
+        colCount = getSpace4DTree().getColCount();
 
         spriteWidth = getBm().getWidth() / colCount;
         spriteHeight = getBm().getHeight() / rowCount;

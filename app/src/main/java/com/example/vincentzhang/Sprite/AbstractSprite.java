@@ -1,10 +1,11 @@
 package com.example.vincentzhang.Sprite;
 
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 
 import com.example.vincentzhang.Sprite.imgemanagement.ImageManager;
+import com.example.vincentzhang.Sprite.imgemanagement.Space4DTree;
+import com.example.vincentzhang.Sprite.imgemanagement.SpriteImage;
 
 /**
  * Created by VincentZhang on 4/15/2017.
@@ -13,11 +14,10 @@ import com.example.vincentzhang.Sprite.imgemanagement.ImageManager;
 public abstract class AbstractSprite {
     private Vector2D spritePos = new Vector2D();
     private float moveSpeed = 20;
-    private Bitmap bm;
+    private SpriteImage bm;
     private Rect mScrRect;
 
     private int imgId = -1;
-    private float sizeScale = 1.0f;
 
     private Vector2D oldCenterPos = new Vector2D(-1,-1);
     private Vector2D curCenterPos = new Vector2D(-1,-1);
@@ -28,7 +28,6 @@ public abstract class AbstractSprite {
         bm = ImageManager.inst().getImg(imgId);
 
         this.imgId = imgId;
-        this.sizeScale = ImageManager.inst().getSizeScale(imgId);
     }
 
     public Vector2D getOldCenterPos() {
@@ -43,15 +42,7 @@ public abstract class AbstractSprite {
         return imgId;
     }
 
-    public float getSizeScale() {
-        return sizeScale;
-    }
-
-    public void setSizeScale(float sizeScale) {
-        this.sizeScale = sizeScale;
-    }
-
-    protected Bitmap getBm() {
+    protected SpriteImage getBm() {
         return bm;
     }
 
@@ -64,7 +55,7 @@ public abstract class AbstractSprite {
         if(srcRect == null)
             return;
         float ratio = (float)srcRect.width()/(float)srcRect.height();
-        int tileHeight = (int) (CoordinateSystem.getTileDimension().getY() * getSizeScale());
+        int tileHeight = (int) (CoordinateSystem.getTileDimension().getY() * bm.getScale());
 
         int real_scrWidth = (int) (ratio * tileHeight);
         Vector2D viewPortPos = CoordinateSystem.worldToScr(getSpritePos());
@@ -127,7 +118,7 @@ public abstract class AbstractSprite {
     public Rect draw(Canvas canvas) {
         Rect srcRect = getSrcRect(); // Source rect
         if (mScrRect != null)
-            canvas.drawBitmap(bm, srcRect, mScrRect, null);
+            canvas.drawBitmap(bm.currentBitmap(), srcRect, mScrRect, null);
         // getSpace4DTree().draw(canvas, getImgRowColumn(), 4, mScrRect);
         return mScrRect;
     }
@@ -137,4 +128,7 @@ public abstract class AbstractSprite {
     }
 
 
+    public Space4DTree getSpace4DTree() {
+        return ImageManager.inst().getImg(imgId).getSpace4DTree();
+    }
 }

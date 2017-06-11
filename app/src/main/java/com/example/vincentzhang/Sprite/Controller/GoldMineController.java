@@ -56,7 +56,6 @@ public class GoldMineController implements Controller {
             int Y = (int) (target.getScrRect().centerY() + rand.nextInt(range));
 
             Coin newCoin = new Coin(12);
-            newCoin.setSizeScale(0.8f);
             newCoin.setSpritePos(CoordinateSystem.scrToWorld(new Vector2D(X, Y)));
 
             SpriteWorld.getInst().getResourceSystem().addResource(newCoin);

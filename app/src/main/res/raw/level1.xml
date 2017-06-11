@@ -12,11 +12,12 @@
         <img src="scorpion" id="9" rowCount="8" colCount="8" directions="LEFT,UPLEFT,UP,UPRIGHT,RIGHT,DOWNRIGHT,DOWN,DOWNLEFT"></img>
         <img src="scorpion_lair" id="10" scale="1.5"></img>
         <img src="hospital" id="11"></img>
-        <img src="coin" id="12" rowCount="2" colCount="8"></img>
+        <img src="coin" id="12" rowCount="2" colCount="8" scale="0.8"></img>
         <img src="timber" id="13" scale="0.8"></img>
         <img src="gold_mine" id="14" scale="1.5"></img>
         <img src="magic_tower" id="15" scale="2"></img>
         <img src="magic_ball" id="16" rowCount="2" colCount="2" scale="1"></img>
+        <img src="lightning_1,lightning_2,lightning_3,lightning_4" id="17"></img>
     </imgs>
     <weapons>
         <bomb imgId="6"></bomb>

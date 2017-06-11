@@ -1,22 +1,13 @@
 package com.example.vincentzhang.Sprite;
 
-import com.example.vincentzhang.Sprite.imgemanagement.ImageManager;
-import com.example.vincentzhang.Sprite.imgemanagement.Space4DTree;
-
 /**
  * Created by VincentZhang on 6/4/2017.
  */
 
 public abstract class AbstractCollidableSprite extends AbstractSprite {
-    private Space4DTree space4DTree;
 
     public AbstractCollidableSprite(int imgId) {
         super(imgId);
-        space4DTree = ImageManager.inst().getSpace4DTree(imgId);
-    }
-
-    public Space4DTree getSpace4DTree() {
-        return space4DTree;
     }
 
     protected void onCollide(AbstractCollidableSprite target) {
