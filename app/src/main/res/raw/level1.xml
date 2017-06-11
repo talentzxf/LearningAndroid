@@ -62,6 +62,6 @@
         <building x='3' y='3' imgId='5' destroyable="false"></building>
         <building x='4' y='8' imgId='15' type="MagicTower" controller="MagicTowerController" destroyable="false"></building>
         <building x='5' y='3' imgId='14' controller="GoldMineController" destroyable="false"></building>
-        <building x='10' y='10' imgId='10' controller="ScorpionLairController" destroyable="true" team="1"></building>
+        <building x='4' y='10' imgId='10' controller="ScorpionLairController" destroyable="true" team="1"></building>
     </buildings>
 </game>

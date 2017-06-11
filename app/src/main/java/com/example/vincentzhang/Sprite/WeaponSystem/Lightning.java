@@ -21,7 +21,10 @@ public class Lightning extends Bullet {
 
     private boolean isGoingForward = true;
 
+    private boolean isAlive = true;
+
     private float speed = 100.0f;
+    private float damage = 50.0f;
 
     public Lightning() {
         super(17);
@@ -88,8 +91,14 @@ public class Lightning extends Bullet {
                 if(scrCurrentEnd.distSquare(this.scrStart) <= speed*speed){
                     scrCurrentEnd = this.scrStart.clone();
                     isGoingForward = true;
+
+                    isAlive = false;
                 }
             }
         }
+    }
+
+    public boolean isAlive() {
+        return isAlive;
     }
 }

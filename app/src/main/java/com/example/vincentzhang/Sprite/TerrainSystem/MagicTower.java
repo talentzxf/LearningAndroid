@@ -4,10 +4,13 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 
 import com.example.vincentzhang.Sprite.CoordinateSystem;
+import com.example.vincentzhang.Sprite.HasLifeAbstractSprite;
 import com.example.vincentzhang.Sprite.SpriteWorld;
 import com.example.vincentzhang.Sprite.Vector2D;
 import com.example.vincentzhang.Sprite.WeaponSystem.Bullet;
 import com.example.vincentzhang.Sprite.WeaponSystem.Lightning;
+
+import java.util.ArrayList;
 
 /**
  * Created by VincentZhang on 6/10/2017.
@@ -15,7 +18,9 @@ import com.example.vincentzhang.Sprite.WeaponSystem.Lightning;
 
 public class MagicTower extends Building {
     private Bullet topBullet = null;
-    private Lightning lightning = new Lightning();
+    private int attackRange = 500;
+
+    private ArrayList<Lightning> lightnings = new ArrayList<>();
 
     public MagicTower(Integer id, Integer gridX, Integer gridY) {
         super(id, gridX, gridY);
@@ -31,11 +36,20 @@ public class MagicTower extends Building {
         if (topBullet != null)
             topBullet.preUpdate();
 
-        lightning.preUpdate();
-
         if(getScrRect() != null){
-            lightning.setScrStart(new Vector2D(getScrRect().centerX(), getScrRect().top));
-            lightning.setScrTarget(CoordinateSystem.worldToScr(SpriteWorld.getInst().getLeadingSprite().getCurCenterPos()));
+
+            Vector2D towerCenter = CoordinateSystem.scrToWorld( new Vector2D(getScrRect().centerX(), getScrRect().centerY()));
+
+            HasLifeAbstractSprite enermySprite = SpriteWorld.getInst().getNearestEnermySprite( towerCenter, getTeamNumber(), attackRange);
+
+            if(enermySprite != null){
+                if(this.lightnings.size() <= 1){
+                    Lightning lightning = new Lightning();
+                    lightning.setScrStart(new Vector2D(getScrRect().centerX(), getScrRect().top));
+                    lightning.setScrTarget(enermySprite.getCurCenterPos());
+                    this.lightnings.add(lightning);
+                }
+            }
         }
     }
 
@@ -45,7 +59,10 @@ public class MagicTower extends Building {
         if (topBullet != null) {
             topBullet.beforeCollision();
         }
-        lightning.beforeCollision();
+
+        for(Lightning lightning: lightnings){
+            lightning.beforeCollision();
+        }
     }
 
     @Override
@@ -53,7 +70,10 @@ public class MagicTower extends Building {
         Rect rect = super.draw(canvas);
         if (topBullet != null)
             topBullet.draw(canvas);
-        lightning.draw(canvas);
+
+        for(Lightning lightning: lightnings){
+            lightning.draw(canvas);
+        }
         return rect;
     }
 
@@ -77,19 +97,19 @@ public class MagicTower extends Building {
             }
         }
 
-        if(!lightning.isInited()){
-            if(lightning.getScrRect() != null){
-                Rect towerRect = getScrRect();
-                Vector2D towerPosWorld = CoordinateSystem.scrToWorld(
-                        new Vector2D(towerRect.centerX(), towerRect.centerY())
-                );
 
-                lightning.setSpriteCenterPos(towerPosWorld);
-                lightning.setInited(true);
+        topBullet.postUpdate();
+
+        ArrayList<Lightning> tobeDeletedLightnings = new ArrayList<>();
+        for(Lightning lightning: lightnings){
+            lightning.postUpdate();
+            if(!lightning.isAlive()){
+                tobeDeletedLightnings.add(lightning);
             }
         }
 
-        topBullet.postUpdate();
-        lightning.postUpdate();
+        for(Lightning tobeDeletedLightning:tobeDeletedLightnings){
+            this.lightnings.remove(tobeDeletedLightning);
+        }
     }
 }
