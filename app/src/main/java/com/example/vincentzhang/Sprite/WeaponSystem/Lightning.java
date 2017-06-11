@@ -19,7 +19,9 @@ public class Lightning extends Bullet {
 
     private Vector2D scrTarget;
 
-    private float speed = 10.0f;
+    private boolean isGoingForward = true;
+
+    private float speed = 100.0f;
 
     public Lightning() {
         super(17);
@@ -27,7 +29,8 @@ public class Lightning extends Bullet {
 
     public void setScrStart(Vector2D scrStart) {
         this.scrStart = scrStart;
-        this.scrCurrentEnd = this.scrStart.clone();
+        if (this.scrCurrentEnd == null)
+            this.scrCurrentEnd = this.scrStart.clone();
     }
 
     public void setScrTarget(Vector2D scrTarget) {
@@ -46,20 +49,20 @@ public class Lightning extends Bullet {
 
         if (getScrRect() != null) {
             // Bitmap rotatedBitmap = Bitmap.createBitmap(getBm(), srcRect.left, srcRect.top, srcRect.width(), srcRect.height(), mat, true);
-            if(scrTarget != null && scrStart != null){
-                float deltaX = (float) (scrTarget.getX() - scrStart.getX());
-                float deltaY = (float) (scrTarget.getY() - scrStart.getY());
-                float angle = (float) (180.0 * Math.atan2(deltaY, deltaX)/ Math.PI - 90);
+            if (scrCurrentEnd != null && scrStart != null) {
+                float deltaX = (float) (scrCurrentEnd.getX() - scrStart.getX());
+                float deltaY = (float) (scrCurrentEnd.getY() - scrStart.getY());
+                float angle = (float) (180.0 * Math.atan2(deltaY, deltaX) / Math.PI - 90);
 
                 float height = getScrRect().height();
-                float distToEnd = (float) scrStart.dist(scrTarget);
+                float distToEnd = (float) scrStart.dist(scrCurrentEnd);
                 float scale = distToEnd / height;
 
                 mat.preRotate(angle);
-                mat.postTranslate((float)this.scrStart.getX(), (float)this.scrStart.getY());
+                mat.postTranslate((float) this.scrStart.getX(), (float) this.scrStart.getY());
 
                 Matrix scaleMatrix = new Matrix();
-                scaleMatrix.setScale(1.0f,scale);
+                scaleMatrix.setScale(1.0f, scale);
                 mat.preConcat(scaleMatrix);
                 canvas.drawBitmap(getBm().currentBitmap(), mat, null);
             }
@@ -73,7 +76,20 @@ public class Lightning extends Bullet {
         super.postUpdate();
         getBm().advance();
 
-        if(scrCurrentEnd != null && scrTarget != null)
-            this.scrCurrentEnd.advance(this.scrTarget, speed);
+        if (scrCurrentEnd != null && scrTarget != null) {
+            if (isGoingForward) {
+                this.scrCurrentEnd = this.scrCurrentEnd.advance(this.scrTarget, speed);
+                if (this.scrCurrentEnd.distSquare(this.scrTarget) <= speed * speed) {
+                    this.scrCurrentEnd = this.scrTarget.clone();
+                    isGoingForward = false;
+                }
+            } else {
+                this.scrCurrentEnd = this.scrCurrentEnd.advance(this.scrStart, speed);
+                if(scrCurrentEnd.distSquare(this.scrStart) <= speed*speed){
+                    scrCurrentEnd = this.scrStart.clone();
+                    isGoingForward = true;
+                }
+            }
+        }
     }
 }

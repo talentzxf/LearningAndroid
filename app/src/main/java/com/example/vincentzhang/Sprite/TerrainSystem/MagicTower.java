@@ -33,9 +33,10 @@ public class MagicTower extends Building {
 
         lightning.preUpdate();
 
-        if(getScrRect() != null)
+        if(getScrRect() != null){
             lightning.setScrStart(new Vector2D(getScrRect().centerX(), getScrRect().top));
             lightning.setScrTarget(CoordinateSystem.worldToScr(SpriteWorld.getInst().getLeadingSprite().getCurCenterPos()));
+        }
     }
 
     @Override
