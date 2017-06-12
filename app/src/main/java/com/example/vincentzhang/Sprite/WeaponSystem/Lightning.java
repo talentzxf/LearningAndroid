@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Rect;
 
+import com.example.vincentzhang.Sprite.CoordinateSystem;
 import com.example.vincentzhang.Sprite.HasLifeAbstractSprite;
 import com.example.vincentzhang.Sprite.Vector2D;
 
@@ -15,8 +16,8 @@ import com.example.vincentzhang.Sprite.Vector2D;
 public class Lightning extends Bullet {
 
     // The start and end position in Screen coordination.
-    private Vector2D scrStart;
-    private Vector2D scrCurrentEnd;
+    private Vector2D startPoint;
+    private Vector2D currentEnd;
 
     private HasLifeAbstractSprite target;
 
@@ -31,10 +32,10 @@ public class Lightning extends Bullet {
         super(17);
     }
 
-    public void setScrStart(Vector2D scrStart) {
-        this.scrStart = scrStart;
-        if (this.scrCurrentEnd == null)
-            this.scrCurrentEnd = this.scrStart.clone();
+    public void setStart(Vector2D startPoint) {
+        this.startPoint = startPoint;
+        if (this.currentEnd == null)
+            this.currentEnd = this.startPoint.clone();
     }
 
     public void setTarget(HasLifeAbstractSprite target) {
@@ -53,7 +54,10 @@ public class Lightning extends Bullet {
 
         if (getScrRect() != null) {
             // Bitmap rotatedBitmap = Bitmap.createBitmap(getBm(), srcRect.left, srcRect.top, srcRect.width(), srcRect.height(), mat, true);
-            if (scrCurrentEnd != null && scrStart != null) {
+            if (currentEnd != null && startPoint != null) {
+
+                Vector2D scrCurrentEnd = CoordinateSystem.worldToScr(currentEnd);
+                Vector2D scrStart = CoordinateSystem.worldToScr(startPoint);
                 float deltaX = (float) (scrCurrentEnd.getX() - scrStart.getX());
                 float deltaY = (float) (scrCurrentEnd.getY() - scrStart.getY());
                 float angle = (float) (180.0 * Math.atan2(deltaY, deltaX) / Math.PI - 90);
@@ -63,7 +67,7 @@ public class Lightning extends Bullet {
                 float scale = distToEnd / height;
 
                 mat.preRotate(angle);
-                mat.postTranslate((float) this.scrStart.getX(), (float) this.scrStart.getY());
+                mat.postTranslate((float) scrStart.getX(), (float) scrStart.getY());
 
                 Matrix scaleMatrix = new Matrix();
                 scaleMatrix.setScale(1.0f, scale);
@@ -82,18 +86,18 @@ public class Lightning extends Bullet {
 
         Vector2D scrTarget = target.getCurCenterPos();
 
-        if (scrCurrentEnd != null && scrTarget != null) {
+        if (startPoint != null && scrTarget != null) {
             if (isGoingForward) {
-                this.scrCurrentEnd = this.scrCurrentEnd.advance(scrTarget, speed);
-                if (this.scrCurrentEnd.distSquare(scrTarget) <= speed * speed) {
-                    this.scrCurrentEnd = scrTarget.clone();
+                this.currentEnd = this.currentEnd.advance(scrTarget, speed);
+                if (this.currentEnd.distSquare(scrTarget) <= speed * speed) {
+                    this.currentEnd = scrTarget.clone();
                     isGoingForward = false;
                     target.reduceHP(this.damage, null);
                 }
             } else {
-                this.scrCurrentEnd = this.scrCurrentEnd.advance(this.scrStart, speed);
-                if(scrCurrentEnd.distSquare(this.scrStart) <= speed*speed){
-                    scrCurrentEnd = this.scrStart.clone();
+                this.currentEnd = this.currentEnd.advance(this.startPoint, speed);
+                if(currentEnd.distSquare(this.startPoint) <= speed*speed){
+                    currentEnd = this.startPoint.clone();
                     isGoingForward = true;
 
                     isAlive = false;

@@ -19,8 +19,8 @@ public abstract class AbstractSprite {
 
     private int imgId = -1;
 
-    private Vector2D oldCenterPos = new Vector2D(-1,-1);
-    private Vector2D curCenterPos = new Vector2D(-1,-1);
+    private Vector2D oldCenterPos = null;
+    private Vector2D curCenterPos = null;
 
     public AbstractSprite(int imgId) {
         if(imgId == -1)
@@ -88,6 +88,7 @@ public abstract class AbstractSprite {
             double newLeft = newCenterPos.getX() - mScrRect.width()/2.0f;
             double newTop = newCenterPos.getY() - mScrRect.height()/2.0f;
             this.setSpritePos(new Vector2D(newLeft, newTop));
+            this.curCenterPos = newCenterPos;
         }
     }
 

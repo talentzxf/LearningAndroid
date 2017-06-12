@@ -24,30 +24,33 @@ public class MagicTower extends Building {
 
     public MagicTower(Integer id, Integer gridX, Integer gridY) {
         super(id, gridX, gridY);
+        this.setMaxHp(10000);
+        this.setHp(10000);
     }
 
     public MagicTower(Integer id, Vector2D pos) {
         super(id, pos);
+        this.setMaxHp(10000);
+        this.setHp(10000);
     }
 
     @Override
     public void preUpdate() {
         super.preUpdate();
-        if (topBullet != null)
+        if (topBullet != null) {
             topBullet.preUpdate();
 
-        if(getScrRect() != null){
+            if (topBullet.getCurCenterPos() != null && topBullet.isInited()) {
+                Vector2D towerCenter = CoordinateSystem.scrToWorld(new Vector2D(getScrRect().centerX(), getScrRect().centerY()));
+                HasLifeAbstractSprite enermySprite = SpriteWorld.getInst().getNearestEnermySprite(towerCenter, getTeamNumber(), attackRange);
 
-            Vector2D towerCenter = CoordinateSystem.scrToWorld( new Vector2D(getScrRect().centerX(), getScrRect().centerY()));
-
-            HasLifeAbstractSprite enermySprite = SpriteWorld.getInst().getNearestEnermySprite( towerCenter, getTeamNumber(), attackRange);
-
-            if(enermySprite != null){
-                if(this.lightnings.size() <= 1){
-                    Lightning lightning = new Lightning();
-                    lightning.setScrStart(new Vector2D(getScrRect().centerX(), getScrRect().top));
-                    lightning.setTarget(enermySprite);
-                    this.lightnings.add(lightning);
+                if (enermySprite != null) {
+                    if (this.lightnings.size() <= 1) {
+                        Lightning lightning = new Lightning();
+                        lightning.setStart(topBullet.getCurCenterPos());
+                        lightning.setTarget(enermySprite);
+                        this.lightnings.add(lightning);
+                    }
                 }
             }
         }
@@ -60,7 +63,7 @@ public class MagicTower extends Building {
             topBullet.beforeCollision();
         }
 
-        for(Lightning lightning: lightnings){
+        for (Lightning lightning : lightnings) {
             lightning.beforeCollision();
         }
     }
@@ -71,7 +74,7 @@ public class MagicTower extends Building {
         if (topBullet != null)
             topBullet.draw(canvas);
 
-        for(Lightning lightning: lightnings){
+        for (Lightning lightning : lightnings) {
             lightning.draw(canvas);
         }
         return rect;
@@ -86,7 +89,7 @@ public class MagicTower extends Building {
         }
 
         if (!topBullet.isInited()) {
-            if (topBullet.getScrRect() != null) {
+                if (topBullet.getScrRect() != null) {
                 Rect towerRect = getScrRect();
                 Vector2D towerPosWorld = CoordinateSystem.scrToWorld(
                         new Vector2D(towerRect.centerX(), towerRect.top)
@@ -101,14 +104,14 @@ public class MagicTower extends Building {
         topBullet.postUpdate();
 
         ArrayList<Lightning> tobeDeletedLightnings = new ArrayList<>();
-        for(Lightning lightning: lightnings){
+        for (Lightning lightning : lightnings) {
             lightning.postUpdate();
-            if(!lightning.isAlive()){
+            if (!lightning.isAlive()) {
                 tobeDeletedLightnings.add(lightning);
             }
         }
 
-        for(Lightning tobeDeletedLightning:tobeDeletedLightnings){
+        for (Lightning tobeDeletedLightning : tobeDeletedLightnings) {
             this.lightnings.remove(tobeDeletedLightning);
         }
     }

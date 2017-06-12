@@ -45,7 +45,7 @@ public class ScorpionController implements Controller {
             target.setMoving(true);
             target.setCurDirection(nextDir);
             // Previously not tracking, actively advance to avoid infinite loop
-            if(!isTracking){
+            if (!isTracking) {
                 target.setSpritePos(target.getSpritePos().applyDir(nextDir, target.getMoveSpeed()));
             }
             isTracking = true;
@@ -76,7 +76,8 @@ public class ScorpionController implements Controller {
             if (collideTargetActor.getTeamNumber() != curActor.getTeamNumber()) {
                 // Log.i("Collide", "Collide with enermy!!!!");
 
-                Vector2D newPos = collideTarget.getSpritePos().applyDir(collideTargetActor.getCurDirection(), -PUSH_DISTANCE);
+                // TODO: Add more realistic collide logic here.
+                Vector2D newPos = collideTarget.getSpritePos().applyDir(curActor.getCurDirection(), PUSH_DISTANCE);
                 collideTargetActor.setSpritePos(newPos);
 
                 collideTargetActor.reduceHP(damage, this.target);
