@@ -34,7 +34,6 @@ public class ScorpionController implements Controller {
         this.target = (ActorSprite) target;
         this.target.setMoving(true);
         this.target.setMoveSpeed(8);
-        this.target.setHp(100);
     }
 
     @Override

@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Rect;
 
+import com.example.vincentzhang.Sprite.HasLifeAbstractSprite;
 import com.example.vincentzhang.Sprite.Vector2D;
 
 /**
@@ -17,14 +18,14 @@ public class Lightning extends Bullet {
     private Vector2D scrStart;
     private Vector2D scrCurrentEnd;
 
-    private Vector2D scrTarget;
+    private HasLifeAbstractSprite target;
 
     private boolean isGoingForward = true;
 
     private boolean isAlive = true;
 
+    private int damage =  10;
     private float speed = 100.0f;
-    private float damage = 50.0f;
 
     public Lightning() {
         super(17);
@@ -36,8 +37,8 @@ public class Lightning extends Bullet {
             this.scrCurrentEnd = this.scrStart.clone();
     }
 
-    public void setScrTarget(Vector2D scrTarget) {
-        this.scrTarget = scrTarget;
+    public void setTarget(HasLifeAbstractSprite target) {
+        this.target = target;
     }
 
     @Override
@@ -79,12 +80,15 @@ public class Lightning extends Bullet {
         super.postUpdate();
         getBm().advance();
 
+        Vector2D scrTarget = target.getCurCenterPos();
+
         if (scrCurrentEnd != null && scrTarget != null) {
             if (isGoingForward) {
-                this.scrCurrentEnd = this.scrCurrentEnd.advance(this.scrTarget, speed);
-                if (this.scrCurrentEnd.distSquare(this.scrTarget) <= speed * speed) {
-                    this.scrCurrentEnd = this.scrTarget.clone();
+                this.scrCurrentEnd = this.scrCurrentEnd.advance(scrTarget, speed);
+                if (this.scrCurrentEnd.distSquare(scrTarget) <= speed * speed) {
+                    this.scrCurrentEnd = scrTarget.clone();
                     isGoingForward = false;
+                    target.reduceHP(this.damage, null);
                 }
             } else {
                 this.scrCurrentEnd = this.scrCurrentEnd.advance(this.scrStart, speed);

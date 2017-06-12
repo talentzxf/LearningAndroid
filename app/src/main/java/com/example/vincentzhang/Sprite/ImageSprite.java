@@ -33,6 +33,10 @@ public class ImageSprite extends HasLifeAbstractSprite {
     }
 
     public void setCurDirection(DIRECTIONS curDirection) {
+        if(this.curDirection == curDirection){
+            return ;
+        }
+
         if(this.curDirection != curDirection){
             CollideDetector.setDirtyFlag(true);
         }

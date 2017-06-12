@@ -10,8 +10,8 @@ import android.graphics.Rect;
  */
 
 public class HasLifeAbstractSprite extends ControllerAbstractSprite {
-    protected float hp_max = 100;
-    protected float hp = 100;
+    protected float hp_max = 1000;
+    protected float hp = 1000;
     private int teamNumber = 0;
     private HasLifeAbstractSprite killedBy;
     private int killedEnermies = 0;

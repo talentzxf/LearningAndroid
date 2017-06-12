@@ -46,7 +46,7 @@ public class MagicTower extends Building {
                 if(this.lightnings.size() <= 1){
                     Lightning lightning = new Lightning();
                     lightning.setScrStart(new Vector2D(getScrRect().centerX(), getScrRect().top));
-                    lightning.setScrTarget(enermySprite.getCurCenterPos());
+                    lightning.setTarget(enermySprite);
                     this.lightnings.add(lightning);
                 }
             }

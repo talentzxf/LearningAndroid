@@ -237,7 +237,7 @@ public class SpriteWorld extends Thread {
     }
 
     public HasLifeAbstractSprite getNearestEnermySprite(Vector2D centerPos, int teamNumber, int distance) {
-        if(centerPos.getX() < 0 || centerPos.getY() < 0)
+        if(centerPos == null)
             return null;
 
         List<HasLifeAbstractSprite> distanceSortedSpriteList = new ArrayList<>();
