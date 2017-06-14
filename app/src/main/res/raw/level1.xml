@@ -13,11 +13,12 @@
         <img src="scorpion_lair" id="10" scale="1.5"></img>
         <img src="hospital" id="11"></img>
         <img src="coin" id="12" rowCount="2" colCount="8" scale="0.8"></img>
-        <img src="timber" id="13" scale="0.8"></img>
+        <img src="timber" id="13" scale="0.6"></img>
         <img src="gold_mine" id="14" scale="1.5"></img>
         <img src="magic_tower" id="15" scale="2"></img>
         <img src="magic_ball" id="16" rowCount="2" colCount="2" scale="1"></img>
         <img src="lightning_1,lightning_2,lightning_3,lightning_4" id="17"></img>
+        <img src="logging_camp" id="18" scale="1.5"></img>
     </imgs>
     <weapons>
         <bomb imgId="6"></bomb>
@@ -63,6 +64,7 @@
         <building x='3' y='3' imgId='5' destroyable="false"></building>
         <building x='4' y='8' imgId='15' type="MagicTower" controller="MagicTowerController" destroyable="true"></building>
         <building x='5' y='3' imgId='14' controller="GoldMineController" destroyable="false"></building>
+        <building x='8' y='6' imgId='18' controller="LoggingCampController" destroyable="false"></building>
         <building x='4' y='10' imgId='10' controller="ScorpionLairController" destroyable="true" team="1"></building>
     </buildings>
 </game>
