@@ -64,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.button_b:
                     l.onClick('B');
+                case R.id.button_c:
+                    l.onClick('C');
             }
 
             return false;
@@ -102,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
         Button downButton = (Button) findViewById(R.id.downbutton);
         Button AButton = (Button) findViewById(R.id.button_a);
         Button BButton = (Button) findViewById(R.id.button_b);
+        Button CButton = (Button) findViewById(R.id.button_c);
 
         MyOnTouchListener myOnTouchListener = new MyOnTouchListener();
         leftButton.setOnTouchListener(myOnTouchListener);
@@ -110,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
         downButton.setOnTouchListener(myOnTouchListener);
         AButton.setOnTouchListener(myOnTouchListener);
         BButton.setOnTouchListener(myOnTouchListener);
+        CButton.setOnTouchListener(myOnTouchListener);
     }
 
     @Override

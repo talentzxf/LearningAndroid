@@ -7,8 +7,10 @@ import com.example.vincentzhang.Sprite.ActorSprite;
 import com.example.vincentzhang.Sprite.CollideDetector;
 import com.example.vincentzhang.Sprite.ControllerAbstractSprite;
 import com.example.vincentzhang.Sprite.DIRECTIONS;
+import com.example.vincentzhang.Sprite.ResourceSystem.ResourceType;
 import com.example.vincentzhang.Sprite.SpriteWorld;
 import com.example.vincentzhang.Sprite.TerrainSystem.Hospital;
+import com.example.vincentzhang.Sprite.TerrainSystem.MagicTower;
 import com.example.vincentzhang.Sprite.Vector2D;
 
 /**
@@ -41,12 +43,29 @@ public class ButtonController implements ButtonEventListener, Controller {
     public void onClick(Character but) {
         switch (but) {
             case 'A': {
+
+                if(SpriteWorld.getInst().getLeadingSprite().getResource(ResourceType.COIN) < 1){
+                    break;
+                }
+                SpriteWorld.getInst().getLeadingSprite().spend(ResourceType.COIN, 1);
+
                 Rect rect = target.getScrRect();
                 Vector2D newPos = target.getSpritePos().applyDir(target.getCurDirection(), Math.min(rect.width(), rect.height()));
                 SpriteWorld.getInst().getWeaponSystem().addBomb(newPos, target);
             }
             break;
             case 'B': {
+                int coin = 5;
+                int timber = 2;
+
+                if(SpriteWorld.getInst().getLeadingSprite().getResource(ResourceType.COIN) < coin ||
+                        SpriteWorld.getInst().getLeadingSprite().getResource(ResourceType.TIMBER) < timber){
+                    break;
+                }
+
+                SpriteWorld.getInst().getLeadingSprite().spend(ResourceType.COIN, coin);
+                SpriteWorld.getInst().getLeadingSprite().spend(ResourceType.TIMBER, timber);
+
                 Rect rect = target.getScrRect();
                 Vector2D newPos = target.getSpritePos().applyDir(target.getCurDirection(), Math.min(rect.width(), rect.height()));
                 // Building newBuilding = new Building(11, newPos);
@@ -60,6 +79,29 @@ public class ButtonController implements ButtonEventListener, Controller {
                 SpriteWorld.getInst().getBuildingSystem().addBuilding(hospital);
             }
             break;
+            case 'C':{
+                int coin = 8;
+                int timber = 4;
+
+                if(SpriteWorld.getInst().getLeadingSprite().getResource(ResourceType.COIN) < coin ||
+                        SpriteWorld.getInst().getLeadingSprite().getResource(ResourceType.TIMBER) < timber){
+                    break;
+                }
+
+                SpriteWorld.getInst().getLeadingSprite().spend(ResourceType.COIN, coin);
+                SpriteWorld.getInst().getLeadingSprite().spend(ResourceType.TIMBER, timber);
+
+                Rect rect = target.getScrRect();
+                Vector2D newPos = target.getSpritePos().applyDir(target.getCurDirection(), Math.min(rect.width(), rect.height()));
+                // Building newBuilding = new Building(11, newPos);
+                MagicTower magicTower = new MagicTower(15, newPos);
+                magicTower.setDestroyable(true);
+                magicTower.setMaxHp(10000);
+                magicTower.setHp(10000);
+                magicTower.setTeamNumber(target.getTeamNumber());
+                ControllerFactory.createController("MagicTowerController", magicTower);
+                SpriteWorld.getInst().getBuildingSystem().addBuilding(magicTower);
+            }
         }
         CollideDetector.setDirtyFlag(true);
     }

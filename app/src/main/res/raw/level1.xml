@@ -62,7 +62,6 @@
     <buildings>
         <building x='0' y='0' imgId='4' destroyable="false"></building>
         <building x='3' y='3' imgId='5' destroyable="false"></building>
-        <building x='4' y='8' imgId='15' type="MagicTower" controller="MagicTowerController" destroyable="true"></building>
         <building x='5' y='3' imgId='14' controller="GoldMineController" destroyable="false"></building>
         <building x='8' y='6' imgId='18' controller="LoggingCampController" destroyable="false"></building>
         <building x='4' y='10' imgId='10' controller="ScorpionLairController" destroyable="true" team="1"></building>

@@ -76,4 +76,15 @@
         android:layout_toEndOf="@+id/button_a"
         android:layout_marginLeft="18dp"
         android:layout_marginStart="18dp" />
+
+    <Button
+        android:id="@+id/button_c"
+        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:text="C"
+        android:layout_alignTop="@+id/rightbutton"
+        android:layout_toRightOf="@+id/button_b"
+        android:layout_toEndOf="@+id/button_b"
+        android:layout_marginLeft="18dp"
+        android:layout_marginStart="18dp" />
 </RelativeLayout>

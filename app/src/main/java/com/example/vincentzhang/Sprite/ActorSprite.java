@@ -34,4 +34,8 @@ public class ActorSprite extends ImageSprite {
         super(imgId);
         this.name = name;
     }
+
+    public void spend(ResourceType resourceType, int amount) {
+        resourceAmount.put(resourceType, resourceAmount.get(resourceType) - amount);
+    }
 }
