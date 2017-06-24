@@ -45,6 +45,7 @@ public class ButtonController implements ButtonEventListener, Controller {
             case 'A': {
 
                 if(SpriteWorld.getInst().getLeadingSprite().getResource(ResourceType.COIN) < 1){
+                    SpriteWorld.getInst().getUiSystem().addMessage("不能建造,没钱啊没钱!");
                     break;
                 }
                 SpriteWorld.getInst().getLeadingSprite().spend(ResourceType.COIN, 1);
@@ -60,6 +61,7 @@ public class ButtonController implements ButtonEventListener, Controller {
 
                 if(SpriteWorld.getInst().getLeadingSprite().getResource(ResourceType.COIN) < coin ||
                         SpriteWorld.getInst().getLeadingSprite().getResource(ResourceType.TIMBER) < timber){
+                    SpriteWorld.getInst().getUiSystem().addMessage("不能建造,没钱没木材啊没钱没木材!");
                     break;
                 }
 
@@ -85,6 +87,7 @@ public class ButtonController implements ButtonEventListener, Controller {
 
                 if(SpriteWorld.getInst().getLeadingSprite().getResource(ResourceType.COIN) < coin ||
                         SpriteWorld.getInst().getLeadingSprite().getResource(ResourceType.TIMBER) < timber){
+                    SpriteWorld.getInst().getUiSystem().addMessage("不能建造,没钱没木材啊没钱没木材!");
                     break;
                 }
 
@@ -94,7 +97,7 @@ public class ButtonController implements ButtonEventListener, Controller {
                 Rect rect = target.getScrRect();
                 Vector2D newPos = target.getSpritePos().applyDir(target.getCurDirection(), Math.min(rect.width(), rect.height()));
                 // Building newBuilding = new Building(11, newPos);
-                MagicTower magicTower = new MagicTower(15, newPos);
+                MagicTower magicTower = new MagicTower(15, newPos, SpriteWorld.getInst().getLeadingSprite());
                 magicTower.setDestroyable(true);
                 magicTower.setMaxHp(10000);
                 magicTower.setHp(10000);

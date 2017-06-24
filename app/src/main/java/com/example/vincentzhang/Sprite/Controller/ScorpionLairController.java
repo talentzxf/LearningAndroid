@@ -25,7 +25,7 @@ public class ScorpionLairController implements BuildingController {
             ActorSprite newScorpion = new ActorSprite(9, "enermy_avatar");
             newScorpion.setTeamNumber(1); // TODO should be configurable here.
             newScorpion.setMaxHp(300);
-            newScorpion.setHp(300);
+            newScorpion.setHp(100);
             Vector2D newSpritePos = target.getSpritePos().applyDir(DIRECTIONS.DOWNRIGHT, target.getScrRect().width());
             newScorpion.setSpritePos(newSpritePos);
             ControllerFactory.createController("ScorpionController", newScorpion);

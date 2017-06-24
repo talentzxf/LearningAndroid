@@ -64,12 +64,13 @@ public class SpriteWorld extends Thread {
 
         buildingSystem = new BuildingSystem();
         subSystems.add(buildingSystem);
-        // TODO: Decouple weaponSystem dependency to controller.
-        weaponSystem = new WeaponSystem();
-        subSystems.add(weaponSystem);
 
         resourceSystem = new ResourceSystem();
         subSystems.add(resourceSystem);
+
+        // TODO: Decouple weaponSystem dependency to controller.
+        weaponSystem = new WeaponSystem();
+        subSystems.add(weaponSystem);
 
         SpriteSystem spriteSystem = new SpriteSystem();
         this.spriteSystem = spriteSystem;
@@ -205,6 +206,10 @@ public class SpriteWorld extends Thread {
 
     public ResourceSystem getResourceSystem() {
         return resourceSystem;
+    }
+
+    public UISystem getUiSystem(){
+        return uiSystem;
     }
 
     public void start_init(Context context, Canvas canvas) {

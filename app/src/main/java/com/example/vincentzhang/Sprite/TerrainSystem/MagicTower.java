@@ -3,6 +3,7 @@ package com.example.vincentzhang.Sprite.TerrainSystem;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 
+import com.example.vincentzhang.Sprite.ActorSprite;
 import com.example.vincentzhang.Sprite.CoordinateSystem;
 import com.example.vincentzhang.Sprite.HasLifeAbstractSprite;
 import com.example.vincentzhang.Sprite.SpriteWorld;
@@ -19,19 +20,21 @@ import java.util.ArrayList;
 public class MagicTower extends Building {
     private Bullet topBullet = null;
     private int attackRange = 500;
+    private ActorSprite owner = null;
 
     private ArrayList<Lightning> lightnings = new ArrayList<>();
 
-    public MagicTower(Integer id, Integer gridX, Integer gridY) {
+    public MagicTower(Integer id, Integer gridX, Integer gridY, ActorSprite owner) {
         super(id, gridX, gridY);
         this.setMaxHp(10000);
         this.setHp(10000);
     }
 
-    public MagicTower(Integer id, Vector2D pos) {
+    public MagicTower(Integer id, Vector2D pos, ActorSprite owner) {
         super(id, pos);
         this.setMaxHp(10000);
         this.setHp(10000);
+        this.owner = owner;
     }
 
     @Override
@@ -46,7 +49,7 @@ public class MagicTower extends Building {
 
                 if (enermySprite != null) {
                     if (this.lightnings.size() <= 1) {
-                        Lightning lightning = new Lightning();
+                        Lightning lightning = new Lightning(this.owner);
                         lightning.setStart(topBullet.getCurCenterPos());
                         lightning.setTarget(enermySprite);
                         this.lightnings.add(lightning);

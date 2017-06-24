@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Rect;
 
+import com.example.vincentzhang.Sprite.ActorSprite;
 import com.example.vincentzhang.Sprite.CoordinateSystem;
 import com.example.vincentzhang.Sprite.HasLifeAbstractSprite;
 import com.example.vincentzhang.Sprite.Vector2D;
@@ -27,9 +28,11 @@ public class Lightning extends Bullet {
 
     private int damage =  10;
     private float speed = 100.0f;
+    private ActorSprite owner;
 
-    public Lightning() {
+    public Lightning(ActorSprite owner) {
         super(17);
+        this.owner = owner;
     }
 
     public void setStart(Vector2D startPoint) {
@@ -92,7 +95,7 @@ public class Lightning extends Bullet {
                 if (this.currentEnd.distSquare(scrTarget) <= speed * speed) {
                     this.currentEnd = scrTarget.clone();
                     isGoingForward = false;
-                    target.reduceHP(this.damage, null);
+                    target.reduceHP(this.damage, owner);
                 }
             } else {
                 this.currentEnd = this.currentEnd.advance(this.startPoint, speed);
