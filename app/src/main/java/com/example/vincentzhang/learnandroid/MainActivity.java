@@ -1,5 +1,7 @@
 package com.example.vincentzhang.learnandroid;
 
+import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -8,9 +10,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.vincentzhang.Sprite.Controller.ButtonEventDispatcher;
@@ -32,6 +38,16 @@ public class MainActivity extends AppCompatActivity {
             l = ButtonEventDispatcher.inst();
         }
 
+        private ImageButton createImageButton(Context context, int imgId){
+            ImageButton imgButton = new ImageButton(context);
+            imgButton.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), imgId));
+            imgButton.setScaleType(ImageView.ScaleType.FIT_XY);
+            imgButton.setAdjustViewBounds(true);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.MATCH_PARENT);
+            imgButton.setLayoutParams(params);
+            return imgButton;
+        }
+
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             switch(event.getAction()){
@@ -41,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
                     l.onClick(UNKNOWN);
                     return false;
             }
+
+            LinearLayout buttonGallery = (LinearLayout)findViewById(R.id.button_gallery);
 
             switch(v.getId()){
                 case R.id.leftbutton:
@@ -59,11 +77,21 @@ public class MainActivity extends AppCompatActivity {
                     l.onClick(DOWN);
                     // l.onClick(DOWNRIGHT);
                     break;
-                case R.id.button_a:
-                    l.onClick('A');
+                case R.id.button_attack:
+                    // l.onClick('A');
+//                    android:layout_width="wrap_content"
+//                    android:layout_height="match_parent"
+//                    android:adjustViewBounds="true"
+//                    android:scaleType="fitXY"
+
+                    buttonGallery.removeAllViews();
+
+                    buttonGallery.addView(createImageButton(buttonGallery.getContext(), R.drawable.bomb));
                     break;
-                case R.id.button_b:
-                    l.onClick('B');
+                case R.id.button_building:
+                    buttonGallery.removeAllViews();
+                    buttonGallery.addView(createImageButton(buttonGallery.getContext(), R.drawable.magic_tower));
+                    buttonGallery.addView(createImageButton(buttonGallery.getContext(), R.drawable.hospital));
                 case R.id.button_c:
                     l.onClick('C');
             }
@@ -102,8 +130,8 @@ public class MainActivity extends AppCompatActivity {
         Button rightButton = (Button) findViewById(R.id.rightbutton);
         Button upButton = (Button) findViewById(R.id.upbutton);
         Button downButton = (Button) findViewById(R.id.downbutton);
-        Button AButton = (Button) findViewById(R.id.button_a);
-        Button BButton = (Button) findViewById(R.id.button_b);
+        Button AButton = (Button) findViewById(R.id.button_attack);
+        Button BButton = (Button) findViewById(R.id.button_building);
         Button CButton = (Button) findViewById(R.id.button_c);
 
         MyOnTouchListener myOnTouchListener = new MyOnTouchListener();

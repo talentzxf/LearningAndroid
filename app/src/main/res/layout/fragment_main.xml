@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/content_main"
     android:layout_width="match_parent"
@@ -8,15 +8,15 @@
     tools:context="com.example.vincentzhang.learnandroid.MainActivityFragment">
 
     <TextView
+        android:id="@+id/sample_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Life game!"
-        android:id="@+id/sample_text" />
+        android:text="Life game!" />
 
     <com.example.vincentzhang.learnandroid.MyGameView
+        android:id="@+id/gamesurfaceview"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/gamesurfaceview" />
+        android:layout_height="wrap_content" />
 
     <Button
         android:id="@+id/leftbutton"
@@ -39,52 +39,85 @@
         android:id="@+id/downbutton"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:text="v"
-        android:textAllCaps="false"
         android:layout_below="@+id/rightbutton"
+        android:layout_toEndOf="@+id/leftbutton"
         android:layout_toRightOf="@+id/leftbutton"
-        android:layout_toEndOf="@+id/leftbutton" />
+        android:text="v"
+        android:textAllCaps="false" />
 
     <Button
         android:id="@+id/rightbutton"
         android:layout_width="40dp"
         android:layout_height="40dp"
+        android:layout_alignBottom="@+id/leftbutton"
         android:layout_below="@+id/upbutton"
         android:layout_toEndOf="@+id/upbutton"
-        android:text=">"
-        android:layout_alignBottom="@+id/leftbutton"
-        android:layout_toRightOf="@+id/upbutton" />
+        android:layout_toRightOf="@+id/upbutton"
+        android:text=">" />
 
     <Button
-        android:id="@+id/button_a"
-        android:layout_height="wrap_content"
+        android:id="@+id/button_attack"
         android:layout_width="40dp"
-        android:text="A"
-        android:layout_alignTop="@+id/rightbutton"
-        android:layout_toRightOf="@+id/rightbutton"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/upbutton"
+        android:layout_marginLeft="18dp"
+        android:layout_marginStart="18dp"
         android:layout_toEndOf="@+id/rightbutton"
-        android:layout_marginLeft="18dp"
-        android:layout_marginStart="18dp" />
+        android:layout_toRightOf="@+id/upbutton"
+        android:text="攻击" />
 
     <Button
-        android:id="@+id/button_b"
-        android:layout_height="wrap_content"
+        android:id="@+id/button_building"
         android:layout_width="40dp"
-        android:text="B"
-        android:layout_alignTop="@+id/rightbutton"
-        android:layout_toRightOf="@+id/button_a"
-        android:layout_toEndOf="@+id/button_a"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/upbutton"
         android:layout_marginLeft="18dp"
-        android:layout_marginStart="18dp" />
+        android:layout_marginStart="18dp"
+        android:layout_toEndOf="@+id/button_attack"
+        android:layout_toRightOf="@+id/button_attack"
+        android:text="医院" />
 
     <Button
         android:id="@+id/button_c"
-        android:layout_height="wrap_content"
         android:layout_width="40dp"
-        android:text="C"
-        android:layout_alignTop="@+id/rightbutton"
-        android:layout_toRightOf="@+id/button_b"
-        android:layout_toEndOf="@+id/button_b"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/upbutton"
         android:layout_marginLeft="18dp"
-        android:layout_marginStart="18dp" />
+        android:layout_marginStart="18dp"
+        android:layout_toEndOf="@+id/button_building"
+        android:layout_toRightOf="@+id/button_building"
+        android:text="建筑" />
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@+id/downbutton"
+        android:layout_alignLeft="@+id/button_attack"
+        android:layout_alignStart="@+id/button_attack"
+        android:layout_below="@+id/button_attack">
+
+        <LinearLayout
+            android:id="@+id/button_gallery"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/magicaltower"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/magic_tower" />
+
+            <ImageButton
+                android:id="@+id/hospital"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/hospital" />
+
+        </LinearLayout>
+    </HorizontalScrollView>
 </RelativeLayout>
