@@ -64,29 +64,18 @@
         android:layout_marginStart="18dp"
         android:layout_toEndOf="@+id/rightbutton"
         android:layout_toRightOf="@+id/upbutton"
-        android:text="攻击" />
+        android:text="武器" />
 
     <Button
         android:id="@+id/button_building"
         android:layout_width="40dp"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/upbutton"
-        android:layout_marginLeft="18dp"
-        android:layout_marginStart="18dp"
-        android:layout_toEndOf="@+id/button_attack"
+        android:text="建筑"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_above="@+id/horizontalScrollView"
         android:layout_toRightOf="@+id/button_attack"
-        android:text="医院" />
-
-    <Button
-        android:id="@+id/button_c"
-        android:layout_width="40dp"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/upbutton"
-        android:layout_marginLeft="18dp"
-        android:layout_marginStart="18dp"
-        android:layout_toEndOf="@+id/button_building"
-        android:layout_toRightOf="@+id/button_building"
-        android:text="建筑" />
+        android:layout_toEndOf="@+id/button_attack" />
 
     <HorizontalScrollView
         android:layout_width="match_parent"
@@ -94,7 +83,8 @@
         android:layout_alignBottom="@+id/downbutton"
         android:layout_alignLeft="@+id/button_attack"
         android:layout_alignStart="@+id/button_attack"
-        android:layout_below="@+id/button_attack">
+        android:layout_below="@+id/button_attack"
+        android:id="@+id/horizontalScrollView">
 
         <LinearLayout
             android:id="@+id/button_gallery"

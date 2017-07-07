@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.util.Log;
 import android.util.Pair;
 
 import com.example.vincentzhang.Sprite.AbstractSprite;
@@ -13,16 +14,52 @@ import com.example.vincentzhang.Sprite.ResourceSystem.ResourceType;
 import com.example.vincentzhang.Sprite.SpriteWorld;
 import com.example.vincentzhang.Sprite.SubSystem;
 
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
+
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+
+import static com.example.vincentzhang.Sprite.Utilities.getXmlSource;
 
 /**
  * Created by VincentZhang on 5/27/2017.
  */
+class ButtonArray{
+    private String buttonArrayName;
+    public ButtonArray(String buttonArrayName) {
+        this.buttonArrayName = buttonArrayName;
+    }
+}
 
 public class UISystem implements SubSystem {
+    private List<ButtonArray> buttonArray = new ArrayList<>();
     @Override
     public boolean init(String level, Resources resources, Canvas canvas) {
+        XPath xPath = XPathFactory.newInstance().newXPath();
+        try {
+            NodeList buttonArrayDefs = (NodeList) xPath.evaluate("/ui/buttons", getXmlSource(resources, level), XPathConstants.NODESET);
+
+            for (int i = 0; i < buttonArrayDefs.getLength(); i++) {
+                Node buttonArrayDefNode = buttonArrayDefs.item(i);
+                String buttonArrayName = buttonArrayDefNode.getAttributes().getNamedItem("name").getNodeValue();
+                ButtonArray buttonArray = new ButtonArray(buttonArrayName);
+                NodeList buttons = buttonArrayDefNode.getChildNodes();
+                for(int j = 0 ; j < buttons.getLength(); j++){
+                    Node buttonNode = buttons.item(j);
+                    
+                }
+            }
+        } catch (XPathExpressionException e) {
+            Log.e("XPath error", "Error!");
+            return false;
+        }
         return false;
     }
 
@@ -81,7 +118,7 @@ public class UISystem implements SubSystem {
             int padding = 20;
             int canvasHeight = canvas.getHeight();
 
-            canvas.drawText(messagePair.first, offsetX, canvasHeight - offsetY - itr * ( msgTextRect.height() + padding), msgP);
+            canvas.drawText(messagePair.first, offsetX, canvasHeight - offsetY - itr * (msgTextRect.height() + padding), msgP);
             itr++;
         }
 
