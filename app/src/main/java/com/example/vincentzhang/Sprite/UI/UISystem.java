@@ -13,9 +13,9 @@ import com.example.vincentzhang.Sprite.ImageSprite;
 import com.example.vincentzhang.Sprite.ResourceSystem.ResourceType;
 import com.example.vincentzhang.Sprite.SpriteWorld;
 import com.example.vincentzhang.Sprite.SubSystem;
+import com.example.vincentzhang.Sprite.XMLUtilities.XMLRefactorDecoder;
 
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -31,6 +31,10 @@ import static com.example.vincentzhang.Sprite.Utilities.getXmlSource;
 /**
  * Created by VincentZhang on 5/27/2017.
  */
+
+class UI{
+    ArrayList<ButtonArray> buttonArrays;
+}
 class ButtonArray{
     private String buttonArrayName;
     public ButtonArray(String buttonArrayName) {
@@ -44,22 +48,25 @@ public class UISystem implements SubSystem {
     public boolean init(String level, Resources resources, Canvas canvas) {
         XPath xPath = XPathFactory.newInstance().newXPath();
         try {
-            NodeList buttonArrayDefs = (NodeList) xPath.evaluate("/ui/buttons", getXmlSource(resources, level), XPathConstants.NODESET);
+            Node uiNode = (Node) xPath.evaluate("/ui/", getXmlSource(resources, level), XPathConstants.NODE);
+            XMLRefactorDecoder.decode(uiNode, UI.class);
 
-            for (int i = 0; i < buttonArrayDefs.getLength(); i++) {
-                Node buttonArrayDefNode = buttonArrayDefs.item(i);
-                String buttonArrayName = buttonArrayDefNode.getAttributes().getNamedItem("name").getNodeValue();
-                ButtonArray buttonArray = new ButtonArray(buttonArrayName);
-                NodeList buttons = buttonArrayDefNode.getChildNodes();
-                for(int j = 0 ; j < buttons.getLength(); j++){
-                    Node buttonNode = buttons.item(j);
-                    
-                }
-            }
+
+//            for (int i = 0; i < buttonArrayDefs.getLength(); i++) {
+//                Node buttonArrayDefNode = buttonArrayDefs.item(i);
+//                String buttonArrayName = buttonArrayDefNode.getAttributes().getNamedItem("name").getNodeValue();
+//                ButtonArray buttonArray = new ButtonArray(buttonArrayName);
+//                NodeList buttons = buttonArrayDefNode.getChildNodes();
+//                for(int j = 0 ; j < buttons.getLength(); j++){
+//                    Node buttonNode = buttons.item(j);
+//
+//                }
+//            }
         } catch (XPathExpressionException e) {
             Log.e("XPath error", "Error!");
             return false;
         }
+        
         return false;
     }
 
