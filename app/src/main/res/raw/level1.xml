@@ -60,13 +60,19 @@
         <!--<sprite name="enermy_avatar" imgId="9" x="200" controller="ScorpionController" y="200" isleading="false" team="1" maxHp="10000" hp="10000"></sprite>-->
     </sprites>
     <ui>
-        <buttons name="武器">
-            <button id="hospital_button" imgId="11" />
-            <button id="magicaltower_button" imgId="15" />
-        </buttons>
-        <buttons name="建筑">
-            <button id="bomb_button" imgId="6"/>
-        </buttons>
+        <list propertyName="buttonArrays">
+            <buttons name="武器">
+                <list>
+                    <button id="hospital_button" imgId="11" />
+                    <button id="magicaltower_button" imgId="15" />
+                </list>
+            </buttons>
+            <buttons displayname="建筑">
+                <list>
+                    <button id="bomb_button" imgId="6"/>
+                </list>
+            </buttons>
+        </list>
     </ui>
     <buildings>
         <building x='0' y='0' imgId='4' destroyable="false"></building>

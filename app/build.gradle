@@ -16,6 +16,12 @@ android {
             }
         }
     }
+
+    dependencies {
+        compile group: 'commons-beanutils', name: 'commons-beanutils', version: '1.9.3'
+        testCompile group: 'commons-logging', name: 'commons-logging', version: '1.2'
+    }
+
     buildTypes {
         release {
             minifyEnabled false

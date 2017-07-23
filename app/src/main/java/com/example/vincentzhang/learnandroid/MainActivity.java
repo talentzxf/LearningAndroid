@@ -92,8 +92,8 @@ public class MainActivity extends AppCompatActivity {
                     buttonGallery.removeAllViews();
                     buttonGallery.addView(createImageButton(buttonGallery.getContext(), R.drawable.magic_tower));
                     buttonGallery.addView(createImageButton(buttonGallery.getContext(), R.drawable.hospital));
-                case R.id.button_c:
-                    l.onClick('C');
+//                case R.id.button_c:
+//                    l.onClick('C');
             }
 
             return false;
@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
         Button downButton = (Button) findViewById(R.id.downbutton);
         Button AButton = (Button) findViewById(R.id.button_attack);
         Button BButton = (Button) findViewById(R.id.button_building);
-        Button CButton = (Button) findViewById(R.id.button_c);
+        // Button CButton = (Button) findViewById(R.id.button_c);
 
         MyOnTouchListener myOnTouchListener = new MyOnTouchListener();
         leftButton.setOnTouchListener(myOnTouchListener);
@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
         downButton.setOnTouchListener(myOnTouchListener);
         AButton.setOnTouchListener(myOnTouchListener);
         BButton.setOnTouchListener(myOnTouchListener);
-        CButton.setOnTouchListener(myOnTouchListener);
+        //CButton.setOnTouchListener(myOnTouchListener);
     }
 
     @Override

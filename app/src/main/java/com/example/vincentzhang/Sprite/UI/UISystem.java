@@ -32,16 +32,6 @@ import static com.example.vincentzhang.Sprite.Utilities.getXmlSource;
  * Created by VincentZhang on 5/27/2017.
  */
 
-class UI{
-    ArrayList<ButtonArray> buttonArrays;
-}
-class ButtonArray{
-    private String buttonArrayName;
-    public ButtonArray(String buttonArrayName) {
-        this.buttonArrayName = buttonArrayName;
-    }
-}
-
 public class UISystem implements SubSystem {
     private List<ButtonArray> buttonArray = new ArrayList<>();
     @Override
@@ -49,7 +39,7 @@ public class UISystem implements SubSystem {
         XPath xPath = XPathFactory.newInstance().newXPath();
         try {
             Node uiNode = (Node) xPath.evaluate("/ui/", getXmlSource(resources, level), XPathConstants.NODE);
-            XMLRefactorDecoder.decode(uiNode, UI.class);
+            XMLRefactorDecoder.decode(uiNode, UIInfo.class);
 
 
 //            for (int i = 0; i < buttonArrayDefs.getLength(); i++) {
