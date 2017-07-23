@@ -59,16 +59,16 @@
         <sprite name="main_avatar" imgId="7" controller="ButtonController" x="200" y="200" isleading="true" team="0" maxHp="10000" hp="10000"></sprite>6
         <!--<sprite name="enermy_avatar" imgId="9" x="200" controller="ScorpionController" y="200" isleading="false" team="1" maxHp="10000" hp="10000"></sprite>-->
     </sprites>
-    <ui>
+    <ui name="界面">
         <list propertyName="buttonArrays">
             <buttons name="武器">
-                <list>
+                <list propertyName="buttons">
                     <button id="hospital_button" imgId="11" />
                     <button id="magicaltower_button" imgId="15" />
                 </list>
             </buttons>
             <buttons displayname="建筑">
-                <list>
+                <list propertyName="buttons">
                     <button id="bomb_button" imgId="6"/>
                 </list>
             </buttons>

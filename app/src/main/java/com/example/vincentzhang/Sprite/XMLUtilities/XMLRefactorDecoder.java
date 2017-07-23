@@ -69,7 +69,7 @@ public class XMLRefactorDecoder {
 
     static public ArrayList decode(NodeList xmlNodeList, Class clz) {
         ArrayList retArray = new ArrayList();
-        for (int i = 0; i <= xmlNodeList.getLength(); i++) {
+        for (int i = 0; i < xmlNodeList.getLength(); i++) {
             Node node = xmlNodeList.item(i);
             if(node.getNodeType() == Node.ELEMENT_NODE){
                 Object newObj = decode(node, clz);

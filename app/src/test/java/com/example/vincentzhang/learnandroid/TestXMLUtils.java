@@ -24,16 +24,16 @@ public class TestXMLUtils {
 
     @Test
     public void testXMLRefactor(){
-        String xml = "    <ui>\n" +
+        String xml = "    <ui name=\"界面\">\n" +
                 "        <list propertyName=\"buttonArrays\">\n" +
                 "            <buttons name=\"武器\">\n" +
-                "                <list>\n" +
+                "                <list propertyName=\"buttons\">\n" +
                 "                    <button id=\"hospital_button\" imgId=\"11\" />\n" +
                 "                    <button id=\"magicaltower_button\" imgId=\"15\" />\n" +
                 "                </list>\n" +
                 "            </buttons>\n" +
                 "            <buttons displayname=\"建筑\">\n" +
-                "                <list>\n" +
+                "                <list propertyName=\"buttons\">\n" +
                 "                    <button id=\"bomb_button\" imgId=\"6\"/>\n" +
                 "                </list>\n" +
                 "            </buttons>\n" +
@@ -50,5 +50,7 @@ public class TestXMLUtils {
         } catch (XPathExpressionException e) {
             e.printStackTrace();
         }
+
+        System.out.println("Everything good!");
     }
 }
