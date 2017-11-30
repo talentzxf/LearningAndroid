@@ -15,27 +15,27 @@ class Cube {
 
     private FloatBuffer mVertexBuffer;
     private FloatBuffer mColorBuffer;
-    private ByteBuffer  mIndexBuffer;
+    private ByteBuffer mIndexBuffer;
 
     private float vertices[] = {
             -1.0f, -1.0f, -1.0f,
             1.0f, -1.0f, -1.0f,
-            1.0f,  1.0f, -1.0f,
+            1.0f, 1.0f, -1.0f,
             -1.0f, 1.0f, -1.0f,
-            -1.0f, -1.0f,  1.0f,
-            1.0f, -1.0f,  1.0f,
-            1.0f,  1.0f,  1.0f,
-            -1.0f,  1.0f,  1.0f
+            -1.0f, -1.0f, 1.0f,
+            1.0f, -1.0f, 1.0f,
+            1.0f, 1.0f, 1.0f,
+            -1.0f, 1.0f, 1.0f
     };
     private float colors[] = {
-            0.0f,  1.0f,  0.0f,  1.0f,
-            0.0f,  1.0f,  0.0f,  1.0f,
-            1.0f,  0.5f,  0.0f,  1.0f,
-            1.0f,  0.5f,  0.0f,  1.0f,
-            1.0f,  0.0f,  0.0f,  1.0f,
-            1.0f,  0.0f,  0.0f,  1.0f,
-            0.0f,  0.0f,  1.0f,  1.0f,
-            1.0f,  0.0f,  1.0f,  1.0f
+            0.0f, 1.0f, 0.0f, 1.0f,
+            0.0f, 1.0f, 0.0f, 1.0f,
+            1.0f, 0.5f, 0.0f, 1.0f,
+            1.0f, 0.5f, 0.0f, 1.0f,
+            1.0f, 0.0f, 0.0f, 1.0f,
+            1.0f, 0.0f, 0.0f, 1.0f,
+            0.0f, 0.0f, 1.0f, 1.0f,
+            1.0f, 0.0f, 1.0f, 1.0f
     };
 
     private byte indices[] = {
@@ -48,9 +48,15 @@ class Cube {
     };
 
     private final String vertexShaderCode =
-            "attribute vec4 vPosition;" +
+                    // This matrix member variable provides a hook to manipulate
+                    // the coordinates of the objects that use this vertex shader
+                    "uniform mat4 uMVPMatrix;" +
+                    "attribute vec4 vPosition;" +
                     "void main() {" +
-                    "  gl_Position = vPosition;" +
+                    // The matrix must be included as a modifier of gl_Position.
+                    // Note that the uMVPMatrix factor *must be first* in order
+                    // for the matrix multiplication product to be correct.
+                    "  gl_Position = uMVPMatrix * vPosition;" +
                     "}";
 
     private final String fragmentShaderCode =
@@ -61,25 +67,15 @@ class Cube {
                     "}";
 
     private int program;
-
-    public static int loadShader(int type, String shaderCode){
-
-        // 创建一个vertex shader类型(GLES20.GL_VERTEX_SHADER)
-        // 或fragment shader类型(GLES20.GL_FRAGMENT_SHADER)
-        int shader = GLES20.glCreateShader(type);
-
-        // 将源码添加到shader并编译之
-        GLES20.glShaderSource(shader, shaderCode);
-        GLES20.glCompileShader(shader);
-
-        return shader;
-    }
+    private int mPositionHandle;
+    private int mColorHandle;
+    private int mMVPMatrixHandle;
+    private int COORDS_PER_VERTEX = 3;
+    private final int vertexStride = COORDS_PER_VERTEX * 4; // 4 bytes per vertex
+    float color[] = {0.63671875f, 0.76953125f, 0.22265625f, 0.0f};
+    private final int vertexCount = vertices.length / COORDS_PER_VERTEX;
 
     public Cube() {
-        program = GLES20.glCreateProgram();
-        GLES20.glAttachShader(program, loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode));
-        GLES20.glAttachShader(program, loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode));
-        GLES20.glLinkProgram(program);
 
         ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
         byteBuf.order(ByteOrder.nativeOrder());
@@ -96,24 +92,51 @@ class Cube {
         mIndexBuffer = ByteBuffer.allocateDirect(indices.length);
         mIndexBuffer.put(indices);
         mIndexBuffer.position(0);
+
+        // prepare shaders and OpenGL program
+        int vertexShader = OpenGLRenderer.loadShader(
+                GLES20.GL_VERTEX_SHADER, vertexShaderCode);
+        int fragmentShader = OpenGLRenderer.loadShader(
+                GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode);
+        program = GLES20.glCreateProgram();             // create empty OpenGL Program
+        GLES20.glAttachShader(program, vertexShader);   // add the vertex shader to program
+        GLES20.glAttachShader(program, fragmentShader); // add the fragment shader to program
+        GLES20.glLinkProgram(program);                  // create OpenGL program executables
     }
 
-    public void draw(GL10 gl) {
+    public void draw(float[] mvpMatrix) {
         GLES20.glUseProgram(program);
 
-        gl.glFrontFace(GL10.GL_CW);
-        // gl.glShadeModel(GL10.GL_FLAT);
+        // get handle to vertex shader's vPosition member
+        mPositionHandle = GLES20.glGetAttribLocation(program, "vPosition");
+        OpenGLRenderer.checkGlError("glGetUniformLocation");
 
-        gl.glVertexPointer(3, GL10.GL_FLOAT, 0, mVertexBuffer);
-        gl.glColorPointer(4, GL10.GL_FLOAT, 0, mColorBuffer);
+        // Enable a handle to the triangle vertices
+        GLES20.glEnableVertexAttribArray(mPositionHandle);
+        // Prepare the triangle coordinate data
+        GLES20.glVertexAttribPointer(
+                mPositionHandle, COORDS_PER_VERTEX,
+                GLES20.GL_FLOAT, false,
+                vertexStride, mVertexBuffer);
 
-        gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-        gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
+        // get handle to fragment shader's vColor member
+        mColorHandle = GLES20.glGetUniformLocation(program, "vColor");
 
-        gl.glDrawElements(GL10.GL_TRIANGLES, 36, GL10.GL_UNSIGNED_BYTE,
-                mIndexBuffer);
+        // Set color for drawing the triangle
+        GLES20.glUniform4fv(mColorHandle, 1, color, 0);
 
-        gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
-        gl.glDisableClientState(GL10.GL_COLOR_ARRAY);
+        // get handle to shape's transformation matrix
+        mMVPMatrixHandle = GLES20.glGetUniformLocation(program, "uMVPMatrix");
+        OpenGLRenderer.checkGlError("glGetUniformLocation");
+
+        // Apply the projection and view transformation
+        GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mvpMatrix, 0);
+        OpenGLRenderer.checkGlError("glUniformMatrix4fv");
+
+        // Draw the triangle
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertexCount);
+
+        // Disable vertex array
+        GLES20.glDisableVertexAttribArray(mPositionHandle);
     }
 }
