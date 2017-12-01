@@ -1,6 +1,9 @@
-package com.example.vincentzhang.learnandroid;
+package com.example.vincentzhang.learnandroid.shapes;
 
 import android.opengl.GLES20;
+import android.util.Log;
+
+import com.example.vincentzhang.learnandroid.OpenGLRenderer;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -11,7 +14,7 @@ import javax.microedition.khronos.opengles.GL10;
 /**
  * Created by VincentZhang on 3/30/2017.
  */
-class Cube {
+public class Cube {
 
     private FloatBuffer mVertexBuffer;
     private FloatBuffer mColorBuffer;
@@ -48,22 +51,25 @@ class Cube {
     };
 
     private final String vertexShaderCode =
-                    // This matrix member variable provides a hook to manipulate
-                    // the coordinates of the objects that use this vertex shader
-                    "uniform mat4 uMVPMatrix;" +
+            // This matrix member variable provides a hook to manipulate
+            // the coordinates of the objects that use this vertex shader
+            "uniform mat4 uMVPMatrix;" +
                     "attribute vec4 vPosition;" +
+                    "attribute vec4 a_color;" +
+                    "varying vec4 v_color;"+
                     "void main() {" +
                     // The matrix must be included as a modifier of gl_Position.
                     // Note that the uMVPMatrix factor *must be first* in order
                     // for the matrix multiplication product to be correct.
                     "  gl_Position = uMVPMatrix * vPosition;" +
+                    " v_color = a_color;" +
                     "}";
 
     private final String fragmentShaderCode =
             "precision mediump float;" +
-                    "uniform vec4 vColor;" +
+                    "varying vec4 v_color;"+
                     "void main() {" +
-                    "  gl_FragColor = vColor;" +
+                    "   gl_FragColor = v_color;" +
                     "}";
 
     private int program;
@@ -72,7 +78,6 @@ class Cube {
     private int mMVPMatrixHandle;
     private int COORDS_PER_VERTEX = 3;
     private final int vertexStride = COORDS_PER_VERTEX * 4; // 4 bytes per vertex
-    float color[] = {0.63671875f, 0.76953125f, 0.22265625f, 0.0f};
     private final int vertexCount = vertices.length / COORDS_PER_VERTEX;
 
     public Cube() {
@@ -99,9 +104,16 @@ class Cube {
         int fragmentShader = OpenGLRenderer.loadShader(
                 GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode);
         program = GLES20.glCreateProgram();             // create empty OpenGL Program
+        OpenGLRenderer.checkGlError("glGetAttribLocation");
         GLES20.glAttachShader(program, vertexShader);   // add the vertex shader to program
+        OpenGLRenderer.checkGlError("glGetAttribLocation");
         GLES20.glAttachShader(program, fragmentShader); // add the fragment shader to program
+        OpenGLRenderer.checkGlError("glGetAttribLocation");
         GLES20.glLinkProgram(program);                  // create OpenGL program executables
+        OpenGLRenderer.checkGlError("glGetAttribLocation");
+        Log.i("OPENGL",GLES20.glGetShaderInfoLog(vertexShader));
+        Log.i("OPENGL",GLES20.glGetShaderInfoLog(fragmentShader));
+        Log.i("OPENGL",GLES20.glGetProgramInfoLog(program));
     }
 
     public void draw(float[] mvpMatrix) {
@@ -109,7 +121,10 @@ class Cube {
 
         // get handle to vertex shader's vPosition member
         mPositionHandle = GLES20.glGetAttribLocation(program, "vPosition");
-        OpenGLRenderer.checkGlError("glGetUniformLocation");
+        OpenGLRenderer.checkGlError("glGetAttribLocation");
+
+        mColorHandle = GLES20.glGetAttribLocation(program, "a_color");
+        OpenGLRenderer.checkGlError("glGetAttribLocation");
 
         // Enable a handle to the triangle vertices
         GLES20.glEnableVertexAttribArray(mPositionHandle);
@@ -118,12 +133,12 @@ class Cube {
                 mPositionHandle, COORDS_PER_VERTEX,
                 GLES20.GL_FLOAT, false,
                 vertexStride, mVertexBuffer);
+        OpenGLRenderer.checkGlError("glGetUniformLocation");
 
-        // get handle to fragment shader's vColor member
-        mColorHandle = GLES20.glGetUniformLocation(program, "vColor");
-
-        // Set color for drawing the triangle
-        GLES20.glUniform4fv(mColorHandle, 1, color, 0);
+        GLES20.glVertexAttribPointer(mColorHandle, 4, GLES20.GL_FLOAT, false, vertexStride, mColorBuffer);
+        OpenGLRenderer.checkGlError("glGetUniformLocation");
+        GLES20.glEnableVertexAttribArray(mColorHandle);
+        OpenGLRenderer.checkGlError("glGetUniformLocation");
 
         // get handle to shape's transformation matrix
         mMVPMatrixHandle = GLES20.glGetUniformLocation(program, "uMVPMatrix");
@@ -134,9 +149,11 @@ class Cube {
         OpenGLRenderer.checkGlError("glUniformMatrix4fv");
 
         // Draw the triangle
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertexCount);
+        // GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertexCount);
+        GLES20.glDrawElements(GLES20.GL_TRIANGLES, vertexCount, GLES20.GL_UNSIGNED_BYTE, mIndexBuffer);
 
         // Disable vertex array
         GLES20.glDisableVertexAttribArray(mPositionHandle);
+        GLES20.glDisableVertexAttribArray(mColorHandle);
     }
 }

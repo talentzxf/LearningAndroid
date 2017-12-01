@@ -2,15 +2,17 @@ package com.example.vincentzhang.learnandroid;
 
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
-import android.opengl.GLU;
 import android.opengl.Matrix;
 import android.util.Log;
 
+import com.example.vincentzhang.learnandroid.shapes.Cube;
 import com.example.vincentzhang.learnandroid.shapes.Square;
 import com.example.vincentzhang.learnandroid.shapes.Triangle;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
+
+import static android.opengl.GLU.gluErrorString;
 
 /**
  * Created by VincentZhang on 3/30/2017.
@@ -51,7 +53,7 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
         // Set the camera position (View matrix)
-        Matrix.setLookAtM(mViewMatrix, 0, 0, 0, -3, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
+        Matrix.setLookAtM(mViewMatrix, 0, 0, 0, -7, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
 
         // Calculate the projection and view transformation
         Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
@@ -75,6 +77,10 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
 
         // Draw triangle
         mTriangle.draw(scratch);
+        float[] sizeMatrix = new float[16];
+        Matrix.setIdentityM(sizeMatrix,0);
+        Matrix.scaleM(sizeMatrix, 0, 0.5f,0.5f,0.5f);
+        Matrix.multiplyMM(scratch,0,scratch,0,sizeMatrix,0);
         mCube.draw(scratch);
     }
 
@@ -88,8 +94,7 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
 
         // this projection matrix is applied to object coordinates
         // in the onDrawFrame() method
-        Matrix.frustumM(mProjectionMatrix, 0, -ratio, ratio, -1, 1, 3, 7);
-
+        Matrix.frustumM(mProjectionMatrix, 0, -ratio, ratio, -1, 1, 3, 20);
     }
 
     /**
@@ -130,8 +135,8 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
     public static void checkGlError(String glOperation) {
         int error;
         while ((error = GLES20.glGetError()) != GLES20.GL_NO_ERROR) {
-            Log.e(TAG, glOperation + ": glError " + error);
-            throw new RuntimeException(glOperation + ": glError " + error);
+            Log.e(TAG, glOperation + ": glError " + error + " Error String:" + gluErrorString(error));
+            throw new RuntimeException(glOperation + ": glError " + error + " Error String:" + gluErrorString(error));
         }
     }
 
