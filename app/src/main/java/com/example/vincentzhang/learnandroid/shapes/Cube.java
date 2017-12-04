@@ -150,7 +150,7 @@ public class Cube {
 
         // Draw the triangle
         // GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertexCount);
-        GLES20.glDrawElements(GLES20.GL_TRIANGLES, vertexCount, GLES20.GL_UNSIGNED_BYTE, mIndexBuffer);
+        GLES20.glDrawElements(GLES20.GL_TRIANGLES, indices.length, GLES20.GL_UNSIGNED_BYTE, mIndexBuffer);
 
         // Disable vertex array
         GLES20.glDisableVertexAttribArray(mPositionHandle);

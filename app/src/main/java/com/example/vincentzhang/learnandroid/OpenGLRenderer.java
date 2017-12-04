@@ -24,7 +24,7 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
 
     private static final String TAG = "MyGLRenderer";
     private Triangle mTriangle;
-    private Square   mSquare;
+    private Square mSquare;
 
     // mMVPMatrix is an abbreviation for "Model View Projection Matrix"
     private final float[] mMVPMatrix = new float[16];
@@ -32,7 +32,10 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
     private final float[] mViewMatrix = new float[16];
     private final float[] mRotationMatrix = new float[16];
 
-    private float mAngle;
+    // Rough version of the object observer
+    // TODO: Make it more professional;
+    private float mAngleX;
+    private float mAngleY;
 
     @Override
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
@@ -41,12 +44,16 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
         mTriangle = new Triangle();
-        mSquare   = new Square();
+        mSquare = new Square();
         mCube = new Cube();
     }
 
     @Override
     public void onDrawFrame(GL10 unused) {
+        GLES20.glEnable( GLES20.GL_DEPTH_TEST );
+        GLES20.glDepthFunc( GLES20.GL_LEQUAL );
+        GLES20.glDepthMask( true );
+
         float[] scratch = new float[16];
 
         // Draw background color
@@ -67,8 +74,11 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
         // Leave this code out when using TouchEvents.
         // long time = SystemClock.uptimeMillis() % 4000L;
         // float angle = 0.090f * ((int) time);
+        float[] rotationY = new float[16];
 
-        Matrix.setRotateM(mRotationMatrix, 0, mAngle, 0, 0, 1.0f);
+        Matrix.setRotateM(mRotationMatrix, 0, mAngleX, 0, 0, 1.0f);
+        Matrix.setRotateM(rotationY, 0, mAngleY, 1.0f, 0, 0.0f);
+        Matrix.multiplyMM(mRotationMatrix, 0, mRotationMatrix, 0, rotationY, 0);
 
         // Combine the rotation matrix with the projection and camera view
         // Note that the mMVPMatrix factor *must be first* in order
@@ -78,9 +88,9 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
         // Draw triangle
         mTriangle.draw(scratch);
         float[] sizeMatrix = new float[16];
-        Matrix.setIdentityM(sizeMatrix,0);
-        Matrix.scaleM(sizeMatrix, 0, 0.5f,0.5f,0.5f);
-        Matrix.multiplyMM(scratch,0,scratch,0,sizeMatrix,0);
+        Matrix.setIdentityM(sizeMatrix, 0);
+        Matrix.scaleM(sizeMatrix, 0, 0.5f, 0.5f, 0.5f);
+        Matrix.multiplyMM(scratch, 0, scratch, 0, sizeMatrix, 0);
         mCube.draw(scratch);
     }
 
@@ -99,15 +109,15 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
 
     /**
      * Utility method for compiling a OpenGL shader.
-     *
+     * <p>
      * <p><strong>Note:</strong> When developing shaders, use the checkGlError()
      * method to debug shader coding errors.</p>
      *
-     * @param type - Vertex or fragment shader type.
+     * @param type       - Vertex or fragment shader type.
      * @param shaderCode - String containing the shader code.
      * @return - Returns an id for the shader.
      */
-    public static int loadShader(int type, String shaderCode){
+    public static int loadShader(int type, String shaderCode) {
 
         // create a vertex shader type (GLES20.GL_VERTEX_SHADER)
         // or a fragment shader type (GLES20.GL_FRAGMENT_SHADER)
@@ -123,11 +133,11 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
     /**
      * Utility method for debugging OpenGL calls. Provide the name of the call
      * just after making it:
-     *
+     * <p>
      * <pre>
      * mColorHandle = GLES20.glGetUniformLocation(mProgram, "vColor");
      * MyGLRenderer.checkGlError("glGetUniformLocation");</pre>
-     *
+     * <p>
      * If the operation is not successful, the check throws an error.
      *
      * @param glOperation - Name of the OpenGL call to check.
@@ -140,19 +150,22 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
         }
     }
 
-    /**
-     * Returns the rotation angle of the triangle shape (mTriangle).
-     *
-     * @return - A float representing the rotation angle.
-     */
-    public float getAngle() {
-        return mAngle;
+    public float getAngleX() {
+        return mAngleX;
+    }
+
+    public void setAngleX(float angle) {
+        mAngleX = angle;
+    }
+
+    public float getAngleY() {
+        return mAngleY;
     }
 
     /**
      * Sets the rotation angle of the triangle shape (mTriangle).
      */
-    public void setAngle(float angle) {
-        mAngle = angle;
+    public void setAngleY(float angle) {
+        mAngleY = angle;
     }
 }

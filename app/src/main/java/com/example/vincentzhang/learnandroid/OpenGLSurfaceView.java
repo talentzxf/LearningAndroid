@@ -56,9 +56,13 @@ public class OpenGLSurfaceView extends GLSurfaceView {
                     dy = dy * -1;
                 }
 
-                mRenderer.setAngle(
-                        mRenderer.getAngle() +
-                                ((dx + dy) * TOUCH_SCALE_FACTOR));  // = 180.0f / 320
+                mRenderer.setAngleX(
+                        mRenderer.getAngleX() +
+                                (dx * TOUCH_SCALE_FACTOR));  // = 180.0f / 320
+
+                mRenderer.setAngleY(
+                        mRenderer.getAngleY() +
+                                (dy * TOUCH_SCALE_FACTOR));  // = 180.0f / 320
                 requestRender();
         }
 
