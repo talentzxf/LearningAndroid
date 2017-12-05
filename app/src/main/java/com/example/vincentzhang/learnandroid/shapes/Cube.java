@@ -52,7 +52,7 @@ public class Cube {
             3, 0, 1, 3, 1, 2
     };
 
-    private float lightPos[] = {10.0f, 10.0f, 10.0f, 1.0f};
+    private float lightPos[] = {3.0f, 3.0f, -3.0f, 1.0f};
 
     private final String vertexShaderCode =
             // This matrix member variable provides a hook to manipulate
@@ -60,8 +60,8 @@ public class Cube {
             "uniform mat4 projection;" +
                     "uniform mat4 model;" +
                     "uniform mat4 view;" +
+                    "attribute vec4 vColor;" +
                     "attribute vec4 vPosition;" +
-                    "attribute vec4 a_color;" +
                     "varying vec4 v_color;" +
                     "varying vec4 frag_pos;" +
                     "varying vec4 normal;" +
@@ -72,7 +72,7 @@ public class Cube {
                     "  gl_Position = projection * view * model * vPosition;" +
                     " frag_pos = model * vPosition;" +
                     " normal = vPosition;"+
-                    "v_color = a_color;"+
+                    "v_color = vColor;"+
                     "}";
 
     private final String fragmentShaderCode =
@@ -82,13 +82,13 @@ public class Cube {
                     "varying vec4 v_color;" +
                     "uniform vec4 lightPos;" +
                     "void main() {" +
-                    " float ambientStrength = 0.1;" +
+                    " float ambientStrength = 0.2;" +
                     " vec3 lightColor = vec3(0.5,0.5,0.5);" +
                     "vec3 ambient = ambientStrength * lightColor;"+
                     "vec3 norm = normalize(normal.xyz);" +
                     "vec3 lightDir = normalize(lightPos.xyz - frag_pos.xyz);" +
                     "float diff = max(dot(norm,lightDir),0.0);"+
-                    "vec3 diffuse = diff * lightColor;" +
+                    "vec3 diffuse = diff * lightColor * v_color.xyz;" +
                     "vec3 result = (ambient + diffuse).xyz; "+
                     "gl_FragColor = vec4(result,1.0);"+
                     "}";
@@ -149,7 +149,7 @@ public class Cube {
         mPositionHandle = GLES20.glGetAttribLocation(program, "vPosition");
         OpenGLRenderer.checkGlError("glGetAttribLocation");
 
-        mColorHandle = GLES20.glGetAttribLocation(program, "a_color");
+        mColorHandle = GLES20.glGetAttribLocation(program, "vColor");
         OpenGLRenderer.checkGlError("glGetAttribLocation");
 
         // Enable a handle to the triangle vertices
