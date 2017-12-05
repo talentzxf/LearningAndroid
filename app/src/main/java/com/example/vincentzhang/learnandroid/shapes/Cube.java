@@ -31,13 +31,13 @@ public class Cube {
             -1.0f, 1.0f, 1.0f
     };
     private float colors[] = {
-            0.0f, 1.0f, 0.0f, 1.0f,
-            0.0f, 1.0f, 0.0f, 1.0f,
-            1.0f, 0.5f, 0.0f, 1.0f,
-            1.0f, 0.5f, 0.0f, 1.0f,
             1.0f, 0.0f, 0.0f, 1.0f,
             1.0f, 0.0f, 0.0f, 1.0f,
-            0.0f, 0.0f, 1.0f, 1.0f,
+            1.0f, 0.0f, 0.0f, 1.0f,
+            1.0f, 0.0f, 0.0f, 1.0f,
+            1.0f, 0.0f, 0.0f, 1.0f,
+            1.0f, 0.0f, 0.0f, 1.0f,
+            1.0f, 0.0f, 1.0f, 1.0f,
             1.0f, 0.0f, 1.0f, 1.0f
     };
 
@@ -54,6 +54,7 @@ public class Cube {
             // This matrix member variable provides a hook to manipulate
             // the coordinates of the objects that use this vertex shader
             "uniform mat4 uMVPMatrix;" +
+                    "uniform vec3 lightPosition;"+
                     "attribute vec4 vPosition;" +
                     "attribute vec4 a_color;" +
                     "varying vec4 v_color;"+
