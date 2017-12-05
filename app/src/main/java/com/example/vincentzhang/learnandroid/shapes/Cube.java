@@ -1,6 +1,7 @@
 package com.example.vincentzhang.learnandroid.shapes;
 
 import android.opengl.GLES20;
+import android.opengl.Matrix;
 import android.util.Log;
 
 import com.example.vincentzhang.learnandroid.OpenGLRenderer;
@@ -30,15 +31,16 @@ public class Cube {
             1.0f, 1.0f, 1.0f,
             -1.0f, 1.0f, 1.0f
     };
+
     private float colors[] = {
-            0.0f, 1.0f, 0.0f, 1.0f,
-            0.0f, 1.0f, 0.0f, 1.0f,
-            1.0f, 0.5f, 0.0f, 1.0f,
-            1.0f, 0.5f, 0.0f, 1.0f,
             1.0f, 0.0f, 0.0f, 1.0f,
             1.0f, 0.0f, 0.0f, 1.0f,
-            0.0f, 0.0f, 1.0f, 1.0f,
-            1.0f, 0.0f, 1.0f, 1.0f
+            1.0f, 0.0f, 0.0f, 1.0f,
+            1.0f, 0.0f, 0.0f, 1.0f,
+            1.0f, 0.0f, 0.0f, 1.0f,
+            1.0f, 0.0f, 0.0f, 1.0f,
+            1.0f, 0.0f, 0.0f, 1.0f,
+            1.0f, 0.0f, 0.0f, 1.0f
     };
 
     private byte indices[] = {
@@ -50,32 +52,54 @@ public class Cube {
             3, 0, 1, 3, 1, 2
     };
 
+    private float lightPos[] = {10.0f, 10.0f, 10.0f, 1.0f};
+
     private final String vertexShaderCode =
             // This matrix member variable provides a hook to manipulate
             // the coordinates of the objects that use this vertex shader
-            "uniform mat4 uMVPMatrix;" +
+            "uniform mat4 projection;" +
+                    "uniform mat4 model;" +
+                    "uniform mat4 view;" +
                     "attribute vec4 vPosition;" +
                     "attribute vec4 a_color;" +
-                    "varying vec4 v_color;"+
+                    "varying vec4 v_color;" +
+                    "varying vec4 frag_pos;" +
+                    "varying vec4 normal;" +
                     "void main() {" +
                     // The matrix must be included as a modifier of gl_Position.
                     // Note that the uMVPMatrix factor *must be first* in order
                     // for the matrix multiplication product to be correct.
-                    "  gl_Position = uMVPMatrix * vPosition;" +
-                    " v_color = a_color;" +
+                    "  gl_Position = projection * view * model * vPosition;" +
+                    " frag_pos = model * vPosition;" +
+                    " normal = vPosition;"+
+                    "v_color = a_color;"+
                     "}";
 
     private final String fragmentShaderCode =
             "precision mediump float;" +
-                    "varying vec4 v_color;"+
+                    "varying vec4 frag_pos;" +
+                    "varying vec4 normal;" +
+                    "varying vec4 v_color;" +
+                    "uniform vec4 lightPos;" +
                     "void main() {" +
-                    "   gl_FragColor = v_color;" +
+                    " float ambientStrength = 0.1;" +
+                    " vec3 lightColor = vec3(0.5,0.5,0.5);" +
+                    "vec3 ambient = ambientStrength * lightColor;"+
+                    "vec3 norm = normalize(normal.xyz);" +
+                    "vec3 lightDir = normalize(lightPos.xyz - frag_pos.xyz);" +
+                    "float diff = max(dot(norm,lightDir),0.0);"+
+                    "vec3 diffuse = diff * lightColor;" +
+                    "vec3 result = (ambient + diffuse).xyz; "+
+                    "gl_FragColor = vec4(result,1.0);"+
                     "}";
 
     private int program;
     private int mPositionHandle;
     private int mColorHandle;
-    private int mMVPMatrixHandle;
+    private int mModelMatrix;
+    private int mViewMatrix;
+    private int mProjectionMatrix;
+    private int mLightPos;
     private int COORDS_PER_VERTEX = 3;
     private final int vertexStride = COORDS_PER_VERTEX * 4; // 4 bytes per vertex
     private final int vertexCount = vertices.length / COORDS_PER_VERTEX;
@@ -111,12 +135,14 @@ public class Cube {
         OpenGLRenderer.checkGlError("glGetAttribLocation");
         GLES20.glLinkProgram(program);                  // create OpenGL program executables
         OpenGLRenderer.checkGlError("glGetAttribLocation");
-        Log.i("OPENGL",GLES20.glGetShaderInfoLog(vertexShader));
-        Log.i("OPENGL",GLES20.glGetShaderInfoLog(fragmentShader));
-        Log.i("OPENGL",GLES20.glGetProgramInfoLog(program));
+        Log.i("OPENGL", GLES20.glGetShaderInfoLog(vertexShader));
+        Log.i("OPENGL", GLES20.glGetShaderInfoLog(fragmentShader));
+        Log.i("OPENGL", GLES20.glGetProgramInfoLog(program));
     }
 
-    public void draw(float[] mvpMatrix) {
+    // mvMatrix -- model view matrix
+    // projectMatrix -- projection matrix
+    public void draw(float[] model, float[] view, float[] projection) {
         GLES20.glUseProgram(program);
 
         // get handle to vertex shader's vPosition member
@@ -135,17 +161,34 @@ public class Cube {
                 vertexStride, mVertexBuffer);
         OpenGLRenderer.checkGlError("glGetUniformLocation");
 
-        GLES20.glVertexAttribPointer(mColorHandle, 4, GLES20.GL_FLOAT, false, vertexStride, mColorBuffer);
+        GLES20.glVertexAttribPointer(mColorHandle, 4, GLES20.GL_FLOAT, false, 16, mColorBuffer);
         OpenGLRenderer.checkGlError("glGetUniformLocation");
         GLES20.glEnableVertexAttribArray(mColorHandle);
         OpenGLRenderer.checkGlError("glGetUniformLocation");
 
         // get handle to shape's transformation matrix
-        mMVPMatrixHandle = GLES20.glGetUniformLocation(program, "uMVPMatrix");
+        mModelMatrix = GLES20.glGetUniformLocation(program, "model");
         OpenGLRenderer.checkGlError("glGetUniformLocation");
 
+        mViewMatrix = GLES20.glGetUniformLocation(program, "view");
+        OpenGLRenderer.checkGlError("glGetUniformLocation");
+
+        mProjectionMatrix = GLES20.glGetUniformLocation(program, "projection");
+        OpenGLRenderer.checkGlError("glGetUniformLocation");
+
+        // get handle to light's position
+        mLightPos = GLES20.glGetUniformLocation(program, "lightPos");
+        OpenGLRenderer.checkGlError("glGetUniformLocation");
+        GLES20.glUniform4fv(mLightPos, 1, this.lightPos, 0);
+
         // Apply the projection and view transformation
-        GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mvpMatrix, 0);
+        GLES20.glUniformMatrix4fv(mModelMatrix, 1, false, model, 0);
+        OpenGLRenderer.checkGlError("glUniformMatrix4fv");
+
+        GLES20.glUniformMatrix4fv(mViewMatrix, 1, false, view, 0);
+        OpenGLRenderer.checkGlError("glUniformMatrix4fv");
+
+        GLES20.glUniformMatrix4fv(mProjectionMatrix, 1, false, projection, 0);
         OpenGLRenderer.checkGlError("glUniformMatrix4fv");
 
         // Draw the triangle

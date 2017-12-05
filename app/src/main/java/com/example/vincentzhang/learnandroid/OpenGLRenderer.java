@@ -27,10 +27,9 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
     private Square mSquare;
 
     // mMVPMatrix is an abbreviation for "Model View Projection Matrix"
-    private final float[] mMVPMatrix = new float[16];
+    private final float[] mModelMatrix = new float[16];
     private final float[] mProjectionMatrix = new float[16];
     private final float[] mViewMatrix = new float[16];
-    private final float[] mRotationMatrix = new float[16];
 
     // Rough version of the object observer
     // TODO: Make it more professional;
@@ -50,9 +49,9 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onDrawFrame(GL10 unused) {
-        GLES20.glEnable( GLES20.GL_DEPTH_TEST );
-        GLES20.glDepthFunc( GLES20.GL_LEQUAL );
-        GLES20.glDepthMask( true );
+        GLES20.glEnable(GLES20.GL_DEPTH_TEST);
+        GLES20.glDepthFunc(GLES20.GL_LEQUAL);
+        GLES20.glDepthMask(true);
 
         float[] scratch = new float[16];
 
@@ -62,36 +61,22 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
         // Set the camera position (View matrix)
         Matrix.setLookAtM(mViewMatrix, 0, 0, 0, -7, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
 
-        // Calculate the projection and view transformation
-        Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
-
-        // Draw square
-        mSquare.draw(mMVPMatrix);
-
-        // Create a rotation for the triangle
-
-        // Use the following code to generate constant rotation.
-        // Leave this code out when using TouchEvents.
-        // long time = SystemClock.uptimeMillis() % 4000L;
-        // float angle = 0.090f * ((int) time);
-        float[] rotationY = new float[16];
-
-        Matrix.setRotateM(mRotationMatrix, 0, mAngleX, 0, 0, 1.0f);
-        Matrix.setRotateM(rotationY, 0, mAngleY, 1.0f, 0, 0.0f);
-        Matrix.multiplyMM(mRotationMatrix, 0, mRotationMatrix, 0, rotationY, 0);
-
-        // Combine the rotation matrix with the projection and camera view
-        // Note that the mMVPMatrix factor *must be first* in order
-        // for the matrix multiplication product to be correct.
-        Matrix.multiplyMM(scratch, 0, mMVPMatrix, 0, mRotationMatrix, 0);
+        // Set model matrix
+        Matrix.setIdentityM(mModelMatrix, 0);
+        float[] rotation = new float[16];
+        Matrix.setRotateM(rotation, 0, mAngleX, 0, 0, 1.0f);
+        Matrix.multiplyMM(mModelMatrix,0,mModelMatrix,0,rotation,0);
+        Matrix.setRotateM(rotation, 0, mAngleY, 1.0f, 0, 0.0f);
+        Matrix.multiplyMM(mModelMatrix, 0, mModelMatrix, 0, rotation, 0);
 
         // Draw triangle
-        mTriangle.draw(scratch);
+        // mTriangle.draw(scratch);
         float[] sizeMatrix = new float[16];
         Matrix.setIdentityM(sizeMatrix, 0);
         Matrix.scaleM(sizeMatrix, 0, 0.5f, 0.5f, 0.5f);
-        Matrix.multiplyMM(scratch, 0, scratch, 0, sizeMatrix, 0);
-        mCube.draw(scratch);
+        Matrix.multiplyMM(mModelMatrix, 0, mModelMatrix, 0, sizeMatrix, 0);
+
+        mCube.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
     }
 
     @Override
