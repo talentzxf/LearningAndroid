@@ -5,6 +5,7 @@ import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.util.Log;
 
+import com.example.vincentzhang.learnandroid.Camera.Camera;
 import com.example.vincentzhang.learnandroid.shapes.Cube;
 import com.example.vincentzhang.learnandroid.shapes.Square;
 import com.example.vincentzhang.learnandroid.shapes.Triangle;
@@ -25,16 +26,14 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
     private static final String TAG = "MyGLRenderer";
     private Triangle mTriangle;
     private Square mSquare;
+    private Camera camera;
 
     // mMVPMatrix is an abbreviation for "Model View Projection Matrix"
     private final float[] mModelMatrix = new float[16];
     private final float[] mProjectionMatrix = new float[16];
-    private final float[] mViewMatrix = new float[16];
+    private float[] mViewMatrix;
 
-    // Rough version of the object observer
-    // TODO: Make it more professional;
-    private float mAngleX;
-    private float mAngleY;
+    private float ratio;
 
     @Override
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
@@ -45,6 +44,9 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
         mTriangle = new Triangle();
         mSquare = new Square();
         mCube = new Cube();
+        camera = new Camera();
+        camera.setPos(new float[]{0.0f,0.0f,-7.0f});
+        camera.setLookAt(new float[]{0.0f,0.0f,0.0f});
     }
 
     @Override
@@ -59,23 +61,10 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
         // Set the camera position (View matrix)
-        Matrix.setLookAtM(mViewMatrix, 0, 0, 0, -7, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
+        mViewMatrix = camera.getViewMatrix();
 
         // Set model matrix
         Matrix.setIdentityM(mModelMatrix, 0);
-        float[] rotation = new float[16];
-        Matrix.setRotateM(rotation, 0, mAngleX, 0, 0, 1.0f);
-        Matrix.multiplyMM(mModelMatrix,0,mModelMatrix,0,rotation,0);
-        Matrix.setRotateM(rotation, 0, mAngleY, 1.0f, 0, 0.0f);
-        Matrix.multiplyMM(mModelMatrix, 0, mModelMatrix, 0, rotation, 0);
-
-        // Draw triangle
-        // mTriangle.draw(scratch);
-        float[] sizeMatrix = new float[16];
-        Matrix.setIdentityM(sizeMatrix, 0);
-        Matrix.scaleM(sizeMatrix, 0, 0.5f, 0.5f, 0.5f);
-        Matrix.multiplyMM(mModelMatrix, 0, mModelMatrix, 0, sizeMatrix, 0);
-
         mCube.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
     }
 
@@ -85,11 +74,11 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
         // such as screen rotation
         GLES20.glViewport(0, 0, width, height);
 
-        float ratio = (float) width / height;
-
+        ratio = (float) width / height;
         // this projection matrix is applied to object coordinates
         // in the onDrawFrame() method
         Matrix.frustumM(mProjectionMatrix, 0, -ratio, ratio, -1, 1, 3, 20);
+        camera.setViewport(width, height);
     }
 
     /**
@@ -135,22 +124,7 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
         }
     }
 
-    public float getAngleX() {
-        return mAngleX;
-    }
-
-    public void setAngleX(float angle) {
-        mAngleX = angle;
-    }
-
-    public float getAngleY() {
-        return mAngleY;
-    }
-
-    /**
-     * Sets the rotation angle of the triangle shape (mTriangle).
-     */
-    public void setAngleY(float angle) {
-        mAngleY = angle;
+    public Camera getCamera(){
+        return camera;
     }
 }

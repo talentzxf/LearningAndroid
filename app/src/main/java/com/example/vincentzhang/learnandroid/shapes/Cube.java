@@ -39,8 +39,8 @@ public class Cube {
             1.0f, 0.0f, 0.0f, 1.0f,
             1.0f, 0.0f, 0.0f, 1.0f,
             1.0f, 0.0f, 0.0f, 1.0f,
-            1.0f, 0.0f, 1.0f, 1.0f,
-            1.0f, 0.0f, 1.0f, 1.0f
+            1.0f, 0.0f, 0.0f, 1.0f,
+            1.0f, 0.0f, 0.0f, 1.0f
     };
 
     private byte indices[] = {
@@ -71,8 +71,8 @@ public class Cube {
                     // for the matrix multiplication product to be correct.
                     "  gl_Position = projection * view * model * vPosition;" +
                     " frag_pos = model * vPosition;" +
-                    " normal = vPosition;"+
-                    "v_color = vColor;"+
+                    " normal = vPosition;" +
+                    "v_color = vColor;" +
                     "}";
 
     private final String fragmentShaderCode =
@@ -84,13 +84,13 @@ public class Cube {
                     "void main() {" +
                     " float ambientStrength = 0.2;" +
                     " vec3 lightColor = vec3(0.5,0.5,0.5);" +
-                    "vec3 ambient = ambientStrength * lightColor;"+
+                    "vec3 ambient = ambientStrength * lightColor;" +
                     "vec3 norm = normalize(normal.xyz);" +
                     "vec3 lightDir = normalize(lightPos.xyz - frag_pos.xyz);" +
-                    "float diff = max(dot(norm,lightDir),0.0);"+
+                    "float diff = max(dot(norm,lightDir),0.0);" +
                     "vec3 diffuse = diff * lightColor * v_color.xyz;" +
-                    "vec3 result = (ambient + diffuse).xyz; "+
-                    "gl_FragColor = vec4(result,1.0);"+
+                    "vec3 result = (ambient + diffuse).xyz; " +
+                    "gl_FragColor = vec4(result,1.0);" +
                     "}";
 
     private int program;
@@ -135,9 +135,13 @@ public class Cube {
         OpenGLRenderer.checkGlError("glGetAttribLocation");
         GLES20.glLinkProgram(program);                  // create OpenGL program executables
         OpenGLRenderer.checkGlError("glGetAttribLocation");
-        Log.i("OPENGL", GLES20.glGetShaderInfoLog(vertexShader));
-        Log.i("OPENGL", GLES20.glGetShaderInfoLog(fragmentShader));
-        Log.i("OPENGL", GLES20.glGetProgramInfoLog(program));
+        try {
+            Log.i("OPENGL", GLES20.glGetShaderInfoLog(vertexShader));
+            Log.i("OPENGL", GLES20.glGetShaderInfoLog(fragmentShader));
+        } catch (Exception e) {
+            Log.e("OPENGL", "Found error trying to get shader infor.");
+        }
+
     }
 
     // mvMatrix -- model view matrix
