@@ -1,6 +1,7 @@
 package com.example.vincentzhang.learnandroid;
 
 import android.app.Activity;
+import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,10 +18,19 @@ import com.example.vincentzhang.Sprite.Utilities;
  */
 
 public class OpenGLActivity extends Activity {
+    private static Activity instance = null;
+
+    public static Context getContext() {
+        if (instance == null)
+            return null;
+        return instance.getApplicationContext();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        try{
+        instance = this;
+        try {
             requestWindowFeature(Window.FEATURE_NO_TITLE);
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -28,7 +38,7 @@ public class OpenGLActivity extends Activity {
             GLSurfaceView surfaceView = new OpenGLSurfaceView(this);
             setContentView(surfaceView);
 
-        }catch(Exception e){
+        } catch (Exception e) {
             Log.e("Exception happened!", "Exception during initing main window", e);
             return;
         }

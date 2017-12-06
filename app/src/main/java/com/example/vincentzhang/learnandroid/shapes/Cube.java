@@ -1,10 +1,14 @@
 package com.example.vincentzhang.learnandroid.shapes;
 
+import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
 import android.util.Log;
 
+import com.example.vincentzhang.learnandroid.OpenGLActivity;
 import com.example.vincentzhang.learnandroid.OpenGLRenderer;
+import com.example.vincentzhang.learnandroid.R;
+import com.example.vincentzhang.learnandroid.Texture.TextureHelper;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -47,15 +51,15 @@ public class Cube {
     };
 
     private float colors[] = {
-            0.0f, 0.0f, 1.0f, 1.0f,
-            0.0f, 0.0f, 1.0f, 1.0f,
-            0.0f, 0.0f, 1.0f, 1.0f,
-            0.0f, 0.0f, 1.0f, 1.0f,
+            1.0f, 1.0f, 1.0f, 1.0f,
+            1.0f, 1.0f, 1.0f, 1.0f,
+            1.0f, 1.0f, 1.0f, 1.0f,
+            1.0f, 1.0f, 1.0f, 1.0f,
 
-            0.0f, 0.0f, 1.0f, 1.0f,
-            0.0f, 0.0f, 1.0f, 1.0f,
-            0.0f, 0.0f, 1.0f, 1.0f,
-            0.0f, 0.0f, 1.0f, 1.0f
+            1.0f, 1.0f, 1.0f, 1.0f,
+            1.0f, 1.0f, 1.0f, 1.0f,
+            1.0f, 1.0f, 1.0f, 1.0f,
+            1.0f, 1.0f, 1.0f, 1.0f
     };
 
     private byte indices[] = {
@@ -104,8 +108,9 @@ public class Cube {
                     "varying vec2 texCoord;" +
                     "uniform vec4 lightPos;" +
                     "uniform vec4 lightPos2;" +
+                    "uniform sampler2D u_Texture;" +    // The input texture.
                     "void main() {" +
-                    " float ambientStrength = 0.2;" +
+                    " float ambientStrength = 0.3;" +
                     " vec3 lightColor = vec3(1.0,1.0,1.0);" +
                     "vec3 ambient = ambientStrength * lightColor;" +
                     "vec3 norm = normalize(normal.xyz);" +
@@ -113,10 +118,10 @@ public class Cube {
                     "vec3 lightDir2 = normalize(lightPos2.xyz-frag_pos.xyz);" +
                     "float diff = max(dot(norm,lightDir),0.0);" +
                     "float diff2 = max(dot(norm, lightDir2),0.0);" +
-                    "vec3 diffuse = diff * lightColor * v_color.xyz;" +
-                    "vec3 result = (ambient + diffuse).xyz; " +
+                    "vec3 diffuse = diff * lightColor * v_color.xyz ;" +
+                    "vec3 result = (ambient + diffuse).xyz* texture2D(u_Texture, texCoord).xyz; " +
                     "if(texCoord[0] < 0.6 && texCoord[0] > 0.4 && texCoord[1]<0.6 && texCoord[1]>0.4){" +
-                    " result.r = 1.0;" +
+                    " result *= 2.0;" +
                     "}" +
                     "gl_FragColor = vec4(result,1.0);" +
                     "}";
@@ -128,6 +133,8 @@ public class Cube {
     private int mPositionHandle;
     private int mColorHandle;
     private int mTexCoordHandle;
+    private int mTextureUniformHandle;
+    private int mTextureDataHandle;
     private int mModelMatrix;
     private int mViewMatrix;
     private int mProjectionMatrix;
@@ -159,6 +166,8 @@ public class Cube {
         mTextureBuffer = byteBuf.asFloatBuffer();
         mTextureBuffer.put(texCoords);
         mTextureBuffer.position(0);
+
+        mTextureDataHandle = TextureHelper.loadTexture(OpenGLActivity.getContext(), R.drawable.imooc);
 
         // prepare shaders and OpenGL program
         int vertexShader = OpenGLRenderer.loadShader(
@@ -196,6 +205,12 @@ public class Cube {
 
         mTexCoordHandle = GLES20.glGetAttribLocation(program, "vTexCoord");
         OpenGLRenderer.checkGlError("glGetAttribLocation");
+
+        mTextureUniformHandle = GLES20.glGetUniformLocation(program, "u_Texture");
+
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextureDataHandle);
+        GLES20.glUniform1i(mTextureUniformHandle, 0);
 
         // Enable a handle to the triangle vertices
         GLES20.glEnableVertexAttribArray(mPositionHandle);
