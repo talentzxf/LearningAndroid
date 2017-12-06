@@ -1,8 +1,6 @@
 package com.example.vincentzhang.learnandroid.shapes;
 
-import android.content.Context;
 import android.opengl.GLES20;
-import android.opengl.Matrix;
 import android.util.Log;
 
 import com.example.vincentzhang.learnandroid.OpenGLActivity;
@@ -13,8 +11,6 @@ import com.example.vincentzhang.learnandroid.Texture.TextureHelper;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
-
-import javax.microedition.khronos.opengles.GL10;
 
 /**
  * Created by VincentZhang on 3/30/2017.
@@ -109,20 +105,20 @@ public class Cube {
                     "uniform vec4 lightPos;" +
                     "uniform vec4 lightPos2;" +
                     "uniform sampler2D u_Texture;" +    // The input texture.
+                    "const float dimp_radius = 0.1;" +
                     "void main() {" +
                     " float ambientStrength = 0.3;" +
                     " vec3 lightColor = vec3(1.0,1.0,1.0);" +
                     "vec3 ambient = ambientStrength * lightColor;" +
                     "vec3 norm = normalize(normal.xyz);" +
+                    "norm = normalize(norm + 2.0*texture2D(u_Texture, texCoord).xyz -1.0);" +
                     "vec3 lightDir = normalize(lightPos.xyz - frag_pos.xyz);" +
                     "vec3 lightDir2 = normalize(lightPos2.xyz-frag_pos.xyz);" +
                     "float diff = max(dot(norm,lightDir),0.0);" +
                     "float diff2 = max(dot(norm, lightDir2),0.0);" +
                     "vec3 diffuse = diff * lightColor * v_color.xyz ;" +
-                    "vec3 result = (ambient + diffuse).xyz* texture2D(u_Texture, texCoord).xyz; " +
-                    "if(texCoord[0] < 0.6 && texCoord[0] > 0.4 && texCoord[1]<0.6 && texCoord[1]>0.4){" +
-                    " result *= 2.0;" +
-                    "}" +
+                    "vec3 result = (ambient + diffuse).xyz; " + //* texture2D(u_Texture, texCoord).xyz; " +
+
                     "gl_FragColor = vec4(result,1.0);" +
                     "}";
 
@@ -167,7 +163,7 @@ public class Cube {
         mTextureBuffer.put(texCoords);
         mTextureBuffer.position(0);
 
-        mTextureDataHandle = TextureHelper.loadTexture(OpenGLActivity.getContext(), R.drawable.imooc);
+        mTextureDataHandle = TextureHelper.loadTexture(OpenGLActivity.getContext(), R.drawable.bumpmap);
 
         // prepare shaders and OpenGL program
         int vertexShader = OpenGLRenderer.loadShader(
