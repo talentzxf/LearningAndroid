@@ -111,13 +111,13 @@ public class Cube {
                     " vec3 lightColor = vec3(1.0,1.0,1.0);" +
                     "vec3 ambient = ambientStrength * lightColor;" +
                     "vec3 norm = normalize(normal.xyz);" +
-                    "norm = normalize(norm + 2.0*texture2D(u_Texture, texCoord).xyz -1.0);" +
+                    // "norm = normalize(norm + 2.0*texture2D(u_Texture, texCoord).xyz -1.0);" +
                     "vec3 lightDir = normalize(lightPos.xyz - frag_pos.xyz);" +
                     "vec3 lightDir2 = normalize(lightPos2.xyz-frag_pos.xyz);" +
                     "float diff = max(dot(norm,lightDir),0.0);" +
                     "float diff2 = max(dot(norm, lightDir2),0.0);" +
                     "vec3 diffuse = diff * lightColor * v_color.xyz ;" +
-                    "vec3 result = (ambient + diffuse).xyz; " + //* texture2D(u_Texture, texCoord).xyz; " +
+                    "vec3 result = (ambient + diffuse).xyz * texture2D(u_Texture, texCoord).xyz; " +
 
                     "gl_FragColor = vec4(result,1.0);" +
                     "}";
@@ -163,7 +163,7 @@ public class Cube {
         mTextureBuffer.put(texCoords);
         mTextureBuffer.position(0);
 
-        mTextureDataHandle = TextureHelper.loadTexture(OpenGLActivity.getContext(), R.drawable.bumpmap);
+        mTextureDataHandle = TextureHelper.loadTexture(OpenGLActivity.getContext(), R.drawable.imooc);
 
         // prepare shaders and OpenGL program
         int vertexShader = OpenGLRenderer.loadShader(
