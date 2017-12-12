@@ -274,7 +274,8 @@ public class Cube {
                     "vec3 diffuse = diff * lightColor * v_color.xyz ;" +
                     // "vec3 result = (ambient + diffuse).xyz * texture2D(u_Texture, texCoord).xyz; " +
                     "float freq = 10.0;" +
-                    "float t = 6.28 * texCoord.x*texCoord.y;" +
+                    // "float t = 6.28 * ((texCoord.x - 0.5)*(texCoord.x-0.5)+(texCoord.y - 0.5)*(texCoord.y-0.5));" +
+                    "float t = 6.28 * texCoord.x;" +
                     "t += turbulence(vec3(texCoord.xy,1.0), 4);" +
                     "t=sin(t);" +
                     "vec3 result = (ambient + diffuse).xyz * marble_color(sin(freq*t))*vec3(1, 0.776, 0.294);" +
