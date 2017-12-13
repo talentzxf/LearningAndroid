@@ -17,7 +17,6 @@ public class Min3DLoadObjActivity extends RendererActivity {
 
     @Override
     public void initScene() {
-
         scene.lights().add(new Light());
         Log.i("Load obj"," Begin to load obj!");
         IParser parser = Parser.createParser(Parser.Type.OBJ,
