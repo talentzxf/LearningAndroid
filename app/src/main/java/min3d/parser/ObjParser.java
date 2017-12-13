@@ -181,7 +181,7 @@ public class ObjParser extends AParser implements IParser {
 
 		try {
 			while ((line = buffer.readLine()) != null) {
-				String[] parts = line.split(" ");
+				String[] parts = line.split("\\s+");
 				if (parts.length == 0)
 					continue;
 				String type = parts[0];
@@ -193,7 +193,16 @@ public class ObjParser extends AParser implements IParser {
 								currentMaterial));
 					}
 				} else if(type.equals(DIFFUSE_COLOR) && !type.equals(DIFFUSE_TEX_MAP)) {
-					Color4 diffuseColor = new Color4(Float.parseFloat(parts[1]) * 255.0f, Float.parseFloat(parts[2]) * 255.0f, Float.parseFloat(parts[3]) * 255.0f, 255.0f);
+					Color4 diffuseColor = new Color4(255.0f, 255.0f, 255.0f, 255.0f);
+					try{
+						diffuseColor = new Color4(Float.parseFloat(parts[1]) * 255.0f,
+								Float.parseFloat(parts[2]) * 255.0f,
+								Float.parseFloat(parts[3]) * 255.0f,
+								255.0f);
+					}catch(NumberFormatException e){
+						Log.e("ERROR", "Empty string");
+					}
+
 					materialMap.get(currentMaterial).diffuseColor = diffuseColor;
 				} else if (type.equals(DIFFUSE_TEX_MAP)) {
 					if (parts.length > 1) {
@@ -251,11 +260,11 @@ public class ObjParser extends AParser implements IParser {
 					subParts = new StringTokenizer(parts.nextToken(), "/");
 
 				int index = i - 1;
-				v[index] = (short) (Short.parseShort(subParts.nextToken()) - 1);
+				v[index] = (int) (Integer.parseInt(subParts.nextToken()) - 1);
 				if (hasuv)
-					uv[index] = (short) (Short.parseShort(subParts.nextToken()) - 1);
+					uv[index] = (int) (Integer.parseInt(subParts.nextToken()) - 1);
 				if (hasn)
-					n[index] = (short) (Short.parseShort(subParts.nextToken()) - 1);
+					n[index] = (int) (Integer.parseInt(subParts.nextToken()) - 1);
 			}
 		}
 	}
