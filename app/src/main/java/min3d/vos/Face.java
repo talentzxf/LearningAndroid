@@ -6,24 +6,14 @@ package min3d.vos;
  */
 public class Face 
 {
-	public short a;
-	public short b;
-	public short c;
+	public int a;
+	public int b;
+	public int c;
 	
-	public Face(short $a, short $b, short $c)
+	public Face(int $a, int $b, int $c)
 	{
 		a = $a;
 		b = $b;
 		c = $c;
-	}
-	
-	/**
-	 * Convenience method to cast int arguments to short's 
-	 */
-	public Face(int $a, int $b, int $c)
-	{
-		a = (short) $a;
-		b = (short) $b;
-		c = (short) $c;
 	}
 }

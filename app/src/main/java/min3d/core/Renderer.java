@@ -3,6 +3,7 @@ package min3d.core;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
 import android.opengl.GLUtils;
@@ -446,9 +447,10 @@ public class Renderer implements GLSurfaceView.Renderer
 
 			_gl.glDrawElements(
 					$o.renderType().glValue(),
-					len * FacesBufferedList.PROPERTIES_PER_ELEMENT,
-					GL10.GL_UNSIGNED_SHORT,
+					len * FacesBufferedList.PROPERTIES_PER_ELEMENT * FacesBufferedList.PROPERTIES_PER_ELEMENT,
+					GL10.GL_UNSIGNED_BYTE,
 					$o.faces().buffer());
+
 		}
 		else
 		{

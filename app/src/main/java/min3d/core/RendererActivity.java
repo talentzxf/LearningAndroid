@@ -81,8 +81,6 @@ public class RendererActivity extends Activity implements ISceneController
 
 		// Example of enabling logging of GL operations 
 		// _glSurfaceView.setDebugFlags(GLSurfaceView.DEBUG_CHECK_GL_ERROR | GLSurfaceView.DEBUG_LOG_GL_CALLS);
-		glSurfaceView().setEGLContextClientVersion(1);
-		glSurfaceView().setEGLConfigChooser(8 , 8, 8, 8, 16, 0);
     }
 	
 	protected GLSurfaceView glSurfaceView()

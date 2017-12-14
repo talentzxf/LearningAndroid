@@ -11,6 +11,7 @@ import com.example.vincentzhang.learnandroid.Texture.TextureHelper;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 
 /**
  * Created by VincentZhang on 3/30/2017.
@@ -19,7 +20,7 @@ public class Cube {
 
     private FloatBuffer mVertexBuffer;
     private FloatBuffer mColorBuffer;
-    private ByteBuffer mIndexBuffer;
+    private IntBuffer mIndexBuffer;
     private FloatBuffer mTextureBuffer;
 
     private float vertices[] = {
@@ -58,7 +59,7 @@ public class Cube {
             1.0f, 1.0f, 1.0f, 1.0f
     };
 
-    private byte indices[] = {
+    private int indices[] = {
             0, 4, 5, 0, 5, 1, // Bottom
             1, 5, 6, 1, 6, 2, // Right
             2, 6, 7, 2, 7, 3, // Top
@@ -316,7 +317,9 @@ public class Cube {
         mColorBuffer.put(colors);
         mColorBuffer.position(0);
 
-        mIndexBuffer = ByteBuffer.allocateDirect(indices.length);
+        byteBuf = ByteBuffer.allocateDirect(indices.length * 4);
+        byteBuf.order(ByteOrder.nativeOrder());
+        mIndexBuffer = byteBuf.asIntBuffer();
         mIndexBuffer.put(indices);
         mIndexBuffer.position(0);
 
@@ -421,7 +424,7 @@ public class Cube {
 
         // Draw the triangle
         // GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertexCount);
-        GLES20.glDrawElements(GLES20.GL_TRIANGLES, indices.length, GLES20.GL_UNSIGNED_BYTE, mIndexBuffer);
+        GLES20.glDrawElements(GLES20.GL_TRIANGLES, indices.length, GLES20.GL_UNSIGNED_INT, mIndexBuffer);
 
         // Disable vertex array
         GLES20.glDisableVertexAttribArray(mPositionHandle);

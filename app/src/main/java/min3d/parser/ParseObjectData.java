@@ -60,6 +60,16 @@ public class ParseObjectData {
 		
 		return obj;
 	}
+
+	private int wrap(int idx, int size){
+		// 1. idx start from 1, but array start from 0
+		// 2. should support negative, -1 means the last element
+		if(idx > 0){
+			return idx;
+		}
+
+		return (idx + size + 1)%size;
+	}
 	
 	private void parseObject(Object3d obj, HashMap<String, Material> materialMap, TextureAtlas textureAtlas)
 	{
@@ -73,11 +83,15 @@ public class ParseObjectData {
 					.getBitmapAssetByName(face.materialKey);
 
 			for (int j = 0; j < face.faceLength; j++) {
-				Number3d newVertex = vertices.get(face.v[j]);
-				
-				Uv newUv = face.hasuv ? texCoords.get(face.uv[j]).clone()
+
+				// According to: https://en.wikipedia.org/wiki/Wavefront_.obj_file#Face_Elements
+				// 1. Index should start from 1.
+				// 2. If an index is negative then it relatively refers to the end of the vertex list, -1 referring to the last element.
+				Number3d newVertex = vertices.get(wrap(face.v[j], vertices.size()));
+
+				Uv newUv = face.hasuv ? texCoords.get(wrap(face.uv[j],texCoords.size())).clone()
 						: new Uv();
-				Number3d newNormal = face.hasn ? normals.get(face.n[j])
+				Number3d newNormal = face.hasn ? normals.get(wrap(face.n[j],normals.size()))
 						: new Number3d();
 				Material material = materialMap.get(face.materialKey);
 				

@@ -2,6 +2,7 @@ package min3d.core;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 
 import min3d.vos.Face;
@@ -9,20 +10,20 @@ import min3d.vos.Face;
 public class FacesBufferedList
 {
 	public static final int PROPERTIES_PER_ELEMENT = 3;
-	public static final int BYTES_PER_PROPERTY = 2;
+	public static final int BYTES_PER_PROPERTY = 4;
 
-	private ShortBuffer _b;
+	private IntBuffer _b;
 	private int _numElements;
 
 	private int _renderSubsetStartIndex = 0;
 	private int _renderSubsetLength = 1;
 	private boolean _renderSubsetEnabled = false;
 	
-	public FacesBufferedList(ShortBuffer $b, int $size)
+	public FacesBufferedList(IntBuffer $b, int $size)
 	{
 		ByteBuffer bb = ByteBuffer.allocateDirect($b.limit() * BYTES_PER_PROPERTY); 
 		bb.order(ByteOrder.nativeOrder());
-		_b = bb.asShortBuffer();
+		_b = bb.asIntBuffer();
 		_b.put($b);
 		_numElements = $size;
 	}
@@ -31,7 +32,7 @@ public class FacesBufferedList
 	{
 		ByteBuffer b = ByteBuffer.allocateDirect($maxElements * PROPERTIES_PER_ELEMENT * BYTES_PER_PROPERTY); 
 		b.order(ByteOrder.nativeOrder());
-		_b = b.asShortBuffer();
+		_b = b.asIntBuffer();
 	}
 	
 	/**
@@ -69,9 +70,9 @@ public class FacesBufferedList
 	public void putInFace(int $index, Face $face)
 	{
 		_b.position($index * PROPERTIES_PER_ELEMENT);
-		$face.a = (short)_b.get();
-		$face.b = (short)_b.get();
-		$face.c = (short)_b.get();
+		$face.a = _b.get();
+		$face.b = _b.get();
+		$face.c = _b.get();
 	}
 	
 	public short getPropertyA(int $index)
@@ -132,11 +133,7 @@ public class FacesBufferedList
 		_numElements++;
 	}
 	
-	public void add(int $a, int $b, int $c) {
-		add((short)$a, (short)$b, (short)$c);
-	}
-	
-	public void add(short $a, short $b, short $c)
+	public void add(int $a, int $b, int $c)
 	{
 		set(_numElements, $a, $b, $c);
 		_numElements++;
@@ -150,7 +147,7 @@ public class FacesBufferedList
 		_b.put($face.c);
 	}
 
-	public void set(int $index, short $a, short $b, short $c)
+	public void set(int $index, int $a, int $b, int $c)
 	{
 		_b.position($index * PROPERTIES_PER_ELEMENT);
 		_b.put($a);
@@ -176,7 +173,7 @@ public class FacesBufferedList
 	
 	//
 	
-	public ShortBuffer buffer()
+	public IntBuffer buffer()
 	{
 		return _b;
 	}
