@@ -3,7 +3,9 @@ package com.example.vincentzhang.learnandroid.shapes;
 import android.opengl.Matrix;
 
 import java.util.HashMap;
+import java.util.Map;
 
+import min3d.core.Number3dBufferList;
 import min3d.core.OGLES20ObjectRender;
 import min3d.objectPrimitives.Sphere;
 
@@ -19,20 +21,29 @@ public class SphereRenderer {
     private final String vertexShaderCode =
             // This matrix member variable provides a hook to manipulate
             // the coordinates of the objects that use this vertex shader
-            "uniform mat4 uMVPMatrix;" +
+            "uniform mat4 projection;" +
+                    "uniform mat4 view;" +
+                    "uniform mat4 model;" +
                     "attribute vec4 vPosition;" +
+                    "attribute vec4 vNormal;" +
+                    "uniform vec4 vColor;" +
+                    "uniform vec4 lightPos;" +
+                    "varying vec4 aColor;" +
+                    "varying vec4 fragPos;"+
                     "void main() {" +
                     // The matrix must be included as a modifier of gl_Position.
                     // Note that the uMVPMatrix factor *must be first* in order
                     // for the matrix multiplication product to be correct.
-                    "  gl_Position = uMVPMatrix * vPosition;" +
+                    "  gl_Position = projection * view * model * vPosition;" +
+                    " aColor = vColor * dot( normalize(vNormal.xyz), normalize((lightPos - model*vPosition).xyz));" +
                     "}";
 
     private final String fragmentShaderCode =
             "precision mediump float;" +
-                    "uniform vec4 vColor;" +
+                    "varying vec4 aColor;" +
+                    "varying vec4 fragPos;"+
                     "void main() {" +
-                    "  gl_FragColor = vec4(1.0,0.0,0.0, 1.0);" +
+                    "  gl_FragColor = aColor;" +
                     "}";
 
     public SphereRenderer(float radius, int stacks, int slices) {
@@ -43,11 +54,19 @@ public class SphereRenderer {
     // mvMatrix -- model view matrix
     // projectMatrix -- projection matrix
     public void draw(float[] model, float[] view, float[] projection) {
-        HashMap<String, float[]> uniformMap = new HashMap<>();
-        float[] mvpMatrix = new float[16];
-        Matrix.multiplyMM(mvpMatrix, 0, projection, 0, view, 0);
-        Matrix.multiplyMM(mvpMatrix, 0, mvpMatrix, 0, model, 0);
-        uniformMap.put("uMVPMatrix", mvpMatrix);
-        renderer.drawObject(uniformMap);
+        // setup uniform
+        Map<String, float[]> uniformMap = new HashMap<>();
+        uniformMap.put("projection", projection);
+        uniformMap.put("view", view);
+        uniformMap.put("model", model);
+        uniformMap.put("vColor", new float[]{1.0f, 1.0f, 1.0f, 1.0f});
+        uniformMap.put("lightPos", new float[]{5.0f, 10.0f, 0.0f, 1.0f});
+
+        // setup attributes
+        Map<String, Number3dBufferList> attributeMap = new HashMap<>();
+        attributeMap.put("vPosition", sphereInternal.points());
+        attributeMap.put("vNormal", sphereInternal.normals());
+
+        renderer.drawObject(uniformMap, attributeMap);
     }
 }

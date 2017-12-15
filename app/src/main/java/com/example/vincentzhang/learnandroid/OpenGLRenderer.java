@@ -46,7 +46,7 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
         mTriangle = new Triangle();
         mSquare = new Square();
         mCube = new Cube();
-        sphereRenderer = new SphereRenderer(0.5f, 100,100);
+        sphereRenderer = new SphereRenderer(0.5f, 10, 10);
         camera = new Camera();
         camera.setPos(new float[]{0.0f,0.0f,-7.0f});
         camera.setLookAt(new float[]{0.0f,0.0f,0.0f});
