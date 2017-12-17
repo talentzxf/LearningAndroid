@@ -4,6 +4,9 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.view.MotionEvent;
 
+import min3d.Shared;
+import min3d.core.Scene;
+
 /**
  * Created by VincentZhang on 11/30/2017.
  */
@@ -18,8 +21,12 @@ public class OpenGLSurfaceView extends GLSurfaceView {
         // Create an OpenGL ES 2.0 context.
         setEGLContextClientVersion(2);
 
+        Shared.context(context);
+
         // Set the Renderer for drawing on the GLSurfaceView
-        mRenderer = new OpenGLRenderer();
+        mRenderer = new OpenGLRenderer(new Scene(null));
+        Shared.renderer(mRenderer);
+
         setEGLConfigChooser(8 , 8, 8, 8, 16, 0);
         setRenderer(mRenderer);
 
