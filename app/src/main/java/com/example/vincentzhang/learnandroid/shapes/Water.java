@@ -35,15 +35,15 @@ public class Water {
         GLES20.glDisable(GLES20.GL_CULL_FACE);
         // Do some local transforms
         float[] localRotate = new float[16];
-        Matrix.setRotateM(localRotate, 0, 90.0f, 1.0f, 0.0f, 0.0f);
+        Matrix.setRotateM(localRotate, 0, -90.0f, 1.0f, 0.0f, 0.0f);
         Matrix.multiplyMM(model, 0, model, 0, localRotate, 0);
 
         Map<String, Object> uniformMap = new HashMap<>();
         uniformMap.put("projection", projection);
         uniformMap.put("view", view);
         uniformMap.put("model", model);
-        uniformMap.put("vColor", new float[]{0.3f, 0.2f, 0.4f, 1.0f});
-        uniformMap.put("lightPos", new float[]{5.0f, 10.0f, 0.0f, 1.0f});
+        uniformMap.put("vColor", new float[]{0.25f, 1.0f, 1.25f, 0.1f});
+        // uniformMap.put("lightPos", new float[]{5.0f, 10.0f, 0.0f, 1.0f});
 
         // setup attributes
         Map<String, AbstractBufferList> attributeMap = new HashMap<>();
