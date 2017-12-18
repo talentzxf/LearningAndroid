@@ -28,20 +28,19 @@ public class SphereRenderer {
                     "attribute vec4 vNormal;" +
                     "uniform vec4 vColor;" +
                     "uniform vec4 lightPos;" +
+                    "vec4 ambient = vec4(0.1,0.1,0.1,1.0);"+
                     "varying vec4 aColor;" +
-                    "varying vec4 fragPos;"+
                     "void main() {" +
                     // The matrix must be included as a modifier of gl_Position.
                     // Note that the uMVPMatrix factor *must be first* in order
                     // for the matrix multiplication product to be correct.
                     "  gl_Position = projection * view * model * vPosition;" +
-                    " aColor = vColor * dot( normalize(vNormal.xyz), normalize((lightPos - model*vPosition).xyz));" +
+                    " aColor = (ambient+dot( normalize(vNormal.xyz), normalize((lightPos - model*vPosition).xyz)))*vColor;" +
                     "}";
 
     private final String fragmentShaderCode =
             "precision mediump float;" +
                     "varying vec4 aColor;" +
-                    "varying vec4 fragPos;"+
                     "void main() {" +
                     "  gl_FragColor = aColor;" +
                     "}";
