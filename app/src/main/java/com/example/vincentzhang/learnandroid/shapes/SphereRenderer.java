@@ -2,11 +2,15 @@ package com.example.vincentzhang.learnandroid.shapes;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 
 import com.example.vincentzhang.learnandroid.OpenGLActivity;
 import com.example.vincentzhang.learnandroid.OpenGLRenderer;
 import com.example.vincentzhang.learnandroid.R;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,39 +29,54 @@ public class SphereRenderer {
     private Sphere sphereInternal;
     private ObjectRenderer renderer;
 
-    private final String vertexShaderCode =
-            // This matrix member variable provides a hook to manipulate
-            // the coordinates of the objects that use this vertex shader
-            "uniform mat4 projection;" +
-                    "uniform mat4 view;" +
-                    "uniform mat4 model;" +
-                    "attribute vec4 vPosition;" +
-                    "attribute vec4 vNormal;" +
-                    "attribute vec2 vTexCoord;" +
-                    "uniform vec4 vColor;" +
-                    "uniform vec4 lightPos;" +
-                    "vec4 ambient = vec4(0.1,0.1,0.1,1.0);" +
-                    "varying vec4 aColor;" +
-                    "varying vec2 texCoord;" +
-                    "void main() {" +
-                    // The matrix must be included as a modifier of gl_Position.
-                    // Note that the uMVPMatrix factor *must be first* in order
-                    // for the matrix multiplication product to be correct.
-                    "  gl_Position = projection * view * model * vPosition;" +
-                    " aColor = vColor * dot( normalize(vNormal.xyz), normalize((lightPos - model*vPosition).xyz));" +
-                    "texCoord = vTexCoord;" +
-                    "}";
+//    private final String vertexShaderCode =
+//            // This matrix member variable provides a hook to manipulate
+//            // the coordinates of the objects that use this vertex shader
+//            "uniform mat4 projection;" +
+//                    "uniform mat4 view;" +
+//                    "uniform mat4 model;" +
+//                    "attribute vec4 vPosition;" +
+//                    "attribute vec4 vNormal;" +
+//                    "attribute vec2 vTexCoord;" +
+//                    "uniform vec4 vColor;" +
+//                    "uniform vec4 lightPos;" +
+//                    "vec4 ambient = vec4(0.7,0.7,0.7,1.0);" +
+//                    "varying vec4 aColor;" +
+//                    "varying vec2 texCoord;" +
+//                    "void main() {" +
+//                    // The matrix must be included as a modifier of gl_Position.
+//                    // Note that the uMVPMatrix factor *must be first* in order
+//                    // for the matrix multiplication product to be correct.
+//                    "  gl_Position = projection * view * model * vPosition;" +
+//                    " aColor = vColor * dot( normalize(vNormal.xyz), normalize((lightPos - model*vPosition).xyz)) + ambient;" +
+//                    "texCoord = vTexCoord;" +
+//                    "}";
+//
+//    private final String fragmentShaderCode =
+//            "precision mediump float;" +
+//                    "varying vec2 texCoord;" +
+//                    "varying vec4 aColor;" +
+//                    "varying vec4 fragPos;" +
+//                    "uniform sampler2D u_Texture;" +
+//                    "void main() {" +
+//                    "  gl_FragColor = aColor * vec4(texture2D(u_Texture, texCoord).xyz,1.0);" +
+//                    "}";
 
-    private final String fragmentShaderCode =
-            "precision mediump float;" +
-                    "varying vec2 texCoord;" +
-                    "varying vec4 aColor;" +
-                    "varying vec4 fragPos;" +
-                    "uniform sampler2D u_Texture;" +
-                    "void main() {" +
-                    "  gl_FragColor = aColor * vec4(texture2D(u_Texture, texCoord).xyz,1.0);" +
-                    "}";
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    String getContentFromAssets(String path){
+        String returnValue = "";
+        try (InputStream is = Shared.context().getAssets().open(path)){
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            returnValue = new String(buffer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return returnValue;
+    }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public SphereRenderer(float radius, int stacks, int slices) {
         sphereInternal = new Sphere(radius, stacks, slices);
         OpenGLRenderer.checkGlError("new Sphere");
@@ -68,7 +87,8 @@ public class SphereRenderer {
         OpenGLRenderer.checkGlError("addTextureId");
         sphereInternal.textures().add(new TextureVo("earth"));
 
-        renderer = new ObjectRenderer(vertexShaderCode, fragmentShaderCode, sphereInternal);
+        renderer = new ObjectRenderer(getContentFromAssets("shaders/lambert_shader_v.vert"),
+                getContentFromAssets("shaders/lambert_shader_f.frag"), sphereInternal);
     }
 
     // mvMatrix -- model view matrix

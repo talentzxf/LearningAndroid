@@ -3,6 +3,8 @@ package com.example.vincentzhang.learnandroid;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import com.example.vincentzhang.learnandroid.Camera.Camera;
@@ -36,11 +38,13 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
     private float[] mViewMatrix;
 
     private float ratio;
+    private long startTime = System.currentTimeMillis();
 
     public OpenGLRenderer() {
         super();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
         // Set the background frame color
@@ -49,7 +53,7 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
         mTriangle = new Triangle();
         mSquare = new Square();
         mCube = new Cube();
-        sphereRenderer = new SphereRenderer(0.5f, 10, 10);
+        sphereRenderer = new SphereRenderer(0.5f, 30, 30);
         camera = new Camera();
         camera.setPos(new float[]{0.0f, 0.0f, -7.0f});
         camera.setLookAt(new float[]{0.0f, 0.0f, 0.0f});
@@ -71,7 +75,9 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
 
         // Set model matrix
         Matrix.setIdentityM(mModelMatrix, 0);
-        Matrix.scaleM(mModelMatrix, 0, 2.0f,2.0f,2.0f);
+        Matrix.scaleM(mModelMatrix, 0, 2.0f, 2.0f, 2.0f);
+        float elapsedTimeSec = ((float)(System.currentTimeMillis() - startTime)/1000.0f);
+        Matrix.rotateM(mModelMatrix,0, elapsedTimeSec * 10, 0.0f, 1.0f, 0.0f);
         // mCube.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
         sphereRenderer.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
     }
