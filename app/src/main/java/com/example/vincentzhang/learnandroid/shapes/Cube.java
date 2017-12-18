@@ -358,6 +358,8 @@ public class Cube {
     public void draw(float[] model, float[] view, float[] projection) {
         GLES20.glUseProgram(program);
 
+        GLES20.glEnable(GLES20.GL_CULL_FACE);
+
         // get handle to vertex shader's vPosition member
         mPositionHandle = GLES20.glGetAttribLocation(program, "vPosition");
         OpenGLRenderer.checkGlError("glGetAttribLocation");

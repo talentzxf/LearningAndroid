@@ -1,14 +1,19 @@
 package max3d.core;
 
 import android.opengl.GLES20;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import com.example.vincentzhang.learnandroid.OpenGLRenderer;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import max3d.Shared;
 import max3d.core.AbstractBufferList;
 import max3d.core.Object3d;
 
@@ -22,9 +27,25 @@ public class ObjectRenderer {
 
     List<Integer> vertexAttributes = new ArrayList<>();
 
-    public ObjectRenderer(String vertexShaderCode, String fragmentShaderCode, Object3d object3d) {
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    String getContentFromAssets(String path){
+        String returnValue = "";
+        try (InputStream is = Shared.context().getAssets().open(path)){
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            returnValue = new String(buffer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return returnValue;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public ObjectRenderer(String vertexShaderPath, String fragmentShaderPath, Object3d object3d) {
         $o = object3d;
-        initShaders(vertexShaderCode, fragmentShaderCode);
+        initShaders(getContentFromAssets(vertexShaderPath), getContentFromAssets(fragmentShaderPath));
     }
 
     private void initShaders(String vertexShaderCode, String fragmentShaderCode) {
@@ -81,28 +102,33 @@ public class ObjectRenderer {
         vertexAttributes.clear();
     }
 
-    private void bindUniform(Map<String, float[]> uniformMap) throws Exception {
+    private void bindUniform(Map<String, Object> uniformMap) throws Exception {
         for (String key : uniformMap.keySet()) {
-            float[] valueArray = uniformMap.get(key);
+            Object valueArrayObj = uniformMap.get(key);
             int uniformLocation = GLES20.glGetUniformLocation(program, key);
             OpenGLRenderer.checkGlError("glGetUniformLocation");
-            if(uniformLocation < 0){
+            if (uniformLocation < 0) {
                 throw new Exception("uniform " + key + " can't be found!");
             }
 
-            switch (valueArray.length) {
-                case 16: // Matrix
-                    GLES20.glUniformMatrix4fv(uniformLocation, 1, false, valueArray, 0);
-                    break;
-                case 4:
-                    GLES20.glUniform4fv(uniformLocation, 1, valueArray, 0);
-                    break;
+            if (valueArrayObj instanceof float[]) {
+                float[] valueArray = (float[]) valueArrayObj;
+                switch (valueArray.length) {
+                    case 16: // Matrix
+                        GLES20.glUniformMatrix4fv(uniformLocation, 1, false, valueArray, 0);
+                        break;
+                    case 4:
+                        GLES20.glUniform4fv(uniformLocation, 1, valueArray, 0);
+                        break;
+                }
+            } else if (valueArrayObj instanceof Integer) {
+                GLES20.glUniform1i(uniformLocation, (Integer) valueArrayObj);
             }
-            OpenGLRenderer.checkGlError("glUniformMatrix4fv");
+            OpenGLRenderer.checkGlError("bindUniform");
         }
     }
 
-    public void drawObject(Map<String, float[]> uniformMap, Map<String, AbstractBufferList> shaderObjectMap) {
+    public void drawObject(Map<String, Object> uniformMap, Map<String, AbstractBufferList> shaderObjectMap) {
         try {
 
             GLES20.glUseProgram(program);
@@ -116,8 +142,8 @@ public class ObjectRenderer {
                     $o.faces().buffer().position(0));
 
             unBindAttributes();
-        }catch (Exception e){
-            Log.e("Error","Exception " + e);
+        } catch (Exception e) {
+            Log.e("Error", "Exception " + e);
         }
     }
 }

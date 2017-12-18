@@ -2,6 +2,7 @@ package com.example.vincentzhang.learnandroid.shapes;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.opengl.GLES20;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 
@@ -62,19 +63,6 @@ public class SphereRenderer {
 //                    "  gl_FragColor = aColor * vec4(texture2D(u_Texture, texCoord).xyz,1.0);" +
 //                    "}";
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    String getContentFromAssets(String path){
-        String returnValue = "";
-        try (InputStream is = Shared.context().getAssets().open(path)){
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            returnValue = new String(buffer);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return returnValue;
-    }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public SphereRenderer(float radius, int stacks, int slices) {
@@ -87,21 +75,26 @@ public class SphereRenderer {
         OpenGLRenderer.checkGlError("addTextureId");
         sphereInternal.textures().add(new TextureVo("earth"));
 
-        renderer = new ObjectRenderer(getContentFromAssets("shaders/lambert_shader_v.vert"),
-                getContentFromAssets("shaders/lambert_shader_f.frag"), sphereInternal);
+        renderer = new ObjectRenderer("shaders/lambert_shader_v.vert",
+                "shaders/lambert_shader_f.frag", sphereInternal);
     }
 
     // mvMatrix -- model view matrix
     // projectMatrix -- projection matrix
     public void draw(float[] model, float[] view, float[] projection) {
         // setup uniform
-        Map<String, float[]> uniformMap = new HashMap<>();
+        Map<String, Object> uniformMap = new HashMap<>();
         uniformMap.put("projection", projection);
         uniformMap.put("view", view);
         uniformMap.put("model", model);
         uniformMap.put("vColor", new float[]{1.0f, 1.0f, 1.0f, 1.0f});
         uniformMap.put("lightPos", new float[]{5.0f, 10.0f, 0.0f, 1.0f});
-        uniformMap.put("u_Texture", new float[]{Shared.textureManager().getGlTextureId("earth")});
+        uniformMap.put("u_Texture", 0);
+
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, Shared.textureManager().getGlTextureId("earth"));
+
+        OpenGLRenderer.checkGlError("glBindTexture");
 
         // setup attributes
         Map<String, AbstractBufferList> attributeMap = new HashMap<>();

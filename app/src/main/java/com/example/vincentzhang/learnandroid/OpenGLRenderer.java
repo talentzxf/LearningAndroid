@@ -12,9 +12,12 @@ import com.example.vincentzhang.learnandroid.shapes.Cube;
 import com.example.vincentzhang.learnandroid.shapes.SphereRenderer;
 import com.example.vincentzhang.learnandroid.shapes.Square;
 import com.example.vincentzhang.learnandroid.shapes.Triangle;
+import com.example.vincentzhang.learnandroid.shapes.Water;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
+
+import max3d.primitives.Rectangle;
 
 import static android.opengl.GLU.gluErrorString;
 
@@ -29,6 +32,7 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
     private static final String TAG = "MyGLRenderer";
     private Triangle mTriangle;
     private Square mSquare;
+    private Water waterSurface;
     private SphereRenderer sphereRenderer;
     private Camera camera;
 
@@ -54,6 +58,8 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
         mSquare = new Square();
         mCube = new Cube();
         sphereRenderer = new SphereRenderer(0.5f, 30, 30);
+        waterSurface = new Water(2.0f,2.0f,100,100);
+
         camera = new Camera();
         camera.setPos(new float[]{0.0f, 0.0f, -7.0f});
         camera.setLookAt(new float[]{0.0f, 0.0f, 0.0f});
@@ -75,11 +81,12 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
 
         // Set model matrix
         Matrix.setIdentityM(mModelMatrix, 0);
-        Matrix.scaleM(mModelMatrix, 0, 2.0f, 2.0f, 2.0f);
+        Matrix.scaleM(mModelMatrix, 0, 1.0f, 1.0f, 1.0f);
         float elapsedTimeSec = ((float)(System.currentTimeMillis() - startTime)/1000.0f);
         Matrix.rotateM(mModelMatrix,0, elapsedTimeSec * 10, 0.0f, 1.0f, 0.0f);
-        // mCube.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
+        mCube.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
         sphereRenderer.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
+        waterSurface.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
     }
 
     @Override
