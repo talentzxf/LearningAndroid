@@ -14,19 +14,13 @@ import com.example.vincentzhang.learnandroid.shapes.Triangle;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import min3d.Shared;
-import min3d.core.OGLES20ObjectRender;
-import min3d.core.OGLES20Renderer;
-import min3d.core.Scene;
-import min3d.core.TextureManager;
-
 import static android.opengl.GLU.gluErrorString;
 
 /**
  * Created by VincentZhang on 3/30/2017.
  */
 
-public class OpenGLRenderer extends OGLES20Renderer {
+public class OpenGLRenderer implements GLSurfaceView.Renderer {
     private Cube mCube;
     private float mCubeRotation;
 
@@ -43,8 +37,8 @@ public class OpenGLRenderer extends OGLES20Renderer {
 
     private float ratio;
 
-    public OpenGLRenderer(Scene $scene) {
-        super($scene);
+    public OpenGLRenderer() {
+        super();
     }
 
     @Override
@@ -57,8 +51,8 @@ public class OpenGLRenderer extends OGLES20Renderer {
         mCube = new Cube();
         sphereRenderer = new SphereRenderer(0.5f, 10, 10);
         camera = new Camera();
-        camera.setPos(new float[]{0.0f,0.0f,-7.0f});
-        camera.setLookAt(new float[]{0.0f,0.0f,0.0f});
+        camera.setPos(new float[]{0.0f, 0.0f, -7.0f});
+        camera.setLookAt(new float[]{0.0f, 0.0f, 0.0f});
     }
 
     @Override
@@ -77,8 +71,9 @@ public class OpenGLRenderer extends OGLES20Renderer {
 
         // Set model matrix
         Matrix.setIdentityM(mModelMatrix, 0);
+        Matrix.scaleM(mModelMatrix, 0, 2.0f,2.0f,2.0f);
         // mCube.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
-        sphereRenderer.draw(mModelMatrix, mViewMatrix,mProjectionMatrix);
+        sphereRenderer.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
     }
 
     @Override
@@ -137,7 +132,7 @@ public class OpenGLRenderer extends OGLES20Renderer {
         }
     }
 
-    public Camera getCamera(){
+    public Camera getCamera() {
         return camera;
     }
 }

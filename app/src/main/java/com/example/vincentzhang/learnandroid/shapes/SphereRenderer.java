@@ -2,20 +2,19 @@ package com.example.vincentzhang.learnandroid.shapes;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.opengl.Matrix;
 
 import com.example.vincentzhang.learnandroid.OpenGLActivity;
+import com.example.vincentzhang.learnandroid.OpenGLRenderer;
 import com.example.vincentzhang.learnandroid.R;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import min3d.Shared;
-import min3d.core.AbstractBufferList;
-import min3d.core.Number3dBufferList;
-import min3d.core.OGLES20ObjectRender;
-import min3d.objectPrimitives.Sphere;
-import min3d.vos.TextureVo;
+import max3d.Shared;
+import max3d.core.AbstractBufferList;
+import max3d.core.ObjectRenderer;
+import max3d.primitives.Sphere;
+import max3d.vos.TextureVo;
 
 /**
  * Created by VincentZhang on 12/7/2017.
@@ -24,7 +23,7 @@ import min3d.vos.TextureVo;
 
 public class SphereRenderer {
     private Sphere sphereInternal;
-    private OGLES20ObjectRender renderer;
+    private ObjectRenderer renderer;
 
     private final String vertexShaderCode =
             // This matrix member variable provides a hook to manipulate
@@ -34,39 +33,42 @@ public class SphereRenderer {
                     "uniform mat4 model;" +
                     "attribute vec4 vPosition;" +
                     "attribute vec4 vNormal;" +
-                    "attribute vec2 vTexCoord;"+
+                    "attribute vec2 vTexCoord;" +
                     "uniform vec4 vColor;" +
                     "uniform vec4 lightPos;" +
-                    "vec4 ambient = vec4(0.1,0.1,0.1,1.0);"+
+                    "vec4 ambient = vec4(0.1,0.1,0.1,1.0);" +
                     "varying vec4 aColor;" +
-                    "varying vec2 texCoord;"+
+                    "varying vec2 texCoord;" +
                     "void main() {" +
                     // The matrix must be included as a modifier of gl_Position.
                     // Note that the uMVPMatrix factor *must be first* in order
                     // for the matrix multiplication product to be correct.
                     "  gl_Position = projection * view * model * vPosition;" +
                     " aColor = vColor * dot( normalize(vNormal.xyz), normalize((lightPos - model*vPosition).xyz));" +
-                    "texCoord = vTexCoord;"+
+                    "texCoord = vTexCoord;" +
                     "}";
 
     private final String fragmentShaderCode =
             "precision mediump float;" +
                     "varying vec2 texCoord;" +
                     "varying vec4 aColor;" +
-                    "varying vec4 fragPos;"+
+                    "varying vec4 fragPos;" +
                     "uniform sampler2D u_Texture;" +
                     "void main() {" +
-                    "  gl_FragColor = aColor * texture2D(u_Texture, texCoord).xyz;" +
+                    "  gl_FragColor = aColor * vec4(texture2D(u_Texture, texCoord).xyz,1.0);" +
                     "}";
 
     public SphereRenderer(float radius, int stacks, int slices) {
         sphereInternal = new Sphere(radius, stacks, slices);
+        OpenGLRenderer.checkGlError("new Sphere");
         Bitmap earthTexture = BitmapFactory.decodeResource(OpenGLActivity.getContext().getResources(),
                 R.drawable.earth);
         Shared.textureManager().addTextureId(earthTexture, "earth");
+        earthTexture.recycle();
+        OpenGLRenderer.checkGlError("addTextureId");
         sphereInternal.textures().add(new TextureVo("earth"));
 
-        renderer = new OGLES20ObjectRender(vertexShaderCode, fragmentShaderCode, sphereInternal);
+        renderer = new ObjectRenderer(vertexShaderCode, fragmentShaderCode, sphereInternal);
     }
 
     // mvMatrix -- model view matrix

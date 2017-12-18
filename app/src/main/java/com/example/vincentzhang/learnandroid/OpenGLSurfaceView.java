@@ -4,8 +4,7 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.view.MotionEvent;
 
-import min3d.Shared;
-import min3d.core.Scene;
+import max3d.Shared;
 
 /**
  * Created by VincentZhang on 11/30/2017.
@@ -23,11 +22,10 @@ public class OpenGLSurfaceView extends GLSurfaceView {
 
         Shared.context(context);
 
-        // Set the Renderer for drawing on the GLSurfaceView
-        mRenderer = new OpenGLRenderer(new Scene(null));
-        Shared.renderer(mRenderer);
+        setEGLConfigChooser(8, 8, 8, 8, 16, 0);
 
-        setEGLConfigChooser(8 , 8, 8, 8, 16, 0);
+        // Set the Renderer for drawing on the GLSurfaceView
+        mRenderer = new OpenGLRenderer();
         setRenderer(mRenderer);
 
         // Render the view only when there is a change in the drawing data
@@ -53,7 +51,7 @@ public class OpenGLSurfaceView extends GLSurfaceView {
                 float dx = x - mPreviousX;
                 float dy = y - mPreviousY;
 
-                mRenderer.getCamera().rotate(dx*TOUCH_SCALE_FACTOR, dy*TOUCH_SCALE_FACTOR);
+                mRenderer.getCamera().rotate(dx * TOUCH_SCALE_FACTOR, dy * TOUCH_SCALE_FACTOR);
                 requestRender();
         }
 
