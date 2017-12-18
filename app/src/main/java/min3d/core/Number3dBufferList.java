@@ -6,17 +6,14 @@ import java.nio.FloatBuffer;
 
 import min3d.vos.Number3d;
 
-public class Number3dBufferList
+public class Number3dBufferList extends AbstractBufferList
 {
 	public static final int PROPERTIES_PER_ELEMENT = 3;
 	public static final int BYTES_PER_PROPERTY = 4;
 
-	private FloatBuffer _b;
-	private int _numElements = 0;
-	
 	public Number3dBufferList(FloatBuffer $b, int $size)
 	{
-		ByteBuffer bb = ByteBuffer.allocateDirect($b.limit() * BYTES_PER_PROPERTY); 
+		ByteBuffer bb = ByteBuffer.allocateDirect($b.limit() * BYTES_PER_PROPERTY);
 		bb.order(ByteOrder.nativeOrder());
 		_b = bb.asFloatBuffer();
 		_b.put($b);
@@ -30,14 +27,6 @@ public class Number3dBufferList
 		bb.order(ByteOrder.nativeOrder());
 		
 		_b  = bb.asFloatBuffer();
-	}
-	
-	/**
-	 * The number of items in the list. 
-	 */
-	public int size()
-	{
-		return _numElements;
 	}
 	
 	/**
@@ -135,13 +124,6 @@ public class Number3dBufferList
 		_b.put($z);
 	}
 	
-	//
-	
-	public FloatBuffer buffer()
-	{
-		return _b;
-	}
-	
 	public void overwrite(float[] $newVals)
 	{
 		_b.position(0);
@@ -153,5 +135,15 @@ public class Number3dBufferList
 		_b.position(0);
 		Number3dBufferList c = new Number3dBufferList(_b, size());
 		return c;
+	}
+
+	@Override
+	public int getPropertiesPerElement() {
+		return Number3dBufferList.PROPERTIES_PER_ELEMENT;
+	}
+
+	@Override
+	public int getBytesPerProperty() {
+		return Number3dBufferList.BYTES_PER_PROPERTY;
 	}
 }

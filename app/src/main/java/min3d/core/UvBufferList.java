@@ -7,12 +7,11 @@ import java.nio.FloatBuffer;
 import min3d.vos.Uv;
 
 
-public class UvBufferList 
+public class UvBufferList extends AbstractBufferList
 {
 	public static final int PROPERTIES_PER_ELEMENT = 2;
 	public static final int BYTES_PER_PROPERTY = 4;
 
-	private FloatBuffer _b;
 	private int _numElements = 0;
 	
 	public UvBufferList(FloatBuffer $b, int $size)
@@ -32,15 +31,7 @@ public class UvBufferList
 		
 		_b  = bb.asFloatBuffer();
 	}
-	
-	/**
-	 * The number of items in the list. 
-	 */
-	public int size()
-	{
-		return _numElements;
-	}
-	
+
 	/**
 	 * The _maximum_ number of items that the list can hold, as defined on instantiation.
 	 * (Not to be confused with the Buffer's capacity)
@@ -121,17 +112,20 @@ public class UvBufferList
 		_b.put($v);
 	}
 	
-	//
-	
-	public FloatBuffer buffer()
-	{
-		return _b;
-	}
-	
 	public UvBufferList clone()
 	{
 		_b.position(0);
 		UvBufferList c = new UvBufferList(_b, size());
 		return c;
+	}
+
+	@Override
+	public int getPropertiesPerElement() {
+		return UvBufferList.PROPERTIES_PER_ELEMENT;
+	}
+
+	@Override
+	public int getBytesPerProperty() {
+		return UvBufferList.BYTES_PER_PROPERTY;
 	}
 }

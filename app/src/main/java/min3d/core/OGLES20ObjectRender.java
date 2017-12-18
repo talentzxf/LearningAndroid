@@ -48,9 +48,9 @@ public class OGLES20ObjectRender {
         }
     }
 
-    private void bindAttributes(Map<String, Number3dBufferList> shaderObjectMap) {
+    private void bindAttributes(Map<String, AbstractBufferList> shaderObjectMap) {
         for (String attributeName : shaderObjectMap.keySet()) {
-            Number3dBufferList buffer = shaderObjectMap.get(attributeName);
+            AbstractBufferList buffer = shaderObjectMap.get(attributeName);
             int newBufferHandle = GLES20.glGetAttribLocation(program, attributeName);
             OpenGLRenderer.checkGlError("glGetAttribLocation");
 
@@ -61,9 +61,9 @@ public class OGLES20ObjectRender {
             GLES20.glEnableVertexAttribArray(newBufferHandle);
             // Prepare the triangle coordinate data
             GLES20.glVertexAttribPointer(
-                    newBufferHandle, buffer.PROPERTIES_PER_ELEMENT,
+                    newBufferHandle, buffer.getPropertiesPerElement(),
                     GLES20.GL_FLOAT, false,
-                    buffer.BYTES_PER_PROPERTY * buffer.PROPERTIES_PER_ELEMENT, buffer.buffer().position(0));
+                    buffer.getBytesPerProperty() * buffer.getPropertiesPerElement(), buffer.buffer().position(0));
             OpenGLRenderer.checkGlError("glVertexAttribPointer");
 
             vertexAttributes.add(newBufferHandle);
@@ -98,7 +98,7 @@ public class OGLES20ObjectRender {
         }
     }
 
-    public void drawObject(Map<String, float[]> uniformMap, Map<String, Number3dBufferList> shaderObjectMap) {
+    public void drawObject(Map<String, float[]> uniformMap, Map<String, AbstractBufferList> shaderObjectMap) {
         try {
 
             GLES20.glUseProgram(program);

@@ -125,7 +125,7 @@ public class TextureManager
 	 * Used by Renderer
 	 * 
 	 */
-	int getGlTextureId(String $textureId) /*package-private*/
+	public int getGlTextureId(String $textureId) /*package-private*/
 	{
 		return _idToTextureName.get($textureId);
 	}

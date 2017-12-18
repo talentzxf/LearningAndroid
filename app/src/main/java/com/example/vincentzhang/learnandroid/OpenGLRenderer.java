@@ -14,13 +14,19 @@ import com.example.vincentzhang.learnandroid.shapes.Triangle;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import min3d.Shared;
+import min3d.core.OGLES20ObjectRender;
+import min3d.core.OGLES20Renderer;
+import min3d.core.Scene;
+import min3d.core.TextureManager;
+
 import static android.opengl.GLU.gluErrorString;
 
 /**
  * Created by VincentZhang on 3/30/2017.
  */
 
-public class OpenGLRenderer implements GLSurfaceView.Renderer {
+public class OpenGLRenderer extends OGLES20Renderer {
     private Cube mCube;
     private float mCubeRotation;
 
@@ -37,9 +43,12 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
 
     private float ratio;
 
+    public OpenGLRenderer(Scene $scene) {
+        super($scene);
+    }
+
     @Override
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
-
         // Set the background frame color
         GLES20.glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 
