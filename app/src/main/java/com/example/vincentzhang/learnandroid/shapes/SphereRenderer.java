@@ -3,6 +3,7 @@ package com.example.vincentzhang.learnandroid.shapes;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
+import android.opengl.Matrix;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 
@@ -82,11 +83,15 @@ public class SphereRenderer {
     // mvMatrix -- model view matrix
     // projectMatrix -- projection matrix
     public void draw(float[] model, float[] view, float[] projection) {
+        float[] local_model = new float[16];
+        Matrix.setIdentityM(local_model,0);
+        Matrix.translateM(local_model,0, 0.0f,-0.5f,0.0f);
+
         // setup uniform
         Map<String, Object> uniformMap = new HashMap<>();
         uniformMap.put("projection", projection);
         uniformMap.put("view", view);
-        uniformMap.put("model", model);
+        uniformMap.put("model", local_model);
         uniformMap.put("vColor", new float[]{1.0f, 1.0f, 1.0f, 1.0f});
         uniformMap.put("lightPos", new float[]{5.0f, 10.0f, 0.0f, 1.0f});
         uniformMap.put("u_Texture", 0);

@@ -54,20 +54,22 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
         // Set the background frame color
         GLES20.glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 
-        mTriangle = new Triangle();
-        mSquare = new Square();
-        mCube = new Cube();
-        sphereRenderer = new SphereRenderer(0.5f, 30, 30);
-        waterSurface = new Water(2.0f,2.0f,100,100);
-
         camera = new Camera();
         camera.setPos(new float[]{0.0f, 0.0f, -7.0f});
         camera.setLookAt(new float[]{0.0f, 0.0f, 0.0f});
+
+        mTriangle = new Triangle();
+        mSquare = new Square();
+        mCube = new Cube();
+        sphereRenderer = new SphereRenderer(0.3f, 30, 30);
+        waterSurface = new Water(2.0f,2.0f,100,100, camera);
     }
 
     @Override
     public void onDrawFrame(GL10 unused) {
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
+        GLES20.glEnable(GLES20.GL_BLEND);
+        GLES20.glBlendFunc(GLES20.GL_DST_ALPHA, GLES20.GL_ONE_MINUS_DST_ALPHA);
         GLES20.glDepthFunc(GLES20.GL_LEQUAL);
         GLES20.glDepthMask(true);
 

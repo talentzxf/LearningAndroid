@@ -120,6 +120,9 @@ public class ObjectRenderer {
                     case 4:
                         GLES20.glUniform4fv(uniformLocation, 1, valueArray, 0);
                         break;
+                    case 3:
+                        GLES20.glUniform3fv(uniformLocation, 1, valueArray, 0);
+                        break;
                 }
             } else if (valueArrayObj instanceof Integer) {
                 GLES20.glUniform1i(uniformLocation, (Integer) valueArrayObj);
