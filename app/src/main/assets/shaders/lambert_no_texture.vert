@@ -1,6 +1,6 @@
 uniform mat4 projection;
 uniform mat4 view;
-uniform mat4 model;\
+uniform mat4 model;
 attribute vec4 vPosition;
 attribute vec4 vNormal;
 uniform vec4 lightPos;
