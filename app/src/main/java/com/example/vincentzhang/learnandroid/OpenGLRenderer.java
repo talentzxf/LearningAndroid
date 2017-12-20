@@ -85,7 +85,7 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
         Matrix.setIdentityM(mModelMatrix, 0);
         Matrix.scaleM(mModelMatrix, 0, 1.0f, 1.0f, 1.0f);
         float elapsedTimeSec = ((float)(System.currentTimeMillis() - startTime)/1000.0f);
-        Matrix.rotateM(mModelMatrix,0, elapsedTimeSec * 10, 0.0f, 1.0f, 0.0f);
+        // Matrix.rotateM(mModelMatrix,0, elapsedTimeSec * 10, 0.0f, 1.0f, 0.0f);
         mCube.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
         sphereRenderer.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
         waterSurface.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);

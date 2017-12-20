@@ -47,7 +47,17 @@ public class Water {
         uniformMap.put("model", model);
         uniformMap.put("vColor", new float[]{0.25f, 1.0f, 1.25f, 0.1f});
         uniformMap.put("cameraPos", this.camera.getPos());
+
+        float[] local_model = new float[16];
+        Matrix.setIdentityM(local_model,0);
+        Matrix.translateM(local_model,0, 0.0f,-0.5f,0.0f);
+        uniformMap.put("sphere_model", local_model);
         // uniformMap.put("lightPos", new float[]{5.0f, 10.0f, 0.0f, 1.0f});
+
+        uniformMap.put("sph_Texture", 0);
+
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, Shared.textureManager().getGlTextureId("earth"));
 
         // setup attributes
         Map<String, AbstractBufferList> attributeMap = new HashMap<>();
