@@ -74,6 +74,8 @@ vec3 getSurfaceRayColor(vec3 origin, vec3 ray, vec3 waterColor){
     // Intersect with sphere first
     vec3 color = waterColor;
     float q = intersectSphere(origin, ray, sphereCenter, sphereRadius);
+
+    vec3 sphere_color = vec3(1.0,1.0,1.0);
     if(q<1.0e6){
         vec4 hitPoint_world = vec4(origin + ray*q,1.0);
         // Calculate sphere color
@@ -82,22 +84,18 @@ vec3 getSurfaceRayColor(vec3 origin, vec3 ray, vec3 waterColor){
         // 2. Position_world = model * local => local = model_inverse*position_world
         vec4 hitPoint_sphere_local = sphere_model_inverse * hitPoint_world;
         // 3. Calculte theta1 (rotation around z)
-        float u = acos(hitPoint_sphere_local.y / sphereRadius) / M_PI;
+        float v = acos(hitPoint_sphere_local.y / sphereRadius) / M_PI;
         // 4. calculate theta2 (rotation around y)
-        float theta1 = -1.0;
-        if(hitPoint_sphere_local.z>0.0){
-            theta1 = acos(-hitPoint_sphere_local.x/sphereRadius);
-        }else{
-            theta1 = acos(-hitPoint_sphere_local.x/sphereRadius)+M_PI;
-        }
-        float v = theta1/2.0*M_PI;
-        return texture2D(sph_Texture,vec2(u,v)).rgb;
+        float theta2 = -atan(hitPoint_sphere_local.z,hitPoint_sphere_local.x) + M_PI;
+        float u = theta2/(2.0*M_PI);
+        sphere_color = texture2D(sph_Texture,vec2(u,v)).rgb;
     }
-    return vec3(1.0,1.0,0.0);
+    return vec3(0.25, 1.0, 1.25)*sphere_color;
 }
 void main() {
     vec3 incomingRay = normalize(aPos.xyz - cameraPos);
     vec3 refractedRay = refract(incomingRay, normal.xyz, IOR_AIR/IOR_WATER);
+    // vec3 rayColor = getSurfaceRayColor(aPos.xyz,refractedRay,aColor.rgb);
     vec3 rayColor = getSurfaceRayColor(aPos.xyz,refractedRay,aColor.rgb);
     gl_FragColor = vec4(rayColor,1.0);
      // gl_FragColor = vec4(aPos.xyz,1.0);// + vec4(,1.0) - vec4(refractedRay,1.0);
