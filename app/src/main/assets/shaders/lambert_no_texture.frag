@@ -3,17 +3,21 @@ precision mediump float;
 
 uniform vec3 cameraPos;
 uniform mat4 sphere_model;
+
 varying vec4 aColor;
 varying vec4 fragPos;
 varying vec4 aPos;
 varying vec4 normal;
-vec4 ambient = vec4(0.3,0.3,0.3,0.1);
+
+const vec4 ambient = vec4(0.3,0.3,0.3,0.1);
+const float poolHeight=0.5;
 const vec3 sphereCenter = vec3(0, -0.5,0.0);
 const float sphereRadius = 0.3;
 const float IOR_AIR = 1.0;
 const float IOR_WATER = 1.333;
 // Sphere texture
 uniform sampler2D sph_Texture;
+uniform sampler2D wall_Texture;
 
 mat4 inverse(mat4 m) {
   float
@@ -56,6 +60,15 @@ mat4 inverse(mat4 m) {
       a20 * b03 - a21 * b01 + a22 * b00) / det;
 }
 
+vec2 intersectCube(vec3 origin, vec3 ray, vec3 cubeMin, vec3 cubeMax) {
+  vec3 tMin = (cubeMin - origin) / ray;
+  vec3 tMax = (cubeMax - origin) / ray;
+  vec3 t1 = min(tMin, tMax);
+  vec3 t2 = max(tMin, tMax);
+  float tNear = max(max(t1.x, t1.y), t1.z);
+  float tFar = min(min(t2.x, t2.y), t2.z);
+  return vec2(tNear, tFar);
+}
 
 float intersectSphere(vec3 origin, vec3 ray, vec3 sphereCenter, float sphereRadius) {
   vec3 toSphere = origin - sphereCenter;
@@ -70,27 +83,54 @@ float intersectSphere(vec3 origin, vec3 ray, vec3 sphereCenter, float sphereRadi
   return 1.0e6;
 }
 
-vec3 getSurfaceRayColor(vec3 origin, vec3 ray, vec3 waterColor){
-    // Intersect with sphere first
-    vec3 color = waterColor;
-    float q = intersectSphere(origin, ray, sphereCenter, sphereRadius);
+// Get sphere color given a world point.
+vec3 getSphereColor(vec4 hitPoint_world) {
+   // Calculate sphere color
+   // 1. Convert world space coord to sphere local space.
+   mat4 sphere_model_inverse = inverse(sphere_model);
+   // 2. Position_world = model * local => local = model_inverse*position_world
+   vec4 hitPoint_sphere_local = sphere_model_inverse * hitPoint_world;
+   // 3. Calculte theta1 (rotation around z)
+   float v = acos(hitPoint_sphere_local.y / sphereRadius) / M_PI;
+   // 4. calculate theta2 (rotation around y)
+   float theta2 = -atan(hitPoint_sphere_local.z,hitPoint_sphere_local.x) + M_PI;
+   float u = theta2/(2.0*M_PI);
+   return texture2D(sph_Texture,vec2(u,v)).rgb;
+}
 
-    vec3 sphere_color = vec3(1.0,1.0,1.0);
+vec3 getWallColor(vec3 point) {
+    vec3 wallColor;
+    float scale = 0.5;
+    if (abs(point.x) > 0.999) {
+      wallColor = texture2D(wall_Texture, point.yz * 0.5 + vec2(1.0, 0.5)).rgb;
+    } else if (abs(point.z) > 0.999) {
+      wallColor = texture2D(wall_Texture, point.yx * 0.5 + vec2(1.0, 0.5)).rgb;
+    } else {
+      wallColor = texture2D(wall_Texture, point.xz * 0.5 + 0.5).rgb;
+    }
+    scale /= length(point); /* pool ambient occlusion */
+    scale *= 1.0 - 0.9 / pow(length(point - sphereCenter) / sphereRadius, 4.0); /* sphere ambient occlusion */
+
+    return wallColor * scale;
+}
+
+vec3 getSurfaceRayColor(vec3 origin, vec3 ray, vec3 waterColor){
+    vec3 color = waterColor;
+
+    // Intersect with sphere first
+    float q = intersectSphere(origin, ray, sphereCenter, sphereRadius);
     if(q<1.0e6){
         vec4 hitPoint_world = vec4(origin + ray*q,1.0);
-        // Calculate sphere color
-        // 1. Convert world space coord to sphere local space.
-        mat4 sphere_model_inverse = inverse(sphere_model);
-        // 2. Position_world = model * local => local = model_inverse*position_world
-        vec4 hitPoint_sphere_local = sphere_model_inverse * hitPoint_world;
-        // 3. Calculte theta1 (rotation around z)
-        float v = acos(hitPoint_sphere_local.y / sphereRadius) / M_PI;
-        // 4. calculate theta2 (rotation around y)
-        float theta2 = -atan(hitPoint_sphere_local.z,hitPoint_sphere_local.x) + M_PI;
-        float u = theta2/(2.0*M_PI);
-        sphere_color = texture2D(sph_Texture,vec2(u,v)).rgb;
+        color = getSphereColor(hitPoint_world);
+    } else {
+        // Intersect with wall (Lower than water part)
+        if(ray.y < 0.0){
+            vec2 t = intersectCube(origin, ray, vec3(-1.0, -1.0, -1.0), vec3(1.0, poolHeight, 1.0));
+            color = getWallColor(origin+ray*t.y);
+        }
     }
-    return vec3(0.25, 1.0, 1.25)*sphere_color;
+    // intersect with walls
+    return vec3(0.25, 1.0, 1.25)*color;
 }
 void main() {
     vec3 incomingRay = normalize(aPos.xyz - cameraPos);

@@ -55,9 +55,12 @@ public class Water {
         // uniformMap.put("lightPos", new float[]{5.0f, 10.0f, 0.0f, 1.0f});
 
         uniformMap.put("sph_Texture", 0);
-
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, Shared.textureManager().getGlTextureId("earth"));
+
+        uniformMap.put("wall_Texture", 1);
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE1);
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, Shared.textureManager().getGlTextureId("imooc"));
 
         // setup attributes
         Map<String, AbstractBufferList> attributeMap = new HashMap<>();

@@ -1,5 +1,7 @@
 package com.example.vincentzhang.learnandroid.shapes;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
 import android.util.Log;
 
@@ -12,6 +14,8 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+
+import max3d.Shared;
 
 /**
  * Created by VincentZhang on 3/30/2017.
@@ -329,7 +333,10 @@ public class Cube {
         mTextureBuffer.put(texCoords);
         mTextureBuffer.position(0);
 
-        mTextureDataHandle = TextureHelper.loadTexture(OpenGLActivity.getContext(), R.drawable.imooc);
+        Bitmap earthTexture = BitmapFactory.decodeResource(OpenGLActivity.getContext().getResources(),
+                R.drawable.tiles);
+        Shared.textureManager().addTextureId(earthTexture, "imooc");
+        mTextureDataHandle = Shared.textureManager().getGlTextureId("imooc");
 
         // prepare shaders and OpenGL program
         int vertexShader = OpenGLRenderer.loadShader(
