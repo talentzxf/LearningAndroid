@@ -74,6 +74,10 @@ public class ObjectRenderer {
     }
 
     private void bindAttributes(Map<String, AbstractBufferList> shaderObjectMap) {
+        if(shaderObjectMap == null){
+            return;
+        }
+
         for (String attributeName : shaderObjectMap.keySet()) {
             AbstractBufferList buffer = shaderObjectMap.get(attributeName);
             int newBufferHandle = GLES20.glGetAttribLocation(program, attributeName);
@@ -103,6 +107,10 @@ public class ObjectRenderer {
     }
 
     private void bindUniform(Map<String, Object> uniformMap) throws Exception {
+        if(uniformMap == null){
+            return ;
+        }
+
         for (String key : uniformMap.keySet()) {
             Object valueArrayObj = uniformMap.get(key);
             int uniformLocation = GLES20.glGetUniformLocation(program, key);
@@ -117,11 +125,14 @@ public class ObjectRenderer {
                     case 16: // Matrix
                         GLES20.glUniformMatrix4fv(uniformLocation, 1, false, valueArray, 0);
                         break;
-                    case 4:
+                    case 4: // vec4
                         GLES20.glUniform4fv(uniformLocation, 1, valueArray, 0);
                         break;
-                    case 3:
+                    case 3: // vec3
                         GLES20.glUniform3fv(uniformLocation, 1, valueArray, 0);
+                        break;
+                    case 2: // vec2
+                        GLES20.glUniform2fv(uniformLocation, 1, valueArray, 0);
                         break;
                 }
             } else if (valueArrayObj instanceof Integer) {
@@ -133,7 +144,6 @@ public class ObjectRenderer {
 
     public void drawObject(Map<String, Object> uniformMap, Map<String, AbstractBufferList> shaderObjectMap) {
         try {
-
             GLES20.glUseProgram(program);
             bindUniform(uniformMap);
             bindAttributes(shaderObjectMap);

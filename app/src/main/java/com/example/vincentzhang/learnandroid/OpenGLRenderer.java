@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.example.vincentzhang.learnandroid.Camera.Camera;
 import com.example.vincentzhang.learnandroid.shapes.Cube;
+import com.example.vincentzhang.learnandroid.shapes.MoocCube;
 import com.example.vincentzhang.learnandroid.shapes.SphereRenderer;
 import com.example.vincentzhang.learnandroid.shapes.Square;
 import com.example.vincentzhang.learnandroid.shapes.Triangle;
@@ -27,6 +28,7 @@ import static android.opengl.GLU.gluErrorString;
 
 public class OpenGLRenderer implements GLSurfaceView.Renderer {
     private Cube mCube;
+    private MoocCube mMoocCube;
     private float mCubeRotation;
 
     private static final String TAG = "MyGLRenderer";
@@ -61,6 +63,7 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
         mTriangle = new Triangle();
         mSquare = new Square();
         mCube = new Cube();
+        mMoocCube = new MoocCube();
         sphereRenderer = new SphereRenderer(0.3f, 30, 30);
         waterSurface = new Water(2.0f,2.0f,100,100, camera);
     }
@@ -86,9 +89,10 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
         Matrix.scaleM(mModelMatrix, 0, 1.0f, 1.0f, 1.0f);
         float elapsedTimeSec = ((float)(System.currentTimeMillis() - startTime)/1000.0f);
         // Matrix.rotateM(mModelMatrix,0, elapsedTimeSec * 10, 0.0f, 1.0f, 0.0f);
-        mCube.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
-        sphereRenderer.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
-        waterSurface.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
+        // mCube.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
+        mMoocCube.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
+        //sphereRenderer.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
+        //waterSurface.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
     }
 
     @Override

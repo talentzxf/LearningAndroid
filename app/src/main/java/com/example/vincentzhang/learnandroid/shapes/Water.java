@@ -9,12 +9,15 @@ import android.support.annotation.RequiresApi;
 import com.example.vincentzhang.learnandroid.Camera.Camera;
 import com.example.vincentzhang.learnandroid.OpenGLRenderer;
 
+import org.w3c.dom.Text;
+
 import java.util.HashMap;
 import java.util.Map;
 
 import max3d.Shared;
 import max3d.core.AbstractBufferList;
 import max3d.core.ObjectRenderer;
+import max3d.core.TextureRenderer;
 import max3d.primitives.Rectangle;
 
 /**
@@ -26,12 +29,33 @@ public class Water {
     private ObjectRenderer renderer;
     private Camera camera;
 
+    // The data in the texture is (position.y, velocity.y, normal.x, normal.z)
+    private TextureRenderer textureA = new TextureRenderer();
+    private TextureRenderer textureB = new TextureRenderer();
+
+    private TextureRenderer currentTexture = textureA;
+    private TextureRenderer backTexture = textureB;
+
+    private ObjectRenderer updateRenderer;
+
+    private void swapTexture() {
+        TextureRenderer tmp = currentTexture;
+        currentTexture = backTexture;
+        backTexture = tmp;
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public Water(float $width, float $height, int $segsW, int $segsH, Camera $cam) {
         rectangle = new Rectangle($width, $height, $segsW, $segsH);
         renderer = new ObjectRenderer("shaders/lambert_no_texture.vert",
                 "shaders/lambert_no_texture.frag", rectangle);
         camera = $cam;
+
+        textureA.init(256, 256);
+        textureB.init(256, 256);
+        currentTexture = textureA;
+        updateRenderer = new ObjectRenderer("shaders/water/vertex.vert",
+                "shaders/water/update.frag", rectangle);
     }
 
     public void draw(float[] model, float[] view, float[] projection) {
@@ -49,8 +73,8 @@ public class Water {
         uniformMap.put("cameraPos", this.camera.getPos());
 
         float[] local_model = new float[16];
-        Matrix.setIdentityM(local_model,0);
-        Matrix.translateM(local_model,0, 0.0f,-0.5f,0.0f);
+        Matrix.setIdentityM(local_model, 0);
+        Matrix.translateM(local_model, 0, 0.0f, -0.5f, 0.0f);
         uniformMap.put("sphere_model", local_model);
         // uniformMap.put("lightPos", new float[]{5.0f, 10.0f, 0.0f, 1.0f});
 
@@ -62,10 +86,32 @@ public class Water {
         GLES20.glActiveTexture(GLES20.GL_TEXTURE1);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, Shared.textureManager().getGlTextureId("imooc"));
 
+        uniformMap.put("info_Texture", 2);
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE2);
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, currentTexture.getTextureId());
+
         // setup attributes
         Map<String, AbstractBufferList> attributeMap = new HashMap<>();
         attributeMap.put("vPosition", rectangle.points());
         attributeMap.put("vNormal", rectangle.normals());
         renderer.drawObject(uniformMap, attributeMap);
+
+        updateInfoTexture();
+    }
+
+    void updateInfoTexture() {
+        currentTexture.drawTo(new Runnable() {
+            @Override
+            public void run() {
+                Map<String, Object> uniformMap = new HashMap<>();
+                uniformMap.put("delta", new float[]{1/backTexture.getWidth(), 1/backTexture.getHeight()});
+
+                GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+                GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, backTexture.getTextureId());
+                uniformMap.put("texture", 2);
+                updateRenderer.drawObject(uniformMap, null);
+            }
+        });
+        swapTexture();
     }
 }
