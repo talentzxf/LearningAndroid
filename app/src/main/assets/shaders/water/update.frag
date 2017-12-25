@@ -1,3 +1,4 @@
+precision mediump float;
 uniform sampler2D texture;
 uniform vec2 delta;
 varying vec2 coord;

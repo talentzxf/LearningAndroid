@@ -66,8 +66,8 @@ public class ObjectRenderer {
         GLES20.glLinkProgram(program);                  // create OpenGL program executables
         OpenGLRenderer.checkGlError("glLinkProgram");
         try {
-            Log.i("OPENGL", GLES20.glGetShaderInfoLog(vertexShader));
-            Log.i("OPENGL", GLES20.glGetShaderInfoLog(fragmentShader));
+            Log.i("Vertex Shader OPENGL", GLES20.glGetShaderInfoLog(vertexShader));
+            Log.i("Fragment Shader OPENGL", GLES20.glGetShaderInfoLog(fragmentShader));
         } catch (Exception e) {
             Log.e("OPENGL", "Found error trying to get shader infor.");
         }
