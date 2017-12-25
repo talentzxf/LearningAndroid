@@ -74,6 +74,10 @@ public class TextureRenderer {
                         GLES20.GL_RENDERBUFFER,            //渲染缓冲
                         renderDepthBufferId                //渲染深度缓冲id
                 );
+
+        // Restore frame buffer and render buffer
+        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);//绑定帧缓冲id
+        GLES20.glBindRenderbuffer(GLES20.GL_RENDERBUFFER, 0);
     }
 
     // Draw the callback into the texture

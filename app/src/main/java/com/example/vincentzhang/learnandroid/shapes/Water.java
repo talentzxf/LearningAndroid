@@ -96,7 +96,7 @@ public class Water {
         attributeMap.put("vNormal", rectangle.normals());
         renderer.drawObject(uniformMap, attributeMap);
 
-        updateInfoTexture();
+        //updateInfoTexture();
     }
 
     void updateInfoTexture() {
