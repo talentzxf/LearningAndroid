@@ -50,10 +50,10 @@ public class Water {
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public Water(float $width, float $height, int $segsW, int $segsH, Camera $cam) {
         rectangle = new Rectangle($width, $height, $segsW, $segsH);
-        renderer = new ObjectRenderer("shaders/lambert_no_texture.vert",
-                "shaders/lambert_no_texture.frag", rectangle);
-//        renderer = new ObjectRenderer("shaders/water/vertex.vert",
-//                "shaders/water/showtexture.frag",rectangle);
+//        renderer = new ObjectRenderer("shaders/lambert_no_texture.vert",
+//                "shaders/lambert_no_texture.frag", rectangle);
+        renderer = new ObjectRenderer("shaders/water/showtexture.vert",
+                "shaders/water/showtexture.frag",rectangle);
 
         camera = $cam;
 

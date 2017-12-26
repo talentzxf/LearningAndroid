@@ -8,6 +8,7 @@ varying vec4 aColor;
 varying vec4 fragPos;
 varying vec4 aPos;
 varying vec4 normal;
+varying vec4 modelPos;
 
 const vec4 ambient = vec4(0.3,0.3,0.3,0.1);
 const float poolHeight=0.5;
@@ -18,6 +19,7 @@ const float IOR_WATER = 1.333;
 // Sphere texture
 uniform sampler2D sph_Texture;
 uniform sampler2D wall_Texture;
+uniform sampler2D info_Texture;
 
 mat4 inverse(mat4 m) {
   float
@@ -137,6 +139,6 @@ void main() {
     vec3 refractedRay = refract(incomingRay, normal.xyz, IOR_AIR/IOR_WATER);
     // vec3 rayColor = getSurfaceRayColor(aPos.xyz,refractedRay,aColor.rgb);
     vec3 rayColor = getSurfaceRayColor(aPos.xyz,refractedRay,aColor.rgb);
-    gl_FragColor = vec4(rayColor,1.0);
+    gl_FragColor = texture2D(info_Texture, modelPos.xy*0.5+0.5) + 0.0001 * vec4(rayColor,1.0);
      // gl_FragColor = vec4(aPos.xyz,1.0);// + vec4(,1.0) - vec4(refractedRay,1.0);
 }
