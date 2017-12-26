@@ -25,8 +25,18 @@
         <!--</intent-filter>-->
         <!--</activity>-->
 
+        <!--<activity-->
+            <!--android:name=".OpenGLActivity"-->
+            <!--android:label="@string/app_name"-->
+            <!--android:theme="@style/AppTheme.NoActionBar">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        <!--</activity>-->
+
         <activity
-            android:name=".OpenGLActivity"
+            android:name="Sample1_5.Sample1_5_Activity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -34,7 +44,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
 
         <!--<activity-->
         <!--android:name=".Min3DLoadObjActivity"-->
