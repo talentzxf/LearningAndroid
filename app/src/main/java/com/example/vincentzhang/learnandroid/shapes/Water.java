@@ -130,7 +130,7 @@ public class Water {
             @Override
             public void run() {
                 Map<String, Object> uniformMap = new HashMap<>();
-                uniformMap.put("delta", new float[]{1/backTexture.getWidth(), 1/backTexture.getHeight()});
+                // uniformMap.put("delta", new float[]{1/backTexture.getWidth(), 1/backTexture.getHeight()});
                 uniformMap.put("center", new float[]{0.0f,0.0f});
                 uniformMap.put("radius", 5.0f);
                 uniformMap.put("strength", 5.0f);

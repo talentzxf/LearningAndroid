@@ -137,6 +137,8 @@ public class ObjectRenderer {
                 }
             } else if (valueArrayObj instanceof Integer) {
                 GLES20.glUniform1i(uniformLocation, (Integer) valueArrayObj);
+            } else if (valueArrayObj instanceof Float){
+                GLES20.glUniform1f(uniformLocation, (Float) valueArrayObj);
             }
             OpenGLRenderer.checkGlError("bindUniform");
         }
