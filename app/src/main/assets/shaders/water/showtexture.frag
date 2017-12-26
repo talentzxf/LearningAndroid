@@ -18,7 +18,6 @@ const float IOR_WATER = 1.333;
 // Sphere texture
 uniform sampler2D sph_Texture;
 uniform sampler2D wall_Texture;
-uniform sampler2D info_Texture;
 
 mat4 inverse(mat4 m) {
   float
@@ -136,8 +135,8 @@ vec3 getSurfaceRayColor(vec3 origin, vec3 ray, vec3 waterColor){
 void main() {
     vec3 incomingRay = normalize(aPos.xyz - cameraPos);
     vec3 refractedRay = refract(incomingRay, normal.xyz, IOR_AIR/IOR_WATER);
+    // vec3 rayColor = getSurfaceRayColor(aPos.xyz,refractedRay,aColor.rgb);
     vec3 rayColor = getSurfaceRayColor(aPos.xyz,refractedRay,aColor.rgb);
-    // gl_FragColor = vec4(rayColor,1.0);
-    gl_FragColor = texture2D(info_Texture, aPos.xz) + 0.0001 * vec4(rayColor,1.0);
+    gl_FragColor = vec4(rayColor,1.0);
      // gl_FragColor = vec4(aPos.xyz,1.0);// + vec4(,1.0) - vec4(refractedRay,1.0);
 }

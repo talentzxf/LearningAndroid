@@ -83,6 +83,9 @@ public class TextureRenderer {
     // Draw the callback into the texture
     public void drawTo(Runnable callback) {
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, frameBufferId);
+        //设置视窗大小及位置
+//        GLES20.glViewport(0, 0, width, height);
+        //GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
         callback.run();
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);//绑定帧缓冲id
         GLES20.glBindRenderbuffer(GLES20.GL_RENDERBUFFER, 0);

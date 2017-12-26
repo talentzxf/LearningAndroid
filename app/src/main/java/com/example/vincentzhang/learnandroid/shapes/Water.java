@@ -50,10 +50,10 @@ public class Water {
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public Water(float $width, float $height, int $segsW, int $segsH, Camera $cam) {
         rectangle = new Rectangle($width, $height, $segsW, $segsH);
-//        renderer = new ObjectRenderer("shaders/lambert_no_texture.vert",
-//                "shaders/lambert_no_texture.frag", rectangle);
-        renderer = new ObjectRenderer("shaders/water/vertex.vert",
-                "shaders/water/showtexture.frag",rectangle);
+        renderer = new ObjectRenderer("shaders/lambert_no_texture.vert",
+                "shaders/lambert_no_texture.frag", rectangle);
+//        renderer = new ObjectRenderer("shaders/water/vertex.vert",
+//                "shaders/water/showtexture.frag",rectangle);
 
         camera = $cam;
 
@@ -133,7 +133,6 @@ public class Water {
             @Override
             public void run() {
                 Map<String, Object> uniformMap = new HashMap<>();
-                // uniformMap.put("delta", new float[]{1/backTexture.getWidth(), 1/backTexture.getHeight()});
                 uniformMap.put("center", new float[]{0.0f,0.0f});
                 uniformMap.put("radius", 5.0f);
                 uniformMap.put("strength", 5.0f);
