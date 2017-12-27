@@ -14,7 +14,7 @@ public class Sample1_5_Activity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN ,
 		              WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+		//setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
 		mGLSurfaceView = new MySurfaceView(this);
         setContentView(mGLSurfaceView);	

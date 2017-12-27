@@ -1,6 +1,6 @@
-varying vec2 coord;
 attribute vec4 vPosition;
+varying vec2 coord;
 void main(){
   coord = vPosition.xy * 0.5 + 0.5;
-  gl_Position = vec4(vPosition.xyz, 1.0);
+  gl_Position = vPosition;
 }

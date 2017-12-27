@@ -100,4 +100,12 @@ public class TextureRenderer {
     public int getHeight() {
         return height;
     }
+
+    public int getFrameBufferId() {
+        return frameBufferId;
+    }
+
+    public int getRenderBufferId() {
+        return renderDepthBufferId;
+    }
 }
