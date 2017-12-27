@@ -7,7 +7,10 @@ varying vec2 coord;
 void main() {
   /* get vertex info */
   vec4 info = texture2D(texture, coord);
-  info=vec4(info.r,-info.g,info.b,info.a);
+
+  if(info.b > 0.9){
+    info.g = -info.g;
+  }
 
   /* calculate average neighbor height */
   vec2 dx = vec2(delta.x, 0.0);
@@ -28,5 +31,12 @@ void main() {
   /* move the vertex along the velocity */
   info.r += info.g;
 
-  gl_FragColor = vec4(info.r, -info.g, info.b,info.a);
+  if(info.g < 0.0){
+    info.b = 1.0;
+    info.g = -info.g;
+  }else{
+    info.b = 0.0;
+  }
+
+  gl_FragColor = info;
 }
