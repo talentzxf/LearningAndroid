@@ -2,6 +2,8 @@ package max3d.core;
 
 import android.opengl.GLES20;
 
+import com.example.vincentzhang.learnandroid.OpenGLRenderer;
+
 /**
  * Created by VincentZhang on 12/24/2017.
  */
@@ -56,9 +58,10 @@ public class TextureRenderer {
                         height,            //高度
                         0,                        //边界宽度
                         GLES20.GL_RGBA,            //格式
-                        GLES20.GL_UNSIGNED_BYTE,//每个像素数据格式
+                        GLES20.GL_FLOAT,//每个像素数据格式
                         null
                 );
+        OpenGLRenderer.checkGlError("Texture generation");
         GLES20.glFramebufferTexture2D        //设置自定义帧缓冲的颜色缓冲附件
                 (
                         GLES20.GL_FRAMEBUFFER,

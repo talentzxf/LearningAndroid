@@ -87,6 +87,8 @@ class MySurfaceView extends GLSurfaceView {
 
         public void initFRBuffers() {
             textureA.init(GEN_TEX_WIDTH, GEN_TEX_HEIGHT);
+            textureB.init(GEN_TEX_WIDTH, GEN_TEX_HEIGHT);
+
             dropRenderer = new ObjectRenderer("shaders/water/vertex.vert",
                     "shaders/water/drop.frag", rectangle);
             updateRenderer = new ObjectRenderer("shaders/water/vertex.vert",
@@ -111,13 +113,17 @@ class MySurfaceView extends GLSurfaceView {
             attributeMap.put("vPosition", rectangle.points());
 
             uniformMap.put("center", new float[]{0.0f, 0.0f});
-            uniformMap.put("radius", 0.3f);
-            uniformMap.put("strength", 0.3f);
+            uniformMap.put("radius", 0.03f);
+            uniformMap.put("strength", 0.01f);
             uniformMap.put("texture", 0);
 
             // Provide texture A information
             GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureA.getTextureId());
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D,GLES20.GL_TEXTURE_WRAP_S,
+                    GLES20.GL_CLAMP_TO_EDGE  );
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D,GLES20.GL_TEXTURE_WRAP_T,
+                    GLES20.GL_CLAMP_TO_EDGE  );
             dropRenderer.drawObject(uniformMap, attributeMap);
 
             // Swap texture B to texture A
@@ -139,7 +145,7 @@ class MySurfaceView extends GLSurfaceView {
             Map attributeMap = new HashMap();
             attributeMap.put("vPosition", rectangle.points());
             uniformMap.put("texture", 0);
-            // uniformMap.put("delta", new float[]{1.0f/GEN_TEX_WIDTH, 1.0f/GEN_TEX_HEIGHT});
+            uniformMap.put("delta", new float[]{1.0f/GEN_TEX_WIDTH, 1.0f/GEN_TEX_HEIGHT});
 
             // Provide texture A information
             GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
@@ -180,12 +186,12 @@ class MySurfaceView extends GLSurfaceView {
         }
 
         public void onDrawFrame(GL10 gl) {
-//            if(!dropAdded){
-//                addDrop();
-//                dropAdded = true;
-//            }
-            addDrop();
-            // updateWater();
+            if(!dropAdded){
+                addDrop();
+                dropAdded = true;
+            }
+            //addDrop();
+            updateWater();
             // updateWater();
             drawShadowTexture();
         }
