@@ -58,8 +58,8 @@ public class TextureRenderer {
                         height,            //高度
                         0,                        //边界宽度
                         GLES20.GL_RGBA,            //格式
-                        // GLES20.GL_FLOAT,//每个像素数据格式
-                        GLES20.GL_UNSIGNED_BYTE, //  final int GL_HALF_FLOAT_OES = 0x8D61;
+                        GLES20.GL_FLOAT,//每个像素数据格式
+                        //GLES20.GL_UNSIGNED_BYTE, //  final int GL_HALF_FLOAT_OES = 0x8D61;
                         null
                 );
         OpenGLRenderer.checkGlError("Texture generation");

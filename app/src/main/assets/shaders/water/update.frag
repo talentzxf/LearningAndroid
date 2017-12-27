@@ -8,7 +8,7 @@ void main() {
   /* get vertex info */
   vec4 info = texture2D(texture, coord);
 
-  if(info.b > 0.9){
+  if(info.b > 0.4){
     info.g = -info.g;
   }
 
@@ -32,7 +32,7 @@ void main() {
   info.r += info.g;
 
   if(info.g < 0.0){
-    info.b = 1.0;
+    info.b = 0.5;
     info.g = -info.g;
   }else{
     info.b = 0.0;
