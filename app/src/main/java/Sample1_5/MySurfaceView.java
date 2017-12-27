@@ -34,8 +34,8 @@ class MySurfaceView extends GLSurfaceView {
     private float mPreviousX;
     float ratio;
 
-    static final int GEN_TEX_WIDTH = 1024;
-    static final int GEN_TEX_HEIGHT = 1024;
+    static final int GEN_TEX_WIDTH = 256;
+    static final int GEN_TEX_HEIGHT = 256;
 
     int SCREEN_WIDTH;
     int SCREEN_HEIGHT;
@@ -78,7 +78,7 @@ class MySurfaceView extends GLSurfaceView {
 
         TextureRenderer textureA = new TextureRenderer();
         TextureRenderer textureB = new TextureRenderer();
-        Rectangle rectangle = new Rectangle(-2.0f, 2.0f, 100, 100);
+        Rectangle rectangle = new Rectangle(-2.0f, 2.0f, 1, 1);
         ObjectRenderer objectRenderer;
         ObjectRenderer dropRenderer;
         ObjectRenderer updateRenderer;
@@ -185,13 +185,18 @@ class MySurfaceView extends GLSurfaceView {
             MatrixState.popMatrix();
         }
 
+        int updateCount = 0;
         public void onDrawFrame(GL10 gl) {
             if(!dropAdded){
                 addDrop();
                 dropAdded = true;
             }
             //addDrop();
-            updateWater();
+            if(updateCount >= 0){
+                updateWater();
+                updateCount--;
+            }
+
             // updateWater();
             drawShadowTexture();
         }
