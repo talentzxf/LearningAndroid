@@ -1,12 +1,12 @@
 precision mediump float;
 #define M_PI 3.1415926535897932384626433832795
 
+const vec3 abovewaterColor = vec3(0.25, 1.0, 1.25);
+const vec3 underwaterColor = vec3(0.4, 0.9, 1.0);
 uniform vec3 cameraPos;
 uniform mat4 sphere_model;
+uniform vec4 light;
 
-const vec3 abovewaterColor = vec3(0.25, 1.0, 1.25);\
-
-varying vec4 aColor;
 varying vec4 fragPos;
 varying vec4 aPos;
 varying vec4 normal;
@@ -20,6 +20,7 @@ const float IOR_WATER = 1.333;
 // Sphere texture
 uniform sampler2D sph_Texture;
 uniform sampler2D wall_Texture;
+
 
 mat4 inverse(mat4 m) {
   float
@@ -131,12 +132,14 @@ vec3 getSurfaceRayColor(vec3 origin, vec3 ray, vec3 waterColor){
         vec2 t = intersectCube(origin, ray, vec3(-1.0, -1.0, -1.0), vec3(1.0, 2.0, 1.0));
         vec3 hit = origin + ray*t.y;
         if(hit.y < 2.0/12.0){
-            color = vec3(0.0,0.0,0.5);
+            color = getWallColor(hit);
+        }else{
+            color = vec3(0.2,0.2,0.5);
+            color += vec3(pow(max(0.0, dot(light.xyz, ray)), 5000.0)) * vec3(10.0, 8.0, 6.0);
         }
     }
 
-
-    if (ray.y < 0.0) color *= waterColor;\
+    if (ray.y < 0.0) color *= waterColor;
     return color;
 }
 void main() {
@@ -148,5 +151,4 @@ void main() {
     vec3 reflectedColor = getSurfaceRayColor(aPos.xyz,reflectedRay,abovewaterColor.rgb);
 
     gl_FragColor = vec4(mix(refractedColor, reflectedColor, fresnel), 1.0);
-     // gl_FragColor = vec4(aPos.xyz,1.0);// + vec4(,1.0) - vec4(refractedRay,1.0);
 }

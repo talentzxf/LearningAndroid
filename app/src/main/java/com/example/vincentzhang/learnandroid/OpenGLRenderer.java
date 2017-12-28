@@ -108,6 +108,8 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
         // in the onDrawFrame() method
         Matrix.frustumM(mProjectionMatrix, 0, -ratio, ratio, -1, 1, 3, 20);
         camera.setViewport(width, height);
+
+        camera.rotate( 10, 10);
     }
 
     /**

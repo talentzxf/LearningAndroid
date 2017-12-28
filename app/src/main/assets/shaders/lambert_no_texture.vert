@@ -3,7 +3,6 @@ uniform mat4 view;
 uniform mat4 model;
 attribute vec4 vPosition;
 attribute vec4 vNormal;
-uniform vec4 lightPos;
 varying vec4 aColor;
 uniform vec4 vColor;
 varying vec4 aPos;
@@ -19,5 +18,5 @@ void main() {
   gl_Position.y += info.r;
   aPos = model * vPosition.xzyw;
   normal = model*vNormal.xzyw;
-  aColor = max( vColor * dot( normalize(vNormal.xzy), normalize((lightPos - model*vPosition).xyz)) ,0.0);
+  //aColor = max( vColor * dot( normalize(vNormal.xzy), normalize((light - model*vPosition).xyz)) ,0.0);
 }
