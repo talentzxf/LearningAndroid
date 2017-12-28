@@ -78,6 +78,8 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
 
         float[] scratch = new float[16];
 
+        GLES20.glViewport(0,0,
+                (int)camera.getViewportWidth(), (int)camera.getViewportHeight());
         // Draw background color
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 

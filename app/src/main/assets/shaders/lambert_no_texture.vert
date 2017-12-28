@@ -15,8 +15,9 @@ void main() {
    // Note that the uMVPMatrix factor *must be first* in order
   // for the matrix multiplication product to be correct.
   vec4 info = texture2D(info_Texture, vPosition.xy*0.5+0.5);
-  gl_Position = projection * view * model * ( vPosition + 0.001*vNormal + info.r);
-  aPos = model * vPosition;
-  normal = model*vNormal;
-  aColor = max( vColor * dot( normalize(vNormal.xyz), normalize((lightPos - model*vPosition).xyz)) ,0.0);
+  gl_Position = projection * view * model * vPosition.xzyw;
+  gl_Position.y += info.r;
+  aPos = model * vPosition.xzyw;
+  normal = model*vNormal.xzyw;
+  aColor = max( vColor * dot( normalize(vNormal.xzy), normalize((lightPos - model*vPosition).xyz)) ,0.0);
 }

@@ -26,6 +26,12 @@ import max3d.primitives.Rectangle;
 
 public class Water {
     private Rectangle rectangle;
+    private final int GEN_TEX_WIDTH = 256;
+    private final int GEN_TEX_HEIGHT = 256;
+
+    // Used for shader only
+    private Rectangle shaderRectangle = new Rectangle(-2.0f, 2.0f, 1, 1);
+    ;
     private ObjectRenderer renderer;
     private Camera camera;
 
@@ -33,16 +39,14 @@ public class Water {
     private TextureRenderer textureA = new TextureRenderer();
     private TextureRenderer textureB = new TextureRenderer();
 
-    private TextureRenderer currentTexture = textureA;
-    private TextureRenderer backTexture = textureB;
+    ObjectRenderer dropRenderer;
+    ObjectRenderer updateRenderer;
+    ObjectRenderer updateNormalRenderer;
 
-    private ObjectRenderer updateRenderer;
-    private ObjectRenderer addDropRenderer;
-
-    private void swapTexture() {
-        TextureRenderer tmp = currentTexture;
-        currentTexture = backTexture;
-        backTexture = tmp;
+    private void swapRTT() {
+        TextureRenderer tmp = textureA;
+        textureA = textureB;
+        textureB = tmp;
     }
 
     boolean initDropAdded = false;
@@ -50,21 +54,19 @@ public class Water {
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public Water(float $width, float $height, int $segsW, int $segsH, Camera $cam) {
         rectangle = new Rectangle($width, $height, $segsW, $segsH);
-//        renderer = new ObjectRenderer("shaders/lambert_no_texture.vert",
-//                "shaders/lambert_no_texture.frag", rectangle);
-        renderer = new ObjectRenderer("shaders/water/showtexture.vert",
-                "shaders/water/showtexture.frag",rectangle);
-
+        renderer = new ObjectRenderer("shaders/lambert_no_texture.vert",
+                "shaders/lambert_no_texture.frag", rectangle);
         camera = $cam;
 
-        textureA.init(256, 256);
-        textureB.init(256, 256);
-        currentTexture = textureA;
-        updateRenderer = new ObjectRenderer("shaders/water/vertex.vert",
-                "shaders/water/update.frag", rectangle);
-        addDropRenderer = new ObjectRenderer("shaders/water/vertex.vert",
-                "shaders/water/drop.frag", rectangle);
+        textureA.init(GEN_TEX_WIDTH, GEN_TEX_HEIGHT);
+        textureB.init(GEN_TEX_WIDTH, GEN_TEX_HEIGHT);
 
+        dropRenderer = new ObjectRenderer("shaders/water/vertex.vert",
+                "shaders/water/drop.frag", shaderRectangle);
+        updateRenderer = new ObjectRenderer("shaders/water/vertex.vert",
+                "shaders/water/update.frag", shaderRectangle);
+        updateNormalRenderer = new ObjectRenderer("shaders/water/vertex.vert",
+                "shaders/water/normal.frag", shaderRectangle);
     }
 
     public void draw(float[] model, float[] view, float[] projection) {
@@ -93,7 +95,7 @@ public class Water {
 
         uniformMap.put("info_Texture", 2);
         GLES20.glActiveTexture(GLES20.GL_TEXTURE2);
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, currentTexture.getTextureId());
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureA.getTextureId());
 
         // setup attributes
         Map<String, AbstractBufferList> attributeMap = new HashMap<>();
@@ -101,51 +103,92 @@ public class Water {
         attributeMap.put("vNormal", rectangle.normals());
         renderer.drawObject(uniformMap, attributeMap);
 
-        if(!initDropAdded){
+        if (!initDropAdded) {
             addDrop();
             initDropAdded = true;
         }
 
-        updateInfo();
+        updateWater();
+        updateWater();
+        updateWater();
+        updateWaterNormal();
     }
 
-    void updateInfo() {
-        currentTexture.drawTo(new Runnable() {
+    public void addDrop() {
+
+        textureB.drawTo(new Runnable() {
             @Override
             public void run() {
-                Map<String, Object> uniformMap = new HashMap<>();
-                uniformMap.put("delta", new float[]{1/backTexture.getWidth(), 1/backTexture.getHeight()});
+                GLES20.glViewport(0, 0, GEN_TEX_WIDTH, GEN_TEX_HEIGHT);
+                GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
 
-                Map<String, AbstractBufferList> attributeMap = new HashMap<>();
-                attributeMap.put("vPosition", rectangle.points());
+                Map uniformMap = new HashMap();
 
-                GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
-                GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, backTexture.getTextureId());
+                Map attributeMap = new HashMap();
+                attributeMap.put("vPosition", shaderRectangle.points());
+
+                uniformMap.put("center", new float[]{0.0f, 0.0f});
+                uniformMap.put("radius", 0.03f);
+                uniformMap.put("strength", 5.1f);
                 uniformMap.put("texture", 0);
+
+                // Provide texture A information
+                GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+                GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureA.getTextureId());
+                dropRenderer.drawObject(uniformMap, attributeMap);
+            }
+        });
+
+        // Swap texture B to texture A
+        swapRTT();
+    }
+
+    public void updateWater() {
+
+        textureB.drawTo(new Runnable() {
+            @Override
+            public void run() {
+                GLES20.glViewport(0, 0, GEN_TEX_WIDTH, GEN_TEX_HEIGHT);
+                GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
+
+                Map uniformMap = new HashMap();
+
+                Map attributeMap = new HashMap();
+                attributeMap.put("vPosition", shaderRectangle.points());
+                uniformMap.put("texture", 0);
+                uniformMap.put("delta", new float[]{1.0f / GEN_TEX_WIDTH, 1.0f / GEN_TEX_HEIGHT});
+
+                // Provide texture A information
+                GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+                GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureA.getTextureId());
                 updateRenderer.drawObject(uniformMap, attributeMap);
             }
         });
-        swapTexture();
+
+        swapRTT();
     }
 
-    void addDrop(){
-        currentTexture.drawTo(new Runnable() {
+    public void updateWaterNormal() {
+
+        textureB.drawTo(new Runnable() {
             @Override
             public void run() {
-                Map<String, Object> uniformMap = new HashMap<>();
-                uniformMap.put("center", new float[]{0.0f,0.0f});
-                uniformMap.put("radius", 5.0f);
-                uniformMap.put("strength", 5.0f);
+                GLES20.glViewport(0, 0, GEN_TEX_WIDTH, GEN_TEX_HEIGHT);
+                GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
 
-                Map<String, AbstractBufferList> attributeMap = new HashMap<>();
-                attributeMap.put("vPosition", rectangle.points());
+                Map uniformMap = new HashMap();
 
-                GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
-                GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, backTexture.getTextureId());
+                Map attributeMap = new HashMap();
+                attributeMap.put("vPosition", shaderRectangle.points());
                 uniformMap.put("texture", 0);
-                addDropRenderer.drawObject(uniformMap, attributeMap);
+                uniformMap.put("delta", new float[]{1.0f / GEN_TEX_WIDTH, 1.0f / GEN_TEX_HEIGHT});
+
+                // Provide texture A information
+                GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+                GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureA.getTextureId());
+                updateNormalRenderer.drawObject(uniformMap, attributeMap);
             }
         });
-        swapTexture();
+        swapRTT();
     }
 }

@@ -64,5 +64,13 @@ public class Camera {
         this.scrWidth = width;
         this.scrHeight = height;
     }
+
+    public float getViewportWidth(){
+        return this.scrWidth;
+    }
+
+    public float getViewportHeight(){
+        return this.scrHeight;
+    }
 }
 
