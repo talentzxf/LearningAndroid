@@ -96,32 +96,28 @@ class MySurfaceView extends GLSurfaceView {
 
         public void addDrop() {
 
-            GLES20.glViewport(0, 0, GEN_TEX_WIDTH, GEN_TEX_HEIGHT);
+            textureB.drawTo(new Runnable() {
+                @Override
+                public void run() {
+                    GLES20.glViewport(0, 0, GEN_TEX_WIDTH, GEN_TEX_HEIGHT);
+                    GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
 
-            // Draw to texture B
-            GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, textureB.getFrameBufferId());
-            // GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
+                    Map uniformMap = new HashMap();
 
-            GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
+                    Map attributeMap = new HashMap();
+                    attributeMap.put("vPosition", rectangle.points());
 
-            Map uniformMap = new HashMap();
+                    uniformMap.put("center", new float[]{0.0f, 0.0f});
+                    uniformMap.put("radius", 0.03f);
+                    uniformMap.put("strength", 0.1f);
+                    uniformMap.put("texture", 0);
 
-            Map attributeMap = new HashMap();
-            attributeMap.put("vPosition", rectangle.points());
-
-            uniformMap.put("center", new float[]{0.0f, 0.0f});
-            uniformMap.put("radius", 0.03f);
-            uniformMap.put("strength", 0.1f);
-            uniformMap.put("texture", 0);
-
-            // Provide texture A information
-            GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
-            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureA.getTextureId());
-            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S,
-                    GLES20.GL_CLAMP_TO_EDGE);
-            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T,
-                    GLES20.GL_CLAMP_TO_EDGE);
-            dropRenderer.drawObject(uniformMap, attributeMap);
+                    // Provide texture A information
+                    GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+                    GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureA.getTextureId());
+                    dropRenderer.drawObject(uniformMap, attributeMap);
+                }
+            });
 
             // Swap texture B to texture A
             swapRTT();
@@ -129,49 +125,50 @@ class MySurfaceView extends GLSurfaceView {
 
         public void updateWater() {
 
-            GLES20.glViewport(0, 0, GEN_TEX_WIDTH, GEN_TEX_HEIGHT);
+            textureB.drawTo(new Runnable() {
+                @Override
+                public void run() {
+                    GLES20.glViewport(0, 0, GEN_TEX_WIDTH, GEN_TEX_HEIGHT);
+                    GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
 
-            // Draw to texture B
-            GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, textureB.getFrameBufferId());
-            // GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
+                    Map uniformMap = new HashMap();
 
-            GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
+                    Map attributeMap = new HashMap();
+                    attributeMap.put("vPosition", rectangle.points());
+                    uniformMap.put("texture", 0);
+                    uniformMap.put("delta", new float[]{1.0f / GEN_TEX_WIDTH, 1.0f / GEN_TEX_HEIGHT});
 
-            Map uniformMap = new HashMap();
+                    // Provide texture A information
+                    GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+                    GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureA.getTextureId());
+                    updateRenderer.drawObject(uniformMap, attributeMap);
+                }
+            });
 
-            Map attributeMap = new HashMap();
-            attributeMap.put("vPosition", rectangle.points());
-            uniformMap.put("texture", 0);
-            uniformMap.put("delta", new float[]{1.0f / GEN_TEX_WIDTH, 1.0f / GEN_TEX_HEIGHT});
-
-            // Provide texture A information
-            GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
-            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureA.getTextureId());
-            updateRenderer.drawObject(uniformMap, attributeMap);
             swapRTT();
         }
 
         public void updateWaterNormal() {
 
-            GLES20.glViewport(0, 0, GEN_TEX_WIDTH, GEN_TEX_HEIGHT);
+            textureB.drawTo(new Runnable() {
+                @Override
+                public void run() {
+                    GLES20.glViewport(0, 0, GEN_TEX_WIDTH, GEN_TEX_HEIGHT);
+                    GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
 
-            // Draw to texture B
-            GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, textureB.getFrameBufferId());
-            // GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
+                    Map uniformMap = new HashMap();
 
-            GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
+                    Map attributeMap = new HashMap();
+                    attributeMap.put("vPosition", rectangle.points());
+                    uniformMap.put("texture", 0);
+                    uniformMap.put("delta", new float[]{1.0f / GEN_TEX_WIDTH, 1.0f / GEN_TEX_HEIGHT});
 
-            Map uniformMap = new HashMap();
-
-            Map attributeMap = new HashMap();
-            attributeMap.put("vPosition", rectangle.points());
-            uniformMap.put("texture", 0);
-            uniformMap.put("delta", new float[]{1.0f / GEN_TEX_WIDTH, 1.0f / GEN_TEX_HEIGHT});
-
-            // Provide texture A information
-            GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
-            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureA.getTextureId());
-            updateNormalRenderer.drawObject(uniformMap, attributeMap);
+                    // Provide texture A information
+                    GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+                    GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureA.getTextureId());
+                    updateNormalRenderer.drawObject(uniformMap, attributeMap);
+                }
+            });
             swapRTT();
         }
 
