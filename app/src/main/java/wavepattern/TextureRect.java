@@ -1,8 +1,7 @@
-package Sample1_5;
+package wavepattern;
 
 import android.annotation.SuppressLint;
 import android.opengl.GLES20;
-import android.opengl.GLSurfaceView;
 
 import com.example.vincentzhang.learnandroid.OpenGLRenderer;
 

@@ -7,7 +7,6 @@ import android.util.Log;
 
 import com.example.vincentzhang.learnandroid.OpenGLActivity;
 import com.example.vincentzhang.learnandroid.OpenGLRenderer;
-import com.example.vincentzhang.learnandroid.R;
 import com.example.vincentzhang.learnandroid.Texture.TextureHelper;
 
 import java.nio.ByteBuffer;
@@ -15,6 +14,7 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
+import com.example.vincentzhang.learnandroid.R;
 import max3d.Shared;
 
 /**

@@ -7,13 +7,13 @@ import android.content.res.Resources;
 import android.graphics.Rect;
 import android.support.v4.app.ActivityCompat;
 
-import com.example.vincentzhang.learnandroid.R;
-
 import org.xml.sax.InputSource;
 
 import java.lang.reflect.Field;
 import java.util.Comparator;
 import java.util.Random;
+
+import com.example.vincentzhang.learnandroid.R;
 
 /**
  * Created by VincentZhang on 4/23/2017.

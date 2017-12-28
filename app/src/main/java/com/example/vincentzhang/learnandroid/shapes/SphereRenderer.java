@@ -9,13 +9,13 @@ import android.support.annotation.RequiresApi;
 
 import com.example.vincentzhang.learnandroid.OpenGLActivity;
 import com.example.vincentzhang.learnandroid.OpenGLRenderer;
-import com.example.vincentzhang.learnandroid.R;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.example.vincentzhang.learnandroid.R;
 import max3d.Shared;
 import max3d.core.AbstractBufferList;
 import max3d.core.ObjectRenderer;

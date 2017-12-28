@@ -2,6 +2,7 @@ package com.example.vincentzhang.learnandroid;
 
 import android.util.Log;
 
+import com.example.vincentzhang.learnandroid.R;
 import min3d.core.Object3dContainer;
 import min3d.core.RendererActivity;
 import min3d.parser.IParser;

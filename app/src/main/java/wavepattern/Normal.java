@@ -1,4 +1,4 @@
-package Sample1_5;
+package wavepattern;
 
 import java.util.Set;
 

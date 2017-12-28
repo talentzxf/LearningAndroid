@@ -1,13 +1,10 @@
-package Sample1_5;
+package wavepattern;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
-import android.opengl.GLUtils;
 import android.view.MotionEvent;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -15,10 +12,6 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-
-import com.example.vincentzhang.learnandroid.R;
 
 import max3d.Shared;
 import max3d.core.ObjectRenderer;
@@ -82,6 +75,7 @@ class MySurfaceView extends GLSurfaceView {
         ObjectRenderer objectRenderer;
         ObjectRenderer dropRenderer;
         ObjectRenderer updateRenderer;
+        ObjectRenderer updateNormalRenderer;
 
         boolean dropAdded = false;
 
@@ -93,8 +87,11 @@ class MySurfaceView extends GLSurfaceView {
                     "shaders/water/drop.frag", rectangle);
             updateRenderer = new ObjectRenderer("shaders/water/vertex.vert",
                     "shaders/water/update.frag", rectangle);
+            updateNormalRenderer = new ObjectRenderer("shaders/water/vertex.vert",
+                    "shaders/water/normal.frag", rectangle);
             objectRenderer = new ObjectRenderer("shaders/water/showtexture.vert",
                     "shaders/water/showtexture.frag", rectangle);
+
         }
 
         public void addDrop() {
@@ -114,7 +111,7 @@ class MySurfaceView extends GLSurfaceView {
 
             uniformMap.put("center", new float[]{0.0f, 0.0f});
             uniformMap.put("radius", 0.03f);
-            uniformMap.put("strength", 0.01f);
+            uniformMap.put("strength", 0.1f);
             uniformMap.put("texture", 0);
 
             // Provide texture A information
@@ -151,6 +148,30 @@ class MySurfaceView extends GLSurfaceView {
             GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureA.getTextureId());
             updateRenderer.drawObject(uniformMap, attributeMap);
+            swapRTT();
+        }
+
+        public void updateWaterNormal() {
+
+            GLES20.glViewport(0, 0, GEN_TEX_WIDTH, GEN_TEX_HEIGHT);
+
+            // Draw to texture B
+            GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, textureB.getFrameBufferId());
+            // GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
+
+            GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
+
+            Map uniformMap = new HashMap();
+
+            Map attributeMap = new HashMap();
+            attributeMap.put("vPosition", rectangle.points());
+            uniformMap.put("texture", 0);
+            uniformMap.put("delta", new float[]{1.0f / GEN_TEX_WIDTH, 1.0f / GEN_TEX_HEIGHT});
+
+            // Provide texture A information
+            GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureA.getTextureId());
+            updateNormalRenderer.drawObject(uniformMap, attributeMap);
             swapRTT();
         }
 
@@ -192,6 +213,8 @@ class MySurfaceView extends GLSurfaceView {
             }
 
             updateWater();
+            updateWater();
+            // updateWaterNormal();
 
             // updateWater();
             drawShadowTexture();

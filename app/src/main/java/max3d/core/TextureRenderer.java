@@ -1,8 +1,14 @@
 package max3d.core;
 
 import android.opengl.GLES20;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.example.vincentzhang.learnandroid.OpenGLRenderer;
+
+import max3d.Shared;
 
 /**
  * Created by VincentZhang on 12/24/2017.
@@ -62,6 +68,22 @@ public class TextureRenderer {
                         //GLES20.GL_UNSIGNED_BYTE, //  final int GL_HALF_FLOAT_OES = 0x8D61;
                         null
                 );
+        Log.i("OpenGL features", GLES20.glGetString(GLES20.GL_EXTENSIONS));
+        if(!GLES20.glGetString(GLES20.GL_EXTENSIONS).contains("GL_OES_texture_float")){
+            Handler handler = new Handler(Looper.getMainLooper());
+
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    String msg = "Can't run this application, lack of support for GL_OES_texture_float!";
+                    Toast.makeText(Shared.context(),msg, Toast.LENGTH_LONG).show();
+                }
+            }, 10 );
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         OpenGLRenderer.checkGlError("Texture generation");
         GLES20.glFramebufferTexture2D        //设置自定义帧缓冲的颜色缓冲附件
                 (

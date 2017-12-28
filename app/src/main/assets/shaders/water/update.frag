@@ -8,10 +8,6 @@ void main() {
   /* get vertex info */
   vec4 info = texture2D(texture, coord);
 
-  if(info.b > 0.4){
-    info.g = -info.g;
-  }
-
   /* calculate average neighbor height */
   vec2 dx = vec2(delta.x, 0.0);
   vec2 dy = vec2(0.0, delta.y);
@@ -26,17 +22,11 @@ void main() {
   info.g += (average - info.r) * 2.0;
 
   /* attenuate the velocity a little so waves do not last forever */
-  info.g *= 0.995;
+   //info.g *= 0.995;
+  // info.g *= 1.0001;
 
   /* move the vertex along the velocity */
   info.r += info.g;
-
-  if(info.g < 0.0){
-    info.b = 0.5;
-    info.g = -info.g;
-  }else{
-    info.b = 0.0;
-  }
 
   gl_FragColor = info;
 }

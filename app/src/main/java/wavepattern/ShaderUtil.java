@@ -1,4 +1,4 @@
-package Sample1_5;
+package wavepattern;
 
 import android.content.res.Resources;
 import android.opengl.GLES20;

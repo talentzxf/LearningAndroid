@@ -7,7 +7,6 @@ import android.graphics.Canvas;
 import android.util.Log;
 
 import com.example.vincentzhang.Sprite.DIRECTIONS;
-import com.example.vincentzhang.learnandroid.R;
 
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -20,6 +19,8 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
+
+import com.example.vincentzhang.learnandroid.R;
 
 import static com.example.vincentzhang.Sprite.Utilities.getId;
 import static com.example.vincentzhang.Sprite.Utilities.getXmlSource;

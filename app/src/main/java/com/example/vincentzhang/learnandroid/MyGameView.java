@@ -15,6 +15,8 @@ import com.example.vincentzhang.Sprite.SpriteWorld;
 
 import java.io.InputStream;
 
+import com.example.vincentzhang.learnandroid.R;
+
 /**
  * Created by VincentZhang on 4/15/2017.
  */

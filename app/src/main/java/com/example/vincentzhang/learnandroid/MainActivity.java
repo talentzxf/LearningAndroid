@@ -23,6 +23,8 @@ import com.example.vincentzhang.Sprite.Controller.ButtonEventDispatcher;
 import com.example.vincentzhang.Sprite.Controller.ButtonEventListener;
 import com.example.vincentzhang.Sprite.Utilities;
 
+import com.example.vincentzhang.learnandroid.R;
+
 import static com.example.vincentzhang.Sprite.DIRECTIONS.DOWN;
 import static com.example.vincentzhang.Sprite.DIRECTIONS.LEFT;
 import static com.example.vincentzhang.Sprite.DIRECTIONS.RIGHT;
