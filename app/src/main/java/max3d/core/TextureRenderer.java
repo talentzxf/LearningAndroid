@@ -103,6 +103,7 @@ public class TextureRenderer {
 
         // Restore frame buffer and render buffer
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);//绑定帧缓冲id
+        OpenGLRenderer.checkGlError("Texture generation");
     }
 
     // Draw the callback into the texture

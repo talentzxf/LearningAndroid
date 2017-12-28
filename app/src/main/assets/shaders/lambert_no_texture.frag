@@ -4,6 +4,8 @@ precision mediump float;
 uniform vec3 cameraPos;
 uniform mat4 sphere_model;
 
+const vec3 abovewaterColor = vec3(0.25, 1.0, 1.25);\
+
 varying vec4 aColor;
 varying vec4 fragPos;
 varying vec4 aPos;
@@ -122,21 +124,29 @@ vec3 getSurfaceRayColor(vec3 origin, vec3 ray, vec3 waterColor){
     if(q<1.0e6){
         vec4 hitPoint_world = vec4(origin + ray*q,1.0);
         color = getSphereColor(hitPoint_world);
-    } else {
-        // Intersect with wall (Lower than water part)
-        if(ray.y < 0.0){
+    } else if(ray.y < 0.0){
             vec2 t = intersectCube(origin, ray, vec3(-1.0, -1.0, -1.0), vec3(1.0, poolHeight, 1.0));
             color = getWallColor(origin+ray*t.y);
+    } else{
+        vec2 t = intersectCube(origin, ray, vec3(-1.0, -1.0, -1.0), vec3(1.0, 2.0, 1.0));
+        vec3 hit = origin + ray*t.y;
+        if(hit.y < 2.0/12.0){
+            color = vec3(0.0,0.0,0.5);
         }
     }
-    // intersect with walls
-    return vec3(0.25, 1.0, 1.25)*color;
+
+
+    if (ray.y < 0.0) color *= waterColor;\
+    return color;
 }
 void main() {
     vec3 incomingRay = normalize(aPos.xyz - cameraPos);
     vec3 refractedRay = refract(incomingRay, normal.xyz, IOR_AIR/IOR_WATER);
-    // vec3 rayColor = getSurfaceRayColor(aPos.xyz,refractedRay,aColor.rgb);
-    vec3 rayColor = getSurfaceRayColor(aPos.xyz,refractedRay,aColor.rgb);
-    gl_FragColor = vec4(rayColor,1.0);
+    vec3 reflectedRay = reflect(incomingRay, normal.xyz);
+    float fresnel = mix(0.25, 1.0, pow(1.0 - dot(normal.xyz, -incomingRay), 3.0));
+    vec3 refractedColor = getSurfaceRayColor(aPos.xyz,refractedRay,abovewaterColor.rgb);
+    vec3 reflectedColor = getSurfaceRayColor(aPos.xyz,reflectedRay,abovewaterColor.rgb);
+
+    gl_FragColor = vec4(mix(refractedColor, reflectedColor, fresnel), 1.0);
      // gl_FragColor = vec4(aPos.xyz,1.0);// + vec4(,1.0) - vec4(refractedRay,1.0);
 }

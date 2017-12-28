@@ -169,6 +169,9 @@ class MySurfaceView extends GLSurfaceView {
                     updateNormalRenderer.drawObject(uniformMap, attributeMap);
                 }
             });
+
+
+
             swapRTT();
         }
 

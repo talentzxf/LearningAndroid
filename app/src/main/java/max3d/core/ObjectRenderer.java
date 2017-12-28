@@ -156,6 +156,8 @@ public class ObjectRenderer {
                     GLES20.GL_UNSIGNED_INT,
                     $o.faces().buffer().position(0));
 
+            OpenGLRenderer.checkGlError("Draw Object");
+
             unBindAttributes();
         } catch (Exception e) {
             Log.e("Error", "Exception " + e);

@@ -129,7 +129,7 @@ public class Water {
 
                 uniformMap.put("center", new float[]{0.0f, 0.0f});
                 uniformMap.put("radius", 0.03f);
-                uniformMap.put("strength", 5.1f);
+                uniformMap.put("strength", 3.01f);
                 uniformMap.put("texture", 0);
 
                 // Provide texture A information
