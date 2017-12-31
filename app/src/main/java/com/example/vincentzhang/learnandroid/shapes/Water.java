@@ -31,7 +31,7 @@ public class Water {
 
     // Used for shader only
     private Rectangle shaderRectangle = new Rectangle(-2.0f, 2.0f, 1, 1);
-    ;
+
     private ObjectRenderer renderer;
     private Camera camera;
 
@@ -39,9 +39,12 @@ public class Water {
     private TextureRenderer textureA = new TextureRenderer();
     private TextureRenderer textureB = new TextureRenderer();
 
-    ObjectRenderer dropRenderer;
-    ObjectRenderer updateRenderer;
-    ObjectRenderer updateNormalRenderer;
+    private TextureRenderer causticTexture = new TextureRenderer();
+
+    private ObjectRenderer dropRenderer;
+    private ObjectRenderer updateRenderer;
+    private ObjectRenderer updateNormalRenderer;
+    private ObjectRenderer causticRenderer;
 
     private void swapRTT() {
         TextureRenderer tmp = textureA;
@@ -56,10 +59,13 @@ public class Water {
         rectangle = new Rectangle($width, $height, $segsW, $segsH);
         renderer = new ObjectRenderer("shaders/lambert_no_texture.vert",
                 "shaders/lambert_no_texture.frag", rectangle);
+        causticRenderer = new ObjectRenderer("shaders/water/caustics.vert",
+                "shaders/water/caustics.frag", rectangle);
         camera = $cam;
 
         textureA.init(GEN_TEX_WIDTH, GEN_TEX_HEIGHT);
         textureB.init(GEN_TEX_WIDTH, GEN_TEX_HEIGHT);
+        causticTexture.init(1024,1024);
 
         dropRenderer = new ObjectRenderer("shaders/water/vertex.vert",
                 "shaders/water/drop.frag", shaderRectangle);
@@ -112,10 +118,32 @@ public class Water {
         updateWater();
         updateWater();
         updateWaterNormal();
+
+        //updateCaustics();
+    }
+
+    private void updateCaustics(){
+        causticTexture.drawTo(new Runnable() {
+            @Override
+            public void run() {
+                GLES20.glViewport(0,0,1024,1024);
+                GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
+                Map uniformMap = new HashMap();
+                uniformMap.put("light", new float[]{5.0f, 10.0f, 0.0f});
+
+                Map attributeMap = new HashMap();
+                attributeMap.put("info_Texture", 0);
+                attributeMap.put("vPosition", rectangle.points());
+
+                // Provide texture A information
+                GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+                GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureA.getTextureId());
+                causticRenderer.drawObject(uniformMap, attributeMap);
+            }
+        });
     }
 
     public void addDrop() {
-
         textureB.drawTo(new Runnable() {
             @Override
             public void run() {

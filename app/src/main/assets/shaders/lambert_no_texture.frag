@@ -11,7 +11,7 @@ varying vec4 fragPos;
 varying vec4 aPos;
 varying vec4 normal;
 
-const vec4 ambient = vec4(0.3,0.3,0.3,0.1);
+const vec4 ambient = vec4(0.5,0.5,0.5,0.1);
 const float poolHeight=0.5;
 const vec3 sphereCenter = vec3(0, -0.5,0.0);
 const float sphereRadius = 0.3;
