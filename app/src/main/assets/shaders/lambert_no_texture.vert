@@ -2,7 +2,6 @@ uniform mat4 projection;
 uniform mat4 view;
 uniform mat4 model;
 attribute vec4 vPosition;
-attribute vec4 vNormal;
 varying vec4 aColor;
 uniform vec4 vColor;
 varying vec4 aPos;
@@ -17,6 +16,10 @@ void main() {
   gl_Position = projection * view * model * vPosition.xzyw;
   gl_Position.y += info.r;
   aPos = model * vPosition.xzyw;
-  normal = model*vNormal.xzyw;
+
+  // Get normal
+  info.ba *= 0.5;
+  vec3 obj_normal = vec3(info.b, sqrt(1.0 - dot(info.ba, info.ba)), info.a);
+  normal = model*vec4(obj_normal,1.0);
   //aColor = max( vColor * dot( normalize(vNormal.xzy), normalize((light - model*vPosition).xyz)) ,0.0);
 }

@@ -100,7 +100,7 @@ public class Water {
         // setup attributes
         Map<String, AbstractBufferList> attributeMap = new HashMap<>();
         attributeMap.put("vPosition", rectangle.points());
-        attributeMap.put("vNormal", rectangle.normals());
+        // attributeMap.put("vNormal", rectangle.normals());
         renderer.drawObject(uniformMap, attributeMap);
 
         if (!initDropAdded) {
