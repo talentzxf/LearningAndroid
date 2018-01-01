@@ -20,6 +20,8 @@ const float IOR_WATER = 1.333;
 // Sphere texture
 uniform sampler2D sph_Texture;
 uniform sampler2D wall_Texture;
+uniform sampler2D caustics_Texture;
+uniform sampler2D info_Texture;
 
 
 mat4 inverse(mat4 m) {
@@ -98,7 +100,19 @@ vec3 getSphereColor(vec4 hitPoint_world) {
    // 4. calculate theta2 (rotation around y)
    float theta2 = -atan(hitPoint_sphere_local.z,hitPoint_sphere_local.x) + M_PI;
    float u = theta2/(2.0*M_PI);
-   return texture2D(sph_Texture,vec2(u,v)).rgb;
+   vec3 sph_Color = texture2D(sph_Texture,vec2(u,v)).rgb;
+   vec3 sphereNormal = (hitPoint_world.xyz - sphereCenter) / sphereRadius;
+   vec3 refractedLight = refract(-light.xyz, vec3(0.0, 1.0, 0.0), IOR_AIR / IOR_WATER);
+   float diffuse = max(0.0, dot(-refractedLight, sphereNormal)) * 0.5;
+   vec4 info = texture2D(info_Texture, hitPoint_world.xz * 0.5 + 0.5);
+
+    // if (hitPoint_world.y < info.r) {
+        vec4 caustic = texture2D(caustics_Texture,
+            0.75 * (hitPoint_world.xz - hitPoint_world.y * refractedLight.xz / refractedLight.y) * 0.5 + 0.5);
+        diffuse *= caustic.r * 4.0;
+    // }
+    sph_Color = sph_Color + diffuse;
+   return sph_Color;
 }
 
 vec3 getWallColor(vec3 point) {
@@ -113,6 +127,15 @@ vec3 getWallColor(vec3 point) {
     }
     scale /= length(point); /* pool ambient occlusion */
     scale *= 1.0 - 0.9 / pow(length(point - sphereCenter) / sphereRadius, 4.0); /* sphere ambient occlusion */
+
+    /* caustics */
+    vec3 refractedLight = -refract(-light.xyz, vec3(0.0, 1.0, 0.0), IOR_AIR / IOR_WATER);
+    float diffuse = max(0.0, dot(refractedLight, normal.xyz));
+    vec4 info = texture2D(info_Texture, point.xz * 0.5 + 0.5);
+    if (point.y < info.r) {
+      vec4 caustic = texture2D(caustics_Texture, 0.75 * (point.xz - point.y * refractedLight.xz / refractedLight.y) * 0.5 + 0.5);
+      scale += diffuse * caustic.r * 2.0 * caustic.g;
+    }
 
     return wallColor * scale;
 }

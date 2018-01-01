@@ -52,11 +52,9 @@ public class MyGameView extends SurfaceView implements Runnable, GestureDetector
     @Override
     public void run() {
         long lastMilliSeconds = System.currentTimeMillis();
-
         int loadingGifId = R.raw.loading;
         InputStream is = context.getResources().openRawResource(loadingGifId);
         Movie movie = Movie.decodeStream(is);
-
 
         while (isDrawing) {
             if (System.currentTimeMillis() - lastMilliSeconds > 1000 / FPS) {

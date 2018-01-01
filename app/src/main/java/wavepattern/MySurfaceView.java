@@ -69,13 +69,17 @@ class MySurfaceView extends GLSurfaceView {
         float yAngle;
         float xAngle;
 
-        TextureRenderer textureA = new TextureRenderer();
-        TextureRenderer textureB = new TextureRenderer();
+        private TextureRenderer textureA = new TextureRenderer();
+        private TextureRenderer textureB = new TextureRenderer();
+
+        private TextureRenderer causticTexture = new TextureRenderer();
+
         Rectangle rectangle = new Rectangle(-2.0f, 2.0f, 1, 1);
-        ObjectRenderer objectRenderer;
-        ObjectRenderer dropRenderer;
-        ObjectRenderer updateRenderer;
-        ObjectRenderer updateNormalRenderer;
+        private ObjectRenderer objectRenderer;
+        private ObjectRenderer dropRenderer;
+        private ObjectRenderer updateRenderer;
+        private ObjectRenderer updateNormalRenderer;
+        private ObjectRenderer causticRenderer;
 
         boolean dropAdded = false;
 
@@ -92,6 +96,8 @@ class MySurfaceView extends GLSurfaceView {
             objectRenderer = new ObjectRenderer("shaders/water/showtexture.vert",
                     "shaders/water/showtexture.frag", rectangle);
 
+            causticRenderer = new ObjectRenderer("shaders/water/caustics.vert",
+                    "shaders/water/caustics.frag", rectangle);
         }
 
         public void addDrop() {

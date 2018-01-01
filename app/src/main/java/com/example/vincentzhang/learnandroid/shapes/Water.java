@@ -103,6 +103,10 @@ public class Water {
         GLES20.glActiveTexture(GLES20.GL_TEXTURE2);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureA.getTextureId());
 
+        uniformMap.put("caustics_Texture",3);
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE3);
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, causticTexture.getTextureId());
+
         // setup attributes
         Map<String, AbstractBufferList> attributeMap = new HashMap<>();
         attributeMap.put("vPosition", rectangle.points());
@@ -119,7 +123,7 @@ public class Water {
         updateWater();
         updateWaterNormal();
 
-        //updateCaustics();
+        updateCaustics();
     }
 
     private void updateCaustics(){
@@ -129,10 +133,10 @@ public class Water {
                 GLES20.glViewport(0,0,1024,1024);
                 GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
                 Map uniformMap = new HashMap();
-                uniformMap.put("light", new float[]{5.0f, 10.0f, 0.0f});
+                uniformMap.put("light", new float[]{2.0f, 2.0f, -1.0f});
+                uniformMap.put("info_Texture", 0);
 
                 Map attributeMap = new HashMap();
-                attributeMap.put("info_Texture", 0);
                 attributeMap.put("vPosition", rectangle.points());
 
                 // Provide texture A information
@@ -189,6 +193,7 @@ public class Water {
                 // Provide texture A information
                 GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
                 GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureA.getTextureId());
+
                 updateRenderer.drawObject(uniformMap, attributeMap);
             }
         });
