@@ -13,6 +13,7 @@ import com.example.vincentzhang.learnandroid.shapes.MoocCube;
 import com.example.vincentzhang.learnandroid.shapes.SphereRenderer;
 import com.example.vincentzhang.learnandroid.shapes.Square;
 import com.example.vincentzhang.learnandroid.shapes.Triangle;
+import com.example.vincentzhang.learnandroid.shapes.Wall;
 import com.example.vincentzhang.learnandroid.shapes.Water;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -35,6 +36,7 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
     private Triangle mTriangle;
     private Square mSquare;
     private Water waterSurface;
+    private Wall wall;
     private SphereRenderer sphereRenderer;
     private Camera camera;
 
@@ -65,6 +67,8 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
         mCube = new Cube();
         mMoocCube = new MoocCube();
         waterSurface = new Water(2.0f,2.0f,100,100, camera);
+         wall = new Wall();
+         wall.setWater(waterSurface);
 
         sphereRenderer = new SphereRenderer(0.3f, 30, 30);
         sphereRenderer.setWater(waterSurface);
@@ -100,8 +104,8 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
 
         GLES20.glViewport(0,0,
                 (int)camera.getViewportWidth(), (int)camera.getViewportHeight());
-
         sphereRenderer.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
+        wall.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
     }
 
     @Override

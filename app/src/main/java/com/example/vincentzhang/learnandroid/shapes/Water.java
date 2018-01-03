@@ -1,15 +1,11 @@
 package com.example.vincentzhang.learnandroid.shapes;
 
-import android.graphics.Rect;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 
 import com.example.vincentzhang.learnandroid.Camera.Camera;
-import com.example.vincentzhang.learnandroid.OpenGLRenderer;
-
-import org.w3c.dom.Text;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -57,8 +53,8 @@ public class Water {
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public Water(float $width, float $height, int $segsW, int $segsH, Camera $cam) {
         rectangle = new Rectangle($width, $height, $segsW, $segsH);
-        renderer = new ObjectRenderer("shaders/lambert_no_texture.vert",
-                "shaders/lambert_no_texture.frag", rectangle);
+        renderer = new ObjectRenderer("shaders/water/water_surface.vert",
+                "shaders/water/water_surface.frag", rectangle);
         causticRenderer = new ObjectRenderer("shaders/water/caustics.vert",
                 "shaders/water/caustics.frag", rectangle);
         camera = $cam;
@@ -229,7 +225,7 @@ public class Water {
         return textureA.getTextureId();
     }
 
-    public int causticsTextureId() {
+    public int getCausticsTextureId() {
         return causticTexture.getTextureId();
     }
 }

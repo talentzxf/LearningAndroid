@@ -10,8 +10,6 @@ import android.support.annotation.RequiresApi;
 import com.example.vincentzhang.learnandroid.OpenGLActivity;
 import com.example.vincentzhang.learnandroid.OpenGLRenderer;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -77,8 +75,8 @@ public class SphereRenderer {
         OpenGLRenderer.checkGlError("addTextureId");
         sphereInternal.textures().add(new TextureVo("earth"));
 
-        renderer = new ObjectRenderer("shaders/lambert_shader_v.vert",
-                "shaders/lambert_shader_f.frag", sphereInternal);
+        renderer = new ObjectRenderer("shaders/water/sphere_surface.vert",
+                "shaders/water/sphere_surface.frag", sphereInternal);
     }
 
     // mvMatrix -- model view matrix
@@ -105,7 +103,7 @@ public class SphereRenderer {
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, water.getInforTextureId());
 
         GLES20.glActiveTexture(GLES20.GL_TEXTURE2);
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, water.causticsTextureId());
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, water.getCausticsTextureId());
 
         OpenGLRenderer.checkGlError("glBindTexture");
 
