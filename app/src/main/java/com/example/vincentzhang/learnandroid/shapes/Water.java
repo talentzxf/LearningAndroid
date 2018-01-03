@@ -224,4 +224,12 @@ public class Water {
         });
         swapRTT();
     }
+
+    public int getInforTextureId() {
+        return textureA.getTextureId();
+    }
+
+    public int causticsTextureId() {
+        return causticTexture.getTextureId();
+    }
 }

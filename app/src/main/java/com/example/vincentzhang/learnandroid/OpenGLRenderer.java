@@ -64,8 +64,10 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
         mSquare = new Square();
         mCube = new Cube();
         mMoocCube = new MoocCube();
-        sphereRenderer = new SphereRenderer(0.3f, 30, 30);
         waterSurface = new Water(2.0f,2.0f,100,100, camera);
+
+        sphereRenderer = new SphereRenderer(0.3f, 30, 30);
+        sphereRenderer.setWater(waterSurface);
     }
 
     @Override
@@ -92,9 +94,14 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
         float elapsedTimeSec = ((float)(System.currentTimeMillis() - startTime)/1000.0f);
         // Matrix.rotateM(mModelMatrix,0, elapsedTimeSec * 10, 0.0f, 1.0f, 0.0f);
         //mMoocCube.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
-        mCube.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
-        sphereRenderer.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
+        // mCube.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
+
         waterSurface.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
+
+        GLES20.glViewport(0,0,
+                (int)camera.getViewportWidth(), (int)camera.getViewportHeight());
+
+        sphereRenderer.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
     }
 
     @Override

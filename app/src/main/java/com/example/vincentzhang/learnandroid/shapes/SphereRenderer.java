@@ -30,6 +30,7 @@ import max3d.vos.TextureVo;
 public class SphereRenderer {
     private Sphere sphereInternal;
     private ObjectRenderer renderer;
+    private Water water;
 
 //    private final String vertexShaderCode =
 //            // This matrix member variable provides a hook to manipulate
@@ -92,21 +93,30 @@ public class SphereRenderer {
         uniformMap.put("projection", projection);
         uniformMap.put("view", view);
         uniformMap.put("model", local_model);
-        uniformMap.put("vColor", new float[]{1.0f, 1.0f, 1.0f, 1.0f});
-        uniformMap.put("lightPos", new float[]{5.0f, 10.0f, 0.0f, 1.0f});
-        uniformMap.put("u_Texture", 0);
+        uniformMap.put("light", new float[]{5.0f, 10.0f, 0.0f, 1.0f});
+        uniformMap.put("sph_Texture", 0);
+        uniformMap.put("info_Texture", 1);
+        uniformMap.put("caustics_Texture", 2);
 
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, Shared.textureManager().getGlTextureId("earth"));
+
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE1);
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, water.getInforTextureId());
+
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE2);
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, water.causticsTextureId());
 
         OpenGLRenderer.checkGlError("glBindTexture");
 
         // setup attributes
         Map<String, AbstractBufferList> attributeMap = new HashMap<>();
         attributeMap.put("vPosition", sphereInternal.points());
-        attributeMap.put("vNormal", sphereInternal.normals());
-        attributeMap.put("vTexCoord", sphereInternal.uvs());
 
         renderer.drawObject(uniformMap, attributeMap);
+    }
+
+    public void setWater(Water water) {
+        this.water = water;
     }
 }
