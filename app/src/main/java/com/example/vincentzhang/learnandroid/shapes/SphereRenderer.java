@@ -91,10 +91,10 @@ public class SphereRenderer {
         uniformMap.put("projection", projection);
         uniformMap.put("view", view);
         uniformMap.put("model", local_model);
-        uniformMap.put("light", new float[]{5.0f, 10.0f, 0.0f, 1.0f});
+        uniformMap.put("light", new float[]{2.0f, 2.0f, -1.0f});
         uniformMap.put("sph_Texture", 0);
         uniformMap.put("info_Texture", 1);
-        uniformMap.put("caustics_Texture", 2);
+        uniformMap.put("causticTex", 2);
 
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, Shared.textureManager().getGlTextureId("earth"));

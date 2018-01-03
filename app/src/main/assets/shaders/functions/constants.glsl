@@ -1,0 +1,3 @@
+const float IOR_AIR = 1.0;
+const float IOR_WATER = 1.333;
+#define M_PI 3.1415926535897932384626433832795

@@ -1,30 +1,11 @@
+precision mediump float;
+
 varying vec3 oldPos;
 varying vec3 newPos;
 varying vec3 ray;
 attribute vec3 vPosition;
-const float poolHeight = 0.5;
-uniform sampler2D info_Texture;
-const float IOR_AIR = 1.0;
-const float IOR_WATER = 1.333;
-uniform vec3 light;
 
-vec2 intersectCube(vec3 origin, vec3 ray, vec3 cubeMin, vec3 cubeMax) {
-  vec3 tMin = (cubeMin - origin) / ray;
-  vec3 tMax = (cubeMax - origin) / ray;
-  vec3 t1 = min(tMin, tMax);
-  vec3 t2 = max(tMin, tMax);
-  float tNear = max(max(t1.x, t1.y), t1.z);
-  float tFar = min(min(t2.x, t2.y), t2.z);
-  return vec2(tNear, tFar);
-}
-
-/* project the ray onto the plane */
-vec3 project(vec3 origin, vec3 ray, vec3 refractedLight) {
-  vec2 tcube = intersectCube(origin, ray, vec3(-1.0, -1.0, -1.0), vec3(1.0, poolHeight, 1.0));
-  origin += ray * tcube.y;
-  float tplane = (-origin.y - 1.0) / refractedLight.y;
-  return origin + refractedLight * tplane;
-}
+#include shaders/functions/helpfunctions.glsl
 
 void main() {
   vec4 info = texture2D(info_Texture, vPosition.xy * 0.5 + 0.5);

@@ -91,7 +91,7 @@ public class Water {
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, Shared.textureManager().getGlTextureId("earth"));
 
-        uniformMap.put("wall_Texture", 1);
+        uniformMap.put("tiles", 1);
         GLES20.glActiveTexture(GLES20.GL_TEXTURE1);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, Shared.textureManager().getGlTextureId("imooc"));
 
@@ -99,7 +99,7 @@ public class Water {
         GLES20.glActiveTexture(GLES20.GL_TEXTURE2);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureA.getTextureId());
 
-        uniformMap.put("caustics_Texture",3);
+        uniformMap.put("causticTex",3);
         GLES20.glActiveTexture(GLES20.GL_TEXTURE3);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, causticTexture.getTextureId());
 

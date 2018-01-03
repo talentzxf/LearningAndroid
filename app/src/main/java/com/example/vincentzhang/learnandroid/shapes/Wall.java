@@ -46,7 +46,7 @@ public class Wall {
         uniformMap.put("project", projection);
         uniformMap.put("view", view);
         uniformMap.put("model", model);
-        uniformMap.put("light", new float[]{2.0f, 2.0f, -1.0f, 1.0f});
+        uniformMap.put("light", new float[]{2.0f, 2.0f, -1.0f});
 
         Map attributeMap = new HashMap();
         attributeMap.put("vPos", box.points());

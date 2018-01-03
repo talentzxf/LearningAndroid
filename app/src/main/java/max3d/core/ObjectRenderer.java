@@ -10,8 +10,12 @@ import com.example.vincentzhang.learnandroid.OpenGLRenderer;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import max3d.Shared;
 import max3d.core.AbstractBufferList;
@@ -24,12 +28,20 @@ import max3d.core.Object3d;
 public class ObjectRenderer {
     private Object3d $o;
     private int program;
+    private final static String INCLUDE_STRING = "#include\\s*([a-zA-Z0-9/._]*)";
+    private final static Pattern INCLUDE_PATTERN = Pattern.compile(INCLUDE_STRING);
 
     List<Integer> vertexAttributes = new ArrayList<>();
-
+    private int vertexShader;
+    private int fragmentShader;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     String getContentFromAssets(String path){
+        return getContentFromAssets(path, new HashSet<String>());
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    String getContentFromAssets(String path, Set<String> fileNameStack){
         String returnValue = "";
         try (InputStream is = Shared.context().getAssets().open(path)){
             int size = is.available();
@@ -39,22 +51,44 @@ public class ObjectRenderer {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return returnValue;
+
+        String finalResult = returnValue;
+
+        // Replace all #include directives
+        Matcher m = INCLUDE_PATTERN.matcher(returnValue);
+        while(m.find()){
+            String fileName = m.group(1);
+            if(!fileNameStack.contains(fileName)){
+                String subFileContent = getContentFromAssets(fileName, fileNameStack);
+                String fileNamePattern = "#include\\s*" + fileName;
+                finalResult = finalResult.replaceAll(fileNamePattern, subFileContent);
+                fileNameStack.add(fileName);
+            }
+        }
+
+        return finalResult;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public ObjectRenderer(String vertexShaderPath, String fragmentShaderPath, Object3d object3d) {
         $o = object3d;
         initShaders(getContentFromAssets(vertexShaderPath), getContentFromAssets(fragmentShaderPath));
+
+        try {
+            Log.i("Vertex Shader OPENGL:" + vertexShaderPath, GLES20.glGetShaderInfoLog(vertexShader));
+            Log.i("Fragment Shader OPENGL:" + fragmentShaderPath, GLES20.glGetShaderInfoLog(fragmentShader));
+        } catch (Exception e) {
+            Log.e("OPENGL", "Found error trying to get shader infor.");
+        }
     }
 
     private void initShaders(String vertexShaderCode, String fragmentShaderCode) {
         OpenGLRenderer.checkGlError("initShaders");
         // prepare shaders and OpenGL program
-        int vertexShader = OpenGLRenderer.loadShader(
+        vertexShader = OpenGLRenderer.loadShader(
                 GLES20.GL_VERTEX_SHADER, vertexShaderCode);
         OpenGLRenderer.checkGlError("loadShader");
-        int fragmentShader = OpenGLRenderer.loadShader(
+        fragmentShader = OpenGLRenderer.loadShader(
                 GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode);
         OpenGLRenderer.checkGlError("loadShader");
         program = GLES20.glCreateProgram();             // create empty OpenGL Program
@@ -65,12 +99,6 @@ public class ObjectRenderer {
         OpenGLRenderer.checkGlError("glAttachShader");
         GLES20.glLinkProgram(program);                  // create OpenGL program executables
         OpenGLRenderer.checkGlError("glLinkProgram");
-        try {
-            Log.i("Vertex Shader OPENGL", GLES20.glGetShaderInfoLog(vertexShader));
-            Log.i("Fragment Shader OPENGL", GLES20.glGetShaderInfoLog(fragmentShader));
-        } catch (Exception e) {
-            Log.e("OPENGL", "Found error trying to get shader infor.");
-        }
     }
 
     private void bindAttributes(Map<String, AbstractBufferList> shaderObjectMap) {
