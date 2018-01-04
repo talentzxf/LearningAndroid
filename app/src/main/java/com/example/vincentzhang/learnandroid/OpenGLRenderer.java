@@ -19,6 +19,9 @@ import com.example.vincentzhang.learnandroid.shapes.Water;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import max3d.Shared;
+import max3d.core.Object3dContainer;
+import max3d.parser.Max3DSParser;
 import max3d.primitives.Rectangle;
 
 import static android.opengl.GLU.gluErrorString;
@@ -72,6 +75,10 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
 
         sphereRenderer = new SphereRenderer(0.3f, 30, 30);
         sphereRenderer.setWater(waterSurface);
+
+        // Load object from 3ds file
+        Max3DSParser millenium_falcon_parser = new Max3DSParser(Shared.context().getResources(), "milleniumfalcon3ds", false);
+        Object3dContainer millenium_falcon = millenium_falcon_parser.getParsedObject();
     }
 
     @Override
