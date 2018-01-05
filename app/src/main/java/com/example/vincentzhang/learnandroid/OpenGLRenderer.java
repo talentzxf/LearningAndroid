@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.example.vincentzhang.learnandroid.Camera.Camera;
 import com.example.vincentzhang.learnandroid.shapes.Cube;
+import com.example.vincentzhang.learnandroid.shapes.Model3DS;
 import com.example.vincentzhang.learnandroid.shapes.MoocCube;
 import com.example.vincentzhang.learnandroid.shapes.SphereRenderer;
 import com.example.vincentzhang.learnandroid.shapes.Square;
@@ -51,7 +52,7 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
     private float ratio;
     private long startTime = System.currentTimeMillis();
 
-    private Object3dContainer millenium_falcon;
+    private Model3DS milleniumfalcon3ds;
 
     public OpenGLRenderer() {
         super();
@@ -72,25 +73,21 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
         mSquare = new Square();
         mCube = new Cube();
         mMoocCube = new MoocCube();
-        waterSurface = new Water(2.0f,2.0f,100,100, camera);
-         wall = new Wall();
-         wall.setWater(waterSurface);
+        waterSurface = new Water(2.0f, 2.0f, 100, 100, camera);
+        wall = new Wall();
+        wall.setWater(waterSurface);
 
         sphereRenderer = new SphereRenderer(0.3f, 30, 30);
         sphereRenderer.setWater(waterSurface);
 
-        // Load object from 3ds file
-//        Max3DSParser millenium_falcon_parser = new Max3DSParser(Shared.context().getResources(),
-//                "com.example.vincentzhang.learnandroid:raw/milleniumfalcon3ds", false);
-//        millenium_falcon_parser.parse();
-//        millenium_falcon = millenium_falcon_parser.getParsedObject();
-//        Log.i("OpenGL", " millenium_falcon loaded");
+        milleniumfalcon3ds = new Model3DS("com.example.vincentzhang.learnandroid:raw/milleniumfalcon3ds", 0.002f);
     }
 
     private int frameCount = 0;
+
     @Override
     public void onDrawFrame(GL10 unused) {
-        if(frameCount % 1000 == 0){
+        if (frameCount % 1000 == 0) {
             Log.i("OpenGL", "Totally drawed:" + frameCount + " frames!");
             frameCount++;
         }
@@ -102,8 +99,8 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
 
         float[] scratch = new float[16];
 
-        GLES20.glViewport(0,0,
-                (int)camera.getViewportWidth(), (int)camera.getViewportHeight());
+        GLES20.glViewport(0, 0,
+                (int) camera.getViewportWidth(), (int) camera.getViewportHeight());
         // Draw background color
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
@@ -113,17 +110,20 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
         // Set model matrix
         Matrix.setIdentityM(mModelMatrix, 0);
         Matrix.scaleM(mModelMatrix, 0, 1.0f, 1.0f, 1.0f);
-        float elapsedTimeSec = ((float)(System.currentTimeMillis() - startTime)/1000.0f);
+        float elapsedTimeSec = ((float) (System.currentTimeMillis() - startTime) / 1000.0f);
         // Matrix.rotateM(mModelMatrix,0, elapsedTimeSec * 10, 0.0f, 1.0f, 0.0f);
         //mMoocCube.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
         // mCube.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
 
         waterSurface.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
 
-        GLES20.glViewport(0,0,
-                (int)camera.getViewportWidth(), (int)camera.getViewportHeight());
+        GLES20.glViewport(0, 0,
+                (int) camera.getViewportWidth(), (int) camera.getViewportHeight());
         sphereRenderer.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
         wall.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
+
+        Matrix.translateM(mModelMatrix, 0, 0.0f, 0.5f, 5.0f);
+        milleniumfalcon3ds.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
     }
 
     @Override
@@ -139,7 +139,7 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
         Matrix.frustumM(mProjectionMatrix, 0, -ratio, ratio, -1, 1, 3, 20);
         camera.setViewport(width, height);
 
-        camera.rotate( 10, 10);
+        camera.rotate(10, 10);
         Log.i("OpenGL", "surface changed finished!");
     }
 

@@ -35,6 +35,10 @@ public class ObjectRenderer {
     private int vertexShader;
     private int fragmentShader;
 
+    public Object3d getObject() {
+        return $o;
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     String getContentFromAssets(String path){
         return getContentFromAssets(path, new HashSet<String>());

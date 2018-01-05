@@ -37,8 +37,11 @@ public class Max3DSParser extends AParser implements IParser {
 	private boolean endReached;
 	private String currentObjName;
 
-	public Max3DSParser(Resources resources, String resourceID, boolean generateMipMap) {
+	private float scale = 1.0f;
+
+	public Max3DSParser(Resources resources, String resourceID, boolean generateMipMap, float scale) {
 		super(resources, resourceID, generateMipMap);
+		this.scale = scale;
 	}
 
 	@Override
@@ -161,9 +164,9 @@ public class Max3DSParser extends AParser implements IParser {
         int numVertices = readShort(buffer);
 
         for (int i = 0; i < numVertices; i++) {
-            x = readFloat(buffer);
-            y = readFloat(buffer);
-            z = readFloat(buffer);
+            x = readFloat(buffer) * scale;
+            y = readFloat(buffer) * scale;
+            z = readFloat(buffer) * scale;
             tmpy = y;
             y = z;
             z = -tmpy;
