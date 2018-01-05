@@ -191,4 +191,10 @@ public class ObjectRenderer {
             Log.e("Error", "Exception " + e);
         }
     }
+
+    public void destroy() {
+        GLES20.glDeleteShader(vertexShader);
+        GLES20.glDeleteShader(fragmentShader);
+        GLES20.glDeleteProgram(program);
+    }
 }

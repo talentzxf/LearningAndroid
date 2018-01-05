@@ -133,4 +133,16 @@ public class TextureRenderer {
     public int getRenderBufferId() {
         return renderDepthBufferId;
     }
+
+    public void destroy() {
+        int[] tempIds = new int[1];
+        tempIds[0] = textureId;
+        GLES20.glDeleteTextures(1, tempIds,0);
+
+        tempIds[0] = renderDepthBufferId;
+        GLES20.glDeleteRenderbuffers(1, tempIds,0);
+
+        tempIds[0] = frameBufferId;
+        GLES20.glDeleteFramebuffers(1, tempIds, 0);
+    }
 }

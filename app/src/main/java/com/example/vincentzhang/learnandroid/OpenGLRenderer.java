@@ -51,6 +51,8 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
     private float ratio;
     private long startTime = System.currentTimeMillis();
 
+    private Object3dContainer millenium_falcon;
+
     public OpenGLRenderer() {
         super();
     }
@@ -58,6 +60,7 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
+        Log.i("OpenGL", "onSurfaceCreated!");
         // Set the background frame color
         GLES20.glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 
@@ -77,12 +80,20 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
         sphereRenderer.setWater(waterSurface);
 
         // Load object from 3ds file
-        Max3DSParser millenium_falcon_parser = new Max3DSParser(Shared.context().getResources(), "milleniumfalcon3ds", false);
-        Object3dContainer millenium_falcon = millenium_falcon_parser.getParsedObject();
+//        Max3DSParser millenium_falcon_parser = new Max3DSParser(Shared.context().getResources(),
+//                "com.example.vincentzhang.learnandroid:raw/milleniumfalcon3ds", false);
+//        millenium_falcon_parser.parse();
+//        millenium_falcon = millenium_falcon_parser.getParsedObject();
+//        Log.i("OpenGL", " millenium_falcon loaded");
     }
 
+    private int frameCount = 0;
     @Override
     public void onDrawFrame(GL10 unused) {
+        if(frameCount % 1000 == 0){
+            Log.i("OpenGL", "Totally drawed:" + frameCount + " frames!");
+            frameCount++;
+        }
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
         GLES20.glEnable(GLES20.GL_BLEND);
         GLES20.glBlendFunc(GLES20.GL_DST_ALPHA, GLES20.GL_ONE_MINUS_DST_ALPHA);
@@ -117,6 +128,7 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onSurfaceChanged(GL10 unused, int width, int height) {
+        Log.i("OpenGL", "surface changed!");
         // Adjust the viewport based on geometry changes,
         // such as screen rotation
         GLES20.glViewport(0, 0, width, height);
@@ -128,6 +140,7 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
         camera.setViewport(width, height);
 
         camera.rotate( 10, 10);
+        Log.i("OpenGL", "surface changed finished!");
     }
 
     /**
@@ -178,5 +191,9 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
 
     public Camera getCamera() {
         return camera;
+    }
+
+    public void onDestroy() {
+        waterSurface.onDestroy();
     }
 }

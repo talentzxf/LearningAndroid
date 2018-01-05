@@ -60,4 +60,7 @@ public class OpenGLSurfaceView extends GLSurfaceView {
         return true;
     }
 
+    public OpenGLRenderer getRenderer() {
+        return mRenderer;
+    }
 }

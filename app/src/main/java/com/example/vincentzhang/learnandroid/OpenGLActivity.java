@@ -5,13 +5,10 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.TextView;
 
-import com.example.vincentzhang.Sprite.Utilities;
+import max3d.Shared;
 
 /**
  * Created by VincentZhang on 11/30/2017.
@@ -19,6 +16,7 @@ import com.example.vincentzhang.Sprite.Utilities;
 
 public class OpenGLActivity extends Activity {
     private static Activity instance = null;
+    private OpenGLSurfaceView surfaceView;
 
     public static Context getContext() {
         if (instance == null)
@@ -27,15 +25,25 @@ public class OpenGLActivity extends Activity {
     }
 
     @Override
+    protected void onDestroy() {
+        Log.i("Activity", "Destroied activity!");
+        super.onDestroy();
+        Shared.release();
+        surfaceView.getRenderer().onDestroy();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.i("Activity", "Oncreate activity!");
         super.onCreate(savedInstanceState);
+
         instance = this;
         try {
             requestWindowFeature(Window.FEATURE_NO_TITLE);
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-            GLSurfaceView surfaceView = new OpenGLSurfaceView(this);
+            surfaceView = new OpenGLSurfaceView(this);
             setContentView(surfaceView);
 
         } catch (Exception e) {

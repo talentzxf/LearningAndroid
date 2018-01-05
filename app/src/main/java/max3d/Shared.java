@@ -1,6 +1,8 @@
 package max3d;
 
 import android.content.Context;
+import android.util.Log;
+
 import max3d.core.TextureManager;
 
 /**
@@ -10,7 +12,7 @@ import max3d.core.TextureManager;
 public class Shared 
 {
 	private static Context _context;
-	private static TextureManager _textureManager;
+	private static TextureManager _textureManager = null;
 
 	
 	public static Context context()
@@ -25,11 +27,18 @@ public class Shared
 	/**
 	 * You must access the TextureManager instance through this accessor
 	 */
-	public static TextureManager textureManager()
+	public static synchronized TextureManager textureManager()
 	{
+		Log.d("Texture", "Getting texture manager!");
 		if(_textureManager == null){
+			Log.i("Texture", "Creating texture manager!");
 			_textureManager = new TextureManager();
 		}
 		return _textureManager;
+	}
+
+	public static synchronized void release() {
+		_textureManager.reset();
+		_textureManager = null;
 	}
 }

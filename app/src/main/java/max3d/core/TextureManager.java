@@ -28,6 +28,7 @@ public class TextureManager {
 
 
     public TextureManager() {
+        Log.i("Texture", "Texture constructor!");
         reset();
     }
 
@@ -35,6 +36,7 @@ public class TextureManager {
         // Delete any extant textures
 
         if (_idToTextureName != null) {
+            Log.i("Texture", "Texture is not null, reseting!");
             Set<String> s = _idToTextureName.keySet();
             Object[] a = s.toArray();
             for (int i = 0; i < a.length; i++) {
@@ -45,6 +47,7 @@ public class TextureManager {
         }
 
         _idToTextureName = new HashMap<String, Integer>();
+        Log.i("Texture", "Created new texture map!");
         _idToHasMipMap = new HashMap<String, Boolean>();
     }
 
@@ -56,7 +59,9 @@ public class TextureManager {
      */
     public String addTextureId(Bitmap $b, String $id, boolean $generateMipMap) {
         if (_idToTextureName.containsKey($id))
-            throw new Error("Texture id \"" + $id + "\" already exists.");
+            throw new Error("Texture id \"" + $id + "\" already exists. Currently has:" + _idToTextureName.size() + "Textures! And in _idToHasMipMap has:" + _idToHasMipMap.size() );
+
+        Log.i("Texture", "Texture:" + $id + " added!" );
 
         int glId = TextureUtils.uploadTextureAndReturnId($b, $generateMipMap);
 

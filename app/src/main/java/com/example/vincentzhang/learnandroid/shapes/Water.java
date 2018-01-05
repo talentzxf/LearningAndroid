@@ -228,4 +228,14 @@ public class Water {
     public int getCausticsTextureId() {
         return causticTexture.getTextureId();
     }
+
+    public void onDestroy() {
+        dropRenderer.destroy();
+        updateRenderer.destroy();
+        updateNormalRenderer.destroy();
+        causticRenderer.destroy();
+
+        textureA.destroy();
+        textureB.destroy();
+    }
 }
