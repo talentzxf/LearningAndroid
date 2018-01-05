@@ -41,6 +41,7 @@ public class Model3DS {
     }
 
     public void draw(float[] model, float[] view, float[] projection) {
+        GLES20.glEnable(GLES20.GL_DEPTH_TEST);
         Map uniformMap = new HashMap();
         uniformMap.put("project", projection);
         uniformMap.put("view", view);
