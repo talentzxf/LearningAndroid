@@ -15,7 +15,7 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
 import com.example.vincentzhang.learnandroid.R;
-import max3d.Shared;
+import org.vincentzhang.max3d.Shared;
 
 /**
  * Created by VincentZhang on 3/30/2017.

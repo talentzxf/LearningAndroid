@@ -10,11 +10,11 @@ import com.example.vincentzhang.learnandroid.Camera.Camera;
 import java.util.HashMap;
 import java.util.Map;
 
-import max3d.Shared;
-import max3d.core.AbstractBufferList;
-import max3d.core.ObjectRenderer;
-import max3d.core.TextureRenderer;
-import max3d.primitives.Rectangle;
+import org.vincentzhang.max3d.Shared;
+import org.vincentzhang.max3d.core.AbstractBufferList;
+import org.vincentzhang.max3d.core.ObjectRenderer;
+import org.vincentzhang.max3d.core.TextureRenderer;
+import org.vincentzhang.max3d.primitives.Rectangle;
 
 /**
  * Created by VincentZhang on 12/18/2017.

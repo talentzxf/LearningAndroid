@@ -12,9 +12,9 @@ import com.example.vincentzhang.learnandroid.R;
 import java.util.HashMap;
 import java.util.Map;
 
-import max3d.Shared;
-import max3d.core.ObjectRenderer;
-import max3d.primitives.Box;
+import org.vincentzhang.max3d.Shared;
+import org.vincentzhang.max3d.core.ObjectRenderer;
+import org.vincentzhang.max3d.primitives.Box;
 
 /**
  * Created by VincentZhang on 1/3/2018.
