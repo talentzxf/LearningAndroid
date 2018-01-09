@@ -110,6 +110,7 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
         // Set model matrix
         Matrix.setIdentityM(mModelMatrix, 0);
         Matrix.scaleM(mModelMatrix, 0, 1.0f, 1.0f, 1.0f);
+
         float elapsedTimeSec = ((float) (System.currentTimeMillis() - startTime) / 1000.0f);
         // Matrix.rotateM(mModelMatrix,0, elapsedTimeSec * 10, 0.0f, 1.0f, 0.0f);
         //mMoocCube.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
@@ -122,8 +123,8 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
         sphereRenderer.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
         wall.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
 
-        Matrix.translateM(mModelMatrix, 0, 0.0f, 0.5f, 5.0f);
-        milleniumfalcon3ds.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
+//        Matrix.translateM(mModelMatrix, 0, 0.0f, 0.5f, 5.0f);
+//        milleniumfalcon3ds.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
     }
 
     @Override
