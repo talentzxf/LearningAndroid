@@ -20,10 +20,10 @@ import com.example.vincentzhang.learnandroid.shapes.Water;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import max3d.Shared;
-import max3d.core.Object3dContainer;
-import max3d.parser.Max3DSParser;
-import max3d.primitives.Rectangle;
+import org.vincentzhang.max3d.Shared;
+import org.vincentzhang.max3d.core.Object3dContainer;
+import org.vincentzhang.max3d.parser.Max3DSParser;
+import org.vincentzhang.max3d.primitives.Rectangle;
 
 import static android.opengl.GLU.gluErrorString;
 

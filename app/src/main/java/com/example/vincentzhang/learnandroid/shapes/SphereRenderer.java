@@ -14,11 +14,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.example.vincentzhang.learnandroid.R;
-import max3d.Shared;
-import max3d.core.AbstractBufferList;
-import max3d.core.ObjectRenderer;
-import max3d.primitives.Sphere;
-import max3d.vos.TextureVo;
+import org.vincentzhang.max3d.Shared;
+import org.vincentzhang.max3d.core.AbstractBufferList;
+import org.vincentzhang.max3d.core.ObjectRenderer;
+import org.vincentzhang.max3d.primitives.Sphere;
+import org.vincentzhang.max3d.vos.TextureVo;
 
 /**
  * Created by VincentZhang on 12/7/2017.

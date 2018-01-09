@@ -10,12 +10,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import max3d.Shared;
-import max3d.core.Object3dContainer;
-import max3d.core.ObjectRenderer;
-import max3d.core.TextureList;
-import max3d.parser.Max3DSParser;
-import max3d.vos.TextureVo;
+import org.vincentzhang.max3d.Shared;
+import org.vincentzhang.max3d.core.Object3dContainer;
+import org.vincentzhang.max3d.core.ObjectRenderer;
+import org.vincentzhang.max3d.core.TextureList;
+import org.vincentzhang.max3d.parser.Max3DSParser;
+import org.vincentzhang.max3d.vos.TextureVo;
 
 /**
  * Created by VincentZhang on 1/5/2018.

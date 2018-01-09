@@ -8,7 +8,7 @@ import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 
-import max3d.Shared;
+import org.vincentzhang.max3d.Shared;
 
 /**
  * Created by VincentZhang on 11/30/2017.
