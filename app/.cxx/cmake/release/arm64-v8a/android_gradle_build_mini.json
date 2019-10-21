@@ -1,0 +1,16 @@
+{
+  "buildFiles": [
+    "/Users/vincentzhang/LearningAndroid/app/CMakeLists.txt"
+  ],
+  "cleanCommands": [
+    "/Users/vincentzhang/Library/Android/sdk/cmake/3.6.4111459/bin/cmake --build /Users/vincentzhang/LearningAndroid/app/.cxx/cmake/release/arm64-v8a --target clean"
+  ],
+  "libraries": {
+    "native-lib-Release-arm64-v8a": {
+      "artifactName": "native-lib",
+      "buildCommand": "/Users/vincentzhang/Library/Android/sdk/cmake/3.6.4111459/bin/cmake --build /Users/vincentzhang/LearningAndroid/app/.cxx/cmake/release/arm64-v8a --target native-lib",
+      "abi": "arm64-v8a",
+      "output": "/Users/vincentzhang/LearningAndroid/app/build/intermediates/cmake/release/obj/arm64-v8a/libnative-lib.so"
+    }
+  }
+}

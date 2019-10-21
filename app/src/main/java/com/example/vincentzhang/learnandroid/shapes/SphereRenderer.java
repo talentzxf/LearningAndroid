@@ -15,6 +15,7 @@ import java.util.Map;
 
 import com.example.vincentzhang.learnandroid.R;
 import org.vincentzhang.max3d.Shared;
+import org.vincentzhang.max3d.Utils;
 import org.vincentzhang.max3d.core.AbstractBufferList;
 import org.vincentzhang.max3d.core.ObjectRenderer;
 import org.vincentzhang.max3d.primitives.Sphere;
@@ -67,12 +68,12 @@ public class SphereRenderer {
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public SphereRenderer(float radius, int stacks, int slices) {
         sphereInternal = new Sphere(radius, stacks, slices);
-        OpenGLRenderer.checkGlError("new Sphere");
+        Utils.checkGlError("new Sphere");
         Bitmap earthTexture = BitmapFactory.decodeResource(OpenGLActivity.getContext().getResources(),
                 R.drawable.earth);
         Shared.textureManager().addTextureId(earthTexture, "earth");
         earthTexture.recycle();
-        OpenGLRenderer.checkGlError("addTextureId");
+        Utils.checkGlError("addTextureId");
         sphereInternal.textures().add(new TextureVo("earth"));
 
         renderer = new ObjectRenderer("shaders/water/sphere_surface.vert",
@@ -105,7 +106,7 @@ public class SphereRenderer {
         GLES20.glActiveTexture(GLES20.GL_TEXTURE2);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, water.getCausticsTextureId());
 
-        OpenGLRenderer.checkGlError("glBindTexture");
+        Utils.checkGlError("glBindTexture");
 
         // setup attributes
         Map<String, AbstractBufferList> attributeMap = new HashMap<>();

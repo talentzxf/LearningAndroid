@@ -6,6 +6,8 @@ import android.util.Log;
 import com.example.vincentzhang.Sprite.ParticleSystem.Particle;
 import com.example.vincentzhang.learnandroid.OpenGLRenderer;
 
+import org.vincentzhang.max3d.Utils;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -28,18 +30,18 @@ public class OGLES20ObjectRender {
 
     private void initShaders(String vertexShaderCode, String fragmentShaderCode) {
         // prepare shaders and OpenGL program
-        int vertexShader = OpenGLRenderer.loadShader(
+        int vertexShader = Utils.loadShader(
                 GLES20.GL_VERTEX_SHADER, vertexShaderCode);
-        int fragmentShader = OpenGLRenderer.loadShader(
+        int fragmentShader = Utils.loadShader(
                 GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode);
         program = GLES20.glCreateProgram();             // create empty OpenGL Program
-        OpenGLRenderer.checkGlError("glGetAttribLocation");
+        Utils.checkGlError("glGetAttribLocation");
         GLES20.glAttachShader(program, vertexShader);   // add the vertex shader to program
-        OpenGLRenderer.checkGlError("glGetAttribLocation");
+        Utils.checkGlError("glGetAttribLocation");
         GLES20.glAttachShader(program, fragmentShader); // add the fragment shader to program
-        OpenGLRenderer.checkGlError("glGetAttribLocation");
+        Utils.checkGlError("glGetAttribLocation");
         GLES20.glLinkProgram(program);                  // create OpenGL program executables
-        OpenGLRenderer.checkGlError("glGetAttribLocation");
+        Utils.checkGlError("glGetAttribLocation");
         try {
             Log.i("OPENGL", GLES20.glGetShaderInfoLog(vertexShader));
             Log.i("OPENGL", GLES20.glGetShaderInfoLog(fragmentShader));
@@ -52,7 +54,7 @@ public class OGLES20ObjectRender {
         for (String attributeName : shaderObjectMap.keySet()) {
             AbstractBufferList buffer = shaderObjectMap.get(attributeName);
             int newBufferHandle = GLES20.glGetAttribLocation(program, attributeName);
-            OpenGLRenderer.checkGlError("glGetAttribLocation");
+            Utils.checkGlError("glGetAttribLocation");
 
             if (newBufferHandle < 0) {
                 Log.e("BindAttribute", "Can's get attribute for buffer:" + attributeName);
@@ -64,7 +66,7 @@ public class OGLES20ObjectRender {
                     newBufferHandle, buffer.getPropertiesPerElement(),
                     GLES20.GL_FLOAT, false,
                     buffer.getBytesPerProperty() * buffer.getPropertiesPerElement(), buffer.buffer().position(0));
-            OpenGLRenderer.checkGlError("glVertexAttribPointer");
+            Utils.checkGlError("glVertexAttribPointer");
 
             vertexAttributes.add(newBufferHandle);
         }
@@ -81,7 +83,7 @@ public class OGLES20ObjectRender {
         for (String key : uniformMap.keySet()) {
             float[] valueArray = uniformMap.get(key);
             int uniformLocation = GLES20.glGetUniformLocation(program, key);
-            OpenGLRenderer.checkGlError("glGetUniformLocation");
+            Utils.checkGlError("glGetUniformLocation");
             if(uniformLocation < 0){
                 throw new Exception("uniform " + key + " can't be found!");
             }
@@ -94,7 +96,7 @@ public class OGLES20ObjectRender {
                     GLES20.glUniform4fv(uniformLocation, 1, valueArray, 0);
                     break;
             }
-            OpenGLRenderer.checkGlError("glUniformMatrix4fv");
+            Utils.checkGlError("glUniformMatrix4fv");
         }
     }
 

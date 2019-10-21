@@ -16,6 +16,7 @@ import java.nio.IntBuffer;
 
 import com.example.vincentzhang.learnandroid.R;
 import org.vincentzhang.max3d.Shared;
+import org.vincentzhang.max3d.Utils;
 
 /**
  * Created by VincentZhang on 3/30/2017.
@@ -339,18 +340,18 @@ public class Cube {
         mTextureDataHandle = Shared.textureManager().getGlTextureId("imooc");
 
         // prepare shaders and OpenGL program
-        int vertexShader = OpenGLRenderer.loadShader(
+        int vertexShader = Utils.loadShader(
                 GLES20.GL_VERTEX_SHADER, vertexShaderCode);
-        int fragmentShader = OpenGLRenderer.loadShader(
+        int fragmentShader = Utils.loadShader(
                 GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode);
         program = GLES20.glCreateProgram();             // create empty OpenGL Program
-        OpenGLRenderer.checkGlError("glGetAttribLocation");
+        Utils.checkGlError("glGetAttribLocation");
         GLES20.glAttachShader(program, vertexShader);   // add the vertex shader to program
-        OpenGLRenderer.checkGlError("glGetAttribLocation");
+        Utils.checkGlError("glGetAttribLocation");
         GLES20.glAttachShader(program, fragmentShader); // add the fragment shader to program
-        OpenGLRenderer.checkGlError("glGetAttribLocation");
+        Utils.checkGlError("glGetAttribLocation");
         GLES20.glLinkProgram(program);                  // create OpenGL program executables
-        OpenGLRenderer.checkGlError("glGetAttribLocation");
+        Utils.checkGlError("glGetAttribLocation");
         try {
             Log.i("OPENGL", GLES20.glGetShaderInfoLog(vertexShader));
             Log.i("OPENGL", GLES20.glGetShaderInfoLog(fragmentShader));
@@ -369,13 +370,13 @@ public class Cube {
 
         // get handle to vertex shader's vPosition member
         mPositionHandle = GLES20.glGetAttribLocation(program, "vPosition");
-        OpenGLRenderer.checkGlError("glGetAttribLocation");
+        Utils.checkGlError("glGetAttribLocation");
 
         mColorHandle = GLES20.glGetAttribLocation(program, "vColor");
-        OpenGLRenderer.checkGlError("glGetAttribLocation");
+        Utils.checkGlError("glGetAttribLocation");
 
         mTexCoordHandle = GLES20.glGetAttribLocation(program, "vTexCoord");
-        OpenGLRenderer.checkGlError("glGetAttribLocation");
+        Utils.checkGlError("glGetAttribLocation");
 
         mTextureUniformHandle = GLES20.glGetUniformLocation(program, "u_Texture");
 
@@ -390,46 +391,46 @@ public class Cube {
                 mPositionHandle, COORDS_PER_VERTEX,
                 GLES20.GL_FLOAT, false,
                 vertexStride, mVertexBuffer);
-        OpenGLRenderer.checkGlError("glGetUniformLocation");
+        Utils.checkGlError("glGetUniformLocation");
 
         GLES20.glVertexAttribPointer(mColorHandle, 4, GLES20.GL_FLOAT, false, 16, mColorBuffer);
-        OpenGLRenderer.checkGlError("glGetUniformLocation");
+        Utils.checkGlError("glGetUniformLocation");
         GLES20.glEnableVertexAttribArray(mColorHandle);
-        OpenGLRenderer.checkGlError("glGetUniformLocation");
+        Utils.checkGlError("glGetUniformLocation");
 
         GLES20.glVertexAttribPointer(mTexCoordHandle, 2, GLES20.GL_FLOAT, false, 8, mTextureBuffer);
-        OpenGLRenderer.checkGlError("glGetUniformLocation");
+        Utils.checkGlError("glGetUniformLocation");
         GLES20.glEnableVertexAttribArray(mTexCoordHandle);
 
 
         // get handle to shape's transformation matrix
         mModelMatrix = GLES20.glGetUniformLocation(program, "model");
-        OpenGLRenderer.checkGlError("glGetUniformLocation");
+        Utils.checkGlError("glGetUniformLocation");
 
         mViewMatrix = GLES20.glGetUniformLocation(program, "view");
-        OpenGLRenderer.checkGlError("glGetUniformLocation");
+        Utils.checkGlError("glGetUniformLocation");
 
         mProjectionMatrix = GLES20.glGetUniformLocation(program, "projection");
-        OpenGLRenderer.checkGlError("glGetUniformLocation");
+        Utils.checkGlError("glGetUniformLocation");
 
         // get handle to light's position
         mLightPos = GLES20.glGetUniformLocation(program, "lightPos");
-        OpenGLRenderer.checkGlError("glGetUniformLocation");
+        Utils.checkGlError("glGetUniformLocation");
         GLES20.glUniform4fv(mLightPos, 1, this.lightPos, 0);
 
         int mLightPos2 = GLES20.glGetUniformLocation(program, "lightPos2");
-        OpenGLRenderer.checkGlError("glGetUniformLocation");
+        Utils.checkGlError("glGetUniformLocation");
         GLES20.glUniform4fv(mLightPos2, 1, this.light2Pos, 0);
 
         // Apply the projection and view transformation
         GLES20.glUniformMatrix4fv(mModelMatrix, 1, false, model, 0);
-        OpenGLRenderer.checkGlError("glUniformMatrix4fv");
+        Utils.checkGlError("glUniformMatrix4fv");
 
         GLES20.glUniformMatrix4fv(mViewMatrix, 1, false, view, 0);
-        OpenGLRenderer.checkGlError("glUniformMatrix4fv");
+        Utils.checkGlError("glUniformMatrix4fv");
 
         GLES20.glUniformMatrix4fv(mProjectionMatrix, 1, false, projection, 0);
-        OpenGLRenderer.checkGlError("glUniformMatrix4fv");
+        Utils.checkGlError("glUniformMatrix4fv");
 
         // Draw the triangle
         // GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertexCount);

@@ -36,7 +36,6 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
     private MoocCube mMoocCube;
     private float mCubeRotation;
 
-    private static final String TAG = "MyGLRenderer";
     private Triangle mTriangle;
     private Square mSquare;
     private Water waterSurface;
@@ -112,7 +111,7 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
         Matrix.scaleM(mModelMatrix, 0, 1.0f, 1.0f, 1.0f);
 
         float elapsedTimeSec = ((float) (System.currentTimeMillis() - startTime) / 1000.0f);
-        // Matrix.rotateM(mModelMatrix,0, elapsedTimeSec * 10, 0.0f, 1.0f, 0.0f);
+        Matrix.rotateM(mModelMatrix,0, elapsedTimeSec * 10, 0.0f, 1.0f, 0.0f);
         //mMoocCube.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
         // mCube.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
 
@@ -120,7 +119,7 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
 
         GLES20.glViewport(0, 0,
                 (int) camera.getViewportWidth(), (int) camera.getViewportHeight());
-        sphereRenderer.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
+        // sphereRenderer.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
         wall.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
 
 //        Matrix.translateM(mModelMatrix, 0, 0.0f, 0.5f, 5.0f);
@@ -142,52 +141,6 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
 
         camera.rotate(10, 10);
         Log.i("OpenGL", "surface changed finished!");
-    }
-
-    /**
-     * Utility method for compiling a OpenGL shader.
-     * <p>
-     * <p><strong>Note:</strong> When developing shaders, use the checkGlError()
-     * method to debug shader coding errors.</p>
-     *
-     * @param type       - Vertex or fragment shader type.
-     * @param shaderCode - String containing the shader code.
-     * @return - Returns an id for the shader.
-     */
-    public static int loadShader(int type, String shaderCode) {
-
-        // create a vertex shader type (GLES20.GL_VERTEX_SHADER)
-        // or a fragment shader type (GLES20.GL_FRAGMENT_SHADER)
-        int shader = GLES20.glCreateShader(type);
-
-        // add the source code to the shader and compile it
-        GLES20.glShaderSource(shader, shaderCode);
-        GLES20.glCompileShader(shader);
-
-        return shader;
-    }
-
-    /**
-     * Utility method for debugging OpenGL calls. Provide the name of the call
-     * just after making it:
-     * <p>
-     * <pre>
-     * mColorHandle = GLES20.glGetUniformLocation(mProgram, "vColor");
-     * MyGLRenderer.checkGlError("glGetUniformLocation");</pre>
-     * <p>
-     * If the operation is not successful, the check throws an error.
-     *
-     * @param glOperation - Name of the OpenGL call to check.
-     */
-    public static void checkGlError(String glOperation) {
-        int error;
-        while ((error = GLES20.glGetError()) != GLES20.GL_NO_ERROR) {
-            Log.e(TAG, glOperation + ": glError " + error + " Error String:" + gluErrorString(error)
-                    + "Features:" + GLES20.glGetString(GLES20.GL_EXTENSIONS));
-            throw new RuntimeException(glOperation + ": glError " + error +
-                    " Error String:" + gluErrorString(error)
-                    + "Features:" + GLES20.glGetString(GLES20.GL_EXTENSIONS));
-        }
     }
 
     public Camera getCamera() {

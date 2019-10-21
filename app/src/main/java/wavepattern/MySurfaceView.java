@@ -13,10 +13,10 @@ import javax.microedition.khronos.opengles.GL10;
 import android.annotation.SuppressLint;
 import android.content.Context;
 
-import max3d.Shared;
-import max3d.core.ObjectRenderer;
-import max3d.core.TextureRenderer;
-import max3d.primitives.Rectangle;
+import org.vincentzhang.max3d.Shared;
+import org.vincentzhang.max3d.core.ObjectRenderer;
+import org.vincentzhang.max3d.core.TextureRenderer;
+import org.vincentzhang.max3d.primitives.Rectangle;
 
 @SuppressLint("NewApi")
 class MySurfaceView extends GLSurfaceView {

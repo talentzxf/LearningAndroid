@@ -1,0 +1,72 @@
+{
+  "variant": {
+    "module": {
+      "rootBuildGradleFolder": "/Users/vincentzhang/LearningAndroid",
+      "sdkFolder": "/Users/vincentzhang/Library/Android/sdk",
+      "isNativeCompilerSettingsCacheEnabled": false,
+      "isBuildOnlyTargetAbiEnabled": true,
+      "splitsAbiFilterSet": [],
+      "intermediatesFolder": "/Users/vincentzhang/LearningAndroid/app/build/intermediates",
+      "gradleModulePathName": ":app",
+      "moduleRootFolder": "/Users/vincentzhang/LearningAndroid/app",
+      "makeFile": "/Users/vincentzhang/LearningAndroid/app/CMakeLists.txt",
+      "buildSystem": "CMAKE",
+      "compilerSettingsCacheFolder": "/Users/vincentzhang/LearningAndroid/.cxx",
+      "cxxFolder": "/Users/vincentzhang/LearningAndroid/app/.cxx",
+      "ndkFolder": "/Users/vincentzhang/Library/Android/sdk/ndk/20.0.5594570",
+      "ndkVersion": "20.0.5594570",
+      "ndkSupportedAbiList": [
+        "ARMEABI_V7A",
+        "ARM64_V8A",
+        "X86",
+        "X86_64"
+      ],
+      "ndkDefaultAbiList": [
+        "ARMEABI_V7A",
+        "ARM64_V8A",
+        "X86",
+        "X86_64"
+      ],
+      "cmakeToolchainFile": "."
+    },
+    "buildSystemArgumentList": [],
+    "cFlagList": [],
+    "cppFlagsList": [
+      ""
+    ],
+    "variantName": "release",
+    "soFolder": "/Users/vincentzhang/LearningAndroid/app/build/intermediates/cmake/release/lib",
+    "objFolder": "/Users/vincentzhang/LearningAndroid/app/build/intermediates/cmake/release/obj",
+    "jsonFolder": "/Users/vincentzhang/LearningAndroid/app/.cxx/cmake/release",
+    "gradleBuildOutputFolder": "/Users/vincentzhang/LearningAndroid/app/.cxx/cxx/release",
+    "isDebuggableEnabled": false,
+    "validAbiList": [
+      "ARMEABI_V7A",
+      "ARM64_V8A",
+      "X86",
+      "X86_64"
+    ],
+    "buildTargetSet": []
+  },
+  "abi": "ARM64_V8A",
+  "abiPlatformVersion": 24,
+  "cxxBuildFolder": "/Users/vincentzhang/LearningAndroid/app/.cxx/cmake/release/arm64-v8a",
+  "jsonFile": "/Users/vincentzhang/LearningAndroid/app/.cxx/cmake/release/arm64-v8a/android_gradle_build.json",
+  "gradleBuildOutputFolder": "/Users/vincentzhang/LearningAndroid/app/.cxx/cxx/release/arm64-v8a",
+  "objFolder": "/Users/vincentzhang/LearningAndroid/app/build/intermediates/cmake/release/obj/arm64-v8a",
+  "buildCommandFile": "/Users/vincentzhang/LearningAndroid/app/.cxx/cmake/release/arm64-v8a/build_command.txt",
+  "buildOutputFile": "/Users/vincentzhang/LearningAndroid/app/.cxx/cmake/release/arm64-v8a/build_output.txt",
+  "modelOutputFile": "/Users/vincentzhang/LearningAndroid/app/.cxx/cmake/release/arm64-v8a/build_model.json",
+  "cmake": {
+    "cmakeListsWrapperFile": "/Users/vincentzhang/LearningAndroid/app/.cxx/cxx/release/arm64-v8a/CMakeLists.txt",
+    "toolchainWrapperFile": "/Users/vincentzhang/LearningAndroid/app/.cxx/cxx/release/arm64-v8a/android_gradle_build.toolchain.cmake",
+    "buildGenerationStateFile": "/Users/vincentzhang/LearningAndroid/app/.cxx/cxx/release/arm64-v8a/build_generation_state.json",
+    "cacheKeyFile": "/Users/vincentzhang/LearningAndroid/app/.cxx/cxx/release/arm64-v8a/compiler_cache_key.json",
+    "compilerCacheUseFile": "/Users/vincentzhang/LearningAndroid/app/.cxx/cxx/release/arm64-v8a/compiler_cache_use.json",
+    "compilerCacheWriteFile": "/Users/vincentzhang/LearningAndroid/app/.cxx/cxx/release/arm64-v8a/compiler_cache_write.json",
+    "toolchainSettingsFromCacheFile": "/Users/vincentzhang/LearningAndroid/app/.cxx/cxx/release/arm64-v8a/compiler_settings_cache.cmake",
+    "cmakeWrappingBaseFolder": "."
+  },
+  "jsonGenerationLoggingRecordFile": "/Users/vincentzhang/LearningAndroid/app/.cxx/cmake/release/arm64-v8a/json_generation_record.json",
+  "compileCommandsJsonFile": "/Users/vincentzhang/LearningAndroid/app/.cxx/cmake/release/arm64-v8a/compile_commands.json"
+}

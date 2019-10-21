@@ -6,9 +6,9 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.vincentzhang.learnandroid.OpenGLRenderer;
 
 import org.vincentzhang.max3d.Shared;
+import org.vincentzhang.max3d.Utils;
 
 /**
  * Created by VincentZhang on 12/24/2017.
@@ -84,7 +84,7 @@ public class TextureRenderer {
                 e.printStackTrace();
             }
         }
-        OpenGLRenderer.checkGlError("Texture generation");
+        Utils.checkGlError("Texture generation");
         GLES20.glFramebufferTexture2D        //设置自定义帧缓冲的颜色缓冲附件
                 (
                         GLES20.GL_FRAMEBUFFER,
@@ -103,7 +103,7 @@ public class TextureRenderer {
 
         // Restore frame buffer and render buffer
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);//绑定帧缓冲id
-        OpenGLRenderer.checkGlError("Texture generation");
+        Utils.checkGlError("Texture generation");
     }
 
     // Draw the callback into the texture

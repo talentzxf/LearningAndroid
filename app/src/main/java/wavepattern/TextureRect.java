@@ -5,6 +5,8 @@ import android.opengl.GLES20;
 
 import com.example.vincentzhang.learnandroid.OpenGLRenderer;
 
+import org.vincentzhang.max3d.Utils;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -86,12 +88,12 @@ public class TextureRect
     {        
     	 
     	 GLES20.glUseProgram(mProgram);
-        OpenGLRenderer.checkGlError("glLinkProgram");
+        Utils.checkGlError("glLinkProgram");
     	 MatrixState.pushMatrix();
          MatrixState.translate(0, 0, 1);
          
          GLES20.glUniformMatrix4fv(muMVPMatrixHandle, 1, false, MatrixState.getFinalMatrix(), 0);
-        OpenGLRenderer.checkGlError("glLinkProgram");
+        Utils.checkGlError("glLinkProgram");
 
          GLES20.glVertexAttribPointer
          (
@@ -102,7 +104,7 @@ public class TextureRect
                 3*4,   
                 mVertexBuffer
          );
-        OpenGLRenderer.checkGlError("glLinkProgram");
+        Utils.checkGlError("glLinkProgram");
          
          GLES20.glVertexAttribPointer
          (
@@ -113,22 +115,22 @@ public class TextureRect
                 2*4,   
                 mTexCoorBuffer
          );
-        OpenGLRenderer.checkGlError("glLinkProgram");
+        Utils.checkGlError("glLinkProgram");
          
          GLES20.glEnableVertexAttribArray(maPositionHandle);
-        OpenGLRenderer.checkGlError("glLinkProgram");
+        Utils.checkGlError("glLinkProgram");
          GLES20.glEnableVertexAttribArray(maTexCoorHandle);
-        OpenGLRenderer.checkGlError("glLinkProgram");
+        Utils.checkGlError("glLinkProgram");
          
          
          GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
-        OpenGLRenderer.checkGlError("glLinkProgram");
+        Utils.checkGlError("glLinkProgram");
          GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texId);
-        OpenGLRenderer.checkGlError("glLinkProgram");
+        Utils.checkGlError("glLinkProgram");
          
          
          GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vCount);
-        OpenGLRenderer.checkGlError("glLinkProgram");
+        Utils.checkGlError("glLinkProgram");
          MatrixState.popMatrix();
     }
 }
