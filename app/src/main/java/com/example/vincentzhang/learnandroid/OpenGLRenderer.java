@@ -79,7 +79,7 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
         sphereRenderer = new SphereRenderer(0.3f, 30, 30);
         sphereRenderer.setWater(waterSurface);
 
-        milleniumfalcon3ds = new Model3DS("com.example.vincentzhang.learnandroid:raw/milleniumfalcon3ds", 0.002f);
+        //milleniumfalcon3ds = new Model3DS("com.example.vincentzhang.learnandroid:raw/milleniumfalcon3ds", 0.002f);
     }
 
     private int frameCount = 0;
@@ -111,16 +111,16 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
         Matrix.scaleM(mModelMatrix, 0, 1.0f, 1.0f, 1.0f);
 
         float elapsedTimeSec = ((float) (System.currentTimeMillis() - startTime) / 1000.0f);
-        Matrix.rotateM(mModelMatrix,0, elapsedTimeSec * 10, 0.0f, 1.0f, 0.0f);
+        //Matrix.rotateM(mModelMatrix,0, elapsedTimeSec * 10, 0.0f, 1.0f, 0.0f);
         //mMoocCube.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
-        // mCube.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
+        //mCube.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
 
-        waterSurface.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
+        //waterSurface.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
 
         GLES20.glViewport(0, 0,
                 (int) camera.getViewportWidth(), (int) camera.getViewportHeight());
-        // sphereRenderer.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
-        wall.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
+        //sphereRenderer.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
+        //wall.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
 
 //        Matrix.translateM(mModelMatrix, 0, 0.0f, 0.5f, 5.0f);
 //        milleniumfalcon3ds.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);

@@ -2,7 +2,6 @@ precision mediump float;
 varying vec3 position;
 
 const vec3 underwaterColor = vec3(0.4, 0.9, 1.0);
-
 #include shaders/functions/helpfunctions.glsl
 
 void main() {

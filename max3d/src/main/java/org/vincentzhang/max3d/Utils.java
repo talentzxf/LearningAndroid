@@ -103,7 +103,7 @@ public class Utils
 		int error;
 		while ((error = GLES20.glGetError()) != GLES20.GL_NO_ERROR) {
 			Log.e(TAG, glOperation + ": glError " + error + " Error String:" + gluErrorString(error)
-					+ "Features:" + GLES20.glGetString(GLES20.GL_EXTENSIONS));
+					+ " Features:" + GLES20.glGetString(GLES20.GL_EXTENSIONS));
 			throw new RuntimeException(glOperation + ": glError " + error +
 					" Error String:" + gluErrorString(error)
 					+ "Features:" + GLES20.glGetString(GLES20.GL_EXTENSIONS));

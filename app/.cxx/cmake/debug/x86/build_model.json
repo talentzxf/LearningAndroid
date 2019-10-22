@@ -5,7 +5,6 @@
       "sdkFolder": "/Users/vincentzhang/Library/Android/sdk",
       "isNativeCompilerSettingsCacheEnabled": false,
       "isBuildOnlyTargetAbiEnabled": true,
-      "ideBuildTargetAbi": "x86",
       "splitsAbiFilterSet": [],
       "intermediatesFolder": "/Users/vincentzhang/LearningAndroid/app/build/intermediates",
       "gradleModulePathName": ":app",
@@ -42,7 +41,10 @@
     "gradleBuildOutputFolder": "/Users/vincentzhang/LearningAndroid/app/.cxx/cxx/debug",
     "isDebuggableEnabled": true,
     "validAbiList": [
-      "X86"
+      "ARMEABI_V7A",
+      "ARM64_V8A",
+      "X86",
+      "X86_64"
     ],
     "buildTargetSet": []
   },
