@@ -106,7 +106,7 @@ public class Utils
 					+ " Features:" + GLES20.glGetString(GLES20.GL_EXTENSIONS));
 			throw new RuntimeException(glOperation + ": glError " + error +
 					" Error String:" + gluErrorString(error)
-					+ "Features:" + GLES20.glGetString(GLES20.GL_EXTENSIONS));
+					+ " Features:" + GLES20.glGetString(GLES20.GL_EXTENSIONS));
 		}
 	}
 

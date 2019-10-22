@@ -119,7 +119,7 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
 
         GLES20.glViewport(0, 0,
                 (int) camera.getViewportWidth(), (int) camera.getViewportHeight());
-        //sphereRenderer.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
+        sphereRenderer.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
         //wall.draw(mModelMatrix, mViewMatrix, mProjectionMatrix);
 
 //        Matrix.translateM(mModelMatrix, 0, 0.0f, 0.5f, 5.0f);
